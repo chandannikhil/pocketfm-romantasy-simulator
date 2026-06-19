@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PocketFM · US Romantasy Engine — Simulator by Chandan NK</title>
+<style>
+:root{
+  --bg:#f4f5f7; --paper:#fff; --ink:#1c2430; --muted:#5b6675; --faint:#97a1af;
+  --line:#e2e6eb; --line2:#ccd2da; --rail:#eef0f3;
+  --accent:#3b54c4; --accent-soft:#eef1fb; --accent-line:#c6cef0;
+  --ctx:#7a6a3f; --ctx-bg:#f7f4ec; --ctx-ln:#e4dabf;
+  --mine:#2f6db0; --mine-bg:#eef4fb; --mine-ln:#c4d8ee;
+  --shared:#9a5aa8; --shared-bg:#f6eef8; --shared-ln:#e3cbe9;
+  --out:#1f7a55; --out-bg:#ecf6f0; --out-ln:#c3e3d1;
+  --pos:#1f7a55; --neg:#bb392d; --warn:#9a6a13;
+  --r:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1340px;margin:0 auto;padding:0 22px}
+.tn{font-variant-numeric:tabular-nums}
+header{background:var(--paper);border-bottom:1px solid var(--line)}
+header .wrap{padding:20px 22px 16px}
+h1{font-size:20px;margin:0 0 4px;letter-spacing:-.3px}
+h1 b{color:var(--accent)}
+.thesis{color:var(--muted);max-width:960px;margin:0;font-size:12.5px}
+.thesis b{color:var(--ink)}
+
+.info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;
+  border:1px solid var(--line2);color:var(--faint);font-size:9.5px;font-weight:700;cursor:help;margin-left:4px;position:relative;font-style:normal;vertical-align:middle}
+.info:hover{border-color:var(--accent);color:var(--accent)}
+.info:hover::after{content:attr(data-tip);position:absolute;top:160%;left:50%;transform:translateX(-50%);
+  width:250px;background:#23303f;color:#eef2f7;font-size:11px;font-weight:400;line-height:1.45;text-align:left;
+  padding:9px 11px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.22);z-index:90;pointer-events:none}
+
+/* decision icon — "on what basis to move this number" */
+.decic{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:3px;
+  border:1px solid var(--mine-ln);color:var(--mine);background:var(--mine-bg);font-size:9px;font-weight:800;cursor:help;margin-left:4px;position:relative;font-style:normal;vertical-align:middle}
+.decic:hover{border-color:var(--mine);filter:brightness(.97)}
+.decic:hover::after{content:attr(data-tip);position:absolute;top:160%;left:50%;transform:translateX(-50%);
+  width:260px;background:#2a2436;color:#f1ecf7;font-size:11px;font-weight:400;line-height:1.45;text-align:left;
+  padding:9px 11px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.22);z-index:91;pointer-events:none}
+.decic:hover::before{content:"▸ How to decide";position:absolute;top:160%;left:50%;transform:translate(-50%,-100%);
+  margin-top:-3px;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--shared);
+  background:#fff;border:1px solid var(--shared-ln);border-radius:5px;padding:2px 6px;white-space:nowrap;z-index:92;pointer-events:none}
+
+.controls{background:var(--paper);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40}
+.controls .wrap{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:11px 22px}
+.btn{font-size:12px;border:1px solid var(--line2);background:var(--paper);color:var(--muted);padding:7px 12px;border-radius:8px;cursor:pointer;transition:.12s;white-space:nowrap}
+.btn:hover{border-color:var(--accent-line);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.primary .dot{display:none;width:7px;height:7px;border-radius:50%;background:#ffd34d;margin-left:6px;vertical-align:middle}
+body.dirty .btn.primary.calc{box-shadow:0 0 0 3px rgba(59,84,196,.18)} body.dirty .btn.primary.calc .dot{display:inline-block}
+.lbl{font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);font-weight:700}
+.badge{font-size:11px;color:var(--ctx);border:1px solid var(--ctx-ln);background:var(--ctx-bg);padding:5px 10px;border-radius:20px;margin-left:auto}
+.stalebar{display:none;background:#fff6e6;border-bottom:1px solid #f0dcb0;color:var(--warn);font-size:12px}
+body.dirty .stalebar{display:block} .stalebar .wrap{padding:6px 22px}
+
+.section-h{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--faint);font-weight:800;margin:26px 0 12px;display:flex;align-items:center;gap:10px}
+.section-h .ln{flex:1;height:1px;background:var(--line)}
+.band{border:1px solid var(--line);border-radius:14px;background:var(--paper);overflow:hidden;margin-bottom:6px}
+.band-hd{padding:11px 16px;font-weight:800;font-size:13px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
+.band-hd .sub{margin-left:auto;font-weight:500;font-size:11px;color:var(--muted)}
+.band.context .band-hd{background:var(--ctx-bg);color:var(--ctx)}
+.band.mine .band-hd{background:var(--mine-bg);color:var(--mine)}
+.band.shared .band-hd{background:var(--shared-bg);color:var(--shared)}
+.band.output .band-hd{background:var(--out-bg);color:var(--out)}
+.band.june .band-hd{background:var(--rail);color:var(--ink)}
+
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px 14px;padding:15px 16px}
+.fields .grp{grid-column:1/-1;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);border-bottom:1px solid var(--line);padding:6px 0 4px;margin-top:4px}
+.fields .grp:first-child{margin-top:0}
+.field label{display:block;font-size:10.5px;color:var(--muted);margin-bottom:3px;line-height:1.25}
+.field .ig{display:flex;align-items:center;border:1px solid var(--line2);border-radius:7px;background:var(--paper);overflow:hidden}
+.field .ig:focus-within{border-color:var(--accent);box-shadow:0 0 0 2px rgba(59,84,196,.12)}
+.field.locked .ig{background:var(--rail)}
+.field .pre{font-size:11px;color:var(--faint);padding:0 0 0 8px}
+.field input{border:0;outline:0;width:100%;padding:6px 7px;font-size:12px;text-align:right;background:transparent;color:var(--ink);font-variant-numeric:tabular-nums}
+.field .suf{font-size:10.5px;color:var(--faint);padding:0 8px 0 0}
+.field.flash .ig{animation:flash 1.1s ease}
+@keyframes flash{0%{background:#fff7d6;border-color:#e9c65a}100%{background:#fff;border-color:var(--line2)}}
+.field .lk{display:inline-flex;align-items:center;gap:3px;font-size:9px;color:var(--faint);margin-left:6px}
+.field .lk input{width:auto}
+
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.twocol>*{min-width:0}
+@media(max-width:900px){.twocol{grid-template-columns:1fr}}
+
+/* metric cards */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line)}
+.metric{background:var(--paper);padding:11px 14px}
+.metric .mk{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--faint);font-weight:700;margin-bottom:5px;display:flex;align-items:center}
+.metric .mv{font-size:19px;font-weight:800;letter-spacing:-.4px}
+.metric .ms{font-size:10.5px;color:var(--muted);margin-top:2px}
+.metric .mv.pos{color:var(--pos)} .metric .mv.neg{color:var(--neg)} .metric .mv.warn{color:var(--warn)}
+body.dirty .metric .mv,body.dirty .mixwrap,body.dirty .vartable{opacity:.5}
+
+/* revenue mix */
+.mixwrap{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:15px 16px}
+.mixwrap>*{min-width:0}
+@media(max-width:900px){.mixwrap{grid-template-columns:1fr}}
+.mixbar{display:flex;height:32px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin:6px 0}
+.mixbar div{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.seg-coin{background:#3b54c4}.seg-ad{background:#7a93d8}.seg-sub{background:#b9c4e8;color:#26324d!important}
+table.tiers{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+table.tiers th,table.tiers td{padding:6px 8px;border-bottom:1px solid var(--line);font-size:11px;text-align:right}
+table.tiers th{color:var(--faint);font-size:9.5px;text-transform:uppercase;letter-spacing:.4px}
+table.tiers th:first-child,table.tiers td:first-child{text-align:left}
+.adbar{height:6px;border-radius:4px;background:#e7ebf2;overflow:hidden;display:inline-block;width:52px;vertical-align:middle;margin-right:6px}
+.adbar i{display:block;height:100%;background:#7a93d8}
+
+/* variance table */
+.vartable{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.vartable th,.vartable td{padding:8px 10px;border-bottom:1px solid var(--line);font-size:12px;text-align:right}
+.vartable th{color:var(--faint);font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+.vartable th:first-child,.vartable td:first-child{text-align:left;font-weight:600}
+.vartable input{width:80px;border:1px solid var(--line2);border-radius:6px;padding:5px 6px;font-size:12px;text-align:right;background:var(--paper);font-variant-numeric:tabular-nums}
+.vartable .rag{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.rag-g{background:var(--pos)}.rag-a{background:var(--warn)}.rag-r{background:var(--neg)}
+.dpos{color:var(--pos)}.dneg{color:var(--neg)}
+
+/* pilot lab */
+.pilots{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;padding:6px 16px 16px}
+.pilot{border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:11px 12px;position:relative}
+.pilot h4{margin:0;font-size:12.5px}.pilot .tp{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.3px;margin:2px 0 8px}
+.pilot .ptop{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.pilot .ltvb{font-size:9px;font-weight:800;color:var(--out);background:var(--out-bg);border:1px solid var(--out-ln);border-radius:5px;padding:1px 5px;white-space:nowrap}
+.pilot .slook{font-size:8.5px;font-weight:800;color:var(--warn);background:#fbf2df;border:1px solid #ecd9a8;border-radius:5px;padding:1px 5px;margin-left:4px;text-transform:uppercase}
+.pilot .srcrow{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:1px 0 6px}
+.pilot .srctag{font-size:8.5px;font-weight:700;border-radius:5px;padding:1px 6px;text-transform:uppercase;letter-spacing:.2px}
+.pilot .srctag.s-web{background:#eef4fb;color:#2f6db0;border:1px solid #c4d8ee}
+.pilot .srctag.s-ip{background:#f0eefb;color:#5a45b0;border:1px solid #d4cdef}
+.pilot .srctag.s-lic{background:#f7f4ec;color:#7a6a3f;border:1px solid #e4dabf}
+.pilot .srctag.s-orig{background:#f1f3f5;color:#5b6675;border:1px solid #d8dde3}
+.pilot .srcscore{font-size:9px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.pilot .gates{display:flex;gap:4px;margin-bottom:8px}
+.pilot .g{flex:1;text-align:center;font-size:9px;font-weight:700;padding:3px 0;border-radius:4px;background:var(--rail);color:var(--faint)}
+.pilot .g.ok{background:var(--out-bg);color:var(--out)} .pilot .g.no{background:#fbeceb;color:var(--neg)}
+.pilot .verdict{font-size:11px;font-weight:800}
+.v-scaled{color:var(--out)} .v-green{color:var(--mine)} .v-kill{color:var(--neg)}
+.pilot .mm{font-size:9.5px;color:var(--faint);margin-top:6px;font-variant-numeric:tabular-nums}
+.pilot .bcost{font-size:9px;color:var(--ctx);background:var(--ctx-bg);border:1px solid var(--ctx-ln);border-radius:5px;padding:3px 6px;margin-top:6px;font-variant-numeric:tabular-nums;line-height:1.35}
+.pilot .bcost b{color:var(--ink)} .pilot .bcost small{color:var(--faint)}
+.pilotsum{padding:10px 16px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);background:var(--rail)}
+.pilotsum b{color:var(--ink)}
+
+/* optimizer */
+.optcard{border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:16px}
+.opthelp{font-size:12px;color:var(--muted);margin:0 0 12px;max-width:880px}
+.crow{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.crow select,.crow input{font-size:12px;border:1px solid var(--line2);border-radius:6px;padding:6px 7px;background:var(--paper);color:var(--ink)}
+.crow input[type=number]{width:78px;text-align:right}
+.crow .rm{cursor:pointer;color:var(--faint);border:1px solid var(--line2);border-radius:6px;padding:4px 8px;font-size:12px}
+.optrow2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}
+.optresult{margin-top:14px;border-top:1px solid var(--line);padding-top:13px;min-height:20px;font-size:12.5px}
+.opt-ok,.opt-warn{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:6px;margin-bottom:9px}
+.opt-ok{color:var(--out);background:var(--out-bg);border:1px solid var(--out-ln)}
+.opt-warn{color:var(--warn);background:#fbf2df;border:1px solid #ecd9a8}
+.opt-lev{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.opt-lev .lv{font-size:11.5px;border:1px solid var(--line);border-radius:7px;padding:6px 9px;background:var(--rail)}
+.opt-lev .lv b{color:var(--accent)} .opt-lev .lv .al{color:var(--shared);font-weight:700;font-size:9.5px;display:block}
+.opt-from{color:var(--muted);text-decoration:line-through;margin-right:4px}
+
+.dpos{color:var(--pos)}.dneg{color:var(--neg)}
+.cap{font-size:10.5px;color:var(--faint);margin-top:4px;line-height:1.5}
+.execsum{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px;margin-bottom:4px}
+.exs{border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:13px 15px;border-top:3px solid var(--line2)}
+.exs.problem{border-top-color:var(--neg)}.exs.answer{border-top-color:var(--out)}.exs.decide{border-top-color:var(--mine)}.exs.risk{border-top-color:var(--warn)}
+.exs h4{margin:0 0 7px;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--faint);font-weight:800}
+.exs p{margin:0;font-size:12px;color:var(--ink);line-height:1.5}.exs b{font-variant-numeric:tabular-nums}
+.exs ul{margin:0;padding-left:15px;font-size:11.5px;color:var(--muted);line-height:1.45}.exs li{margin-bottom:3px}
+.brief{white-space:pre-wrap;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;line-height:1.55;color:var(--ink);padding:14px 16px;margin:0;background:#fbfcfd;overflow-x:auto}
+/* slate / arc */
+.slate{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:11px}
+.tcard{border:1px solid var(--line);border-radius:11px;background:var(--paper);padding:13px}
+.tcard .role{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:3px 7px;border-radius:5px;display:inline-block;margin-bottom:8px}
+.r-acq{background:#eef4fb;color:#2f6db0}.r-mon{background:#ecf6f0;color:#1f7a55}.r-react{background:#f7f4ec;color:#7a6a3f}
+.r-bridge{background:#f0eefb;color:#5a45b0}.r-whale{background:#fbeef4;color:#a83a76}.r-gem{background:#eef9f9;color:#2f8f96}
+.tcard h4{margin:0 0 3px;font-size:13px}.tcard .tr{font-size:11px;color:var(--muted)}
+.arcwrap{border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:14px 16px}
+footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(--muted)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 0;font-size:11px;color:var(--muted)}
+.legend .pip{font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;text-transform:uppercase}
+.pip-c{background:var(--ctx-bg);color:var(--ctx)}.pip-m{background:var(--mine-bg);color:var(--mine)}.pip-s{background:var(--shared-bg);color:var(--shared)}.pip-o{background:var(--out-bg);color:var(--out)}
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <h1>US Romantasy — <b>June baseline → July plan</b> · Context → Inputs → Output</h1>
+  <div style="font-size:11.5px;color:var(--faint);margin:1px 0 7px">Interactive <b style="color:var(--mine)">simulator by Chandan NK</b> · for the PocketFM AVP — Category / Growth conversation</div>
+  <p class="thesis"><b>Content is near-free, so I test fast and kill fast; acquisition is expensive on a thin margin, so I scale slow on marginal contribution.</b> June is the benchmarked baseline. Set July levers — split into <b style="color:var(--mine)">my category levers</b> and <b style="color:var(--shared)">shared (needs alignment)</b> — under the <b style="color:var(--ctx)">context</b> the market hands me, then track actuals against the plan. Coins are modelled bottoms-up (episodes × coins/ep × price/coin). <i>An illustrative simulator for a US Romantasy category — not a company forecast.</i></p>
+</div></header>
+
+<div class="controls"><div class="wrap">
+  <button class="btn primary calc" id="calcBtn">▶ Calculate<span class="dot"></span></button>
+  <button class="btn" id="resetBtn">↺ Reset</button>
+  <span class="badge">Illustrative June baseline — benchmarked assumptions, not telemetry</span>
+  <div class="cap" style="flex-basis:100%">▶ <b>Calculate</b> = recompute all outputs <i>and</i> regenerate the team brief from your current inputs (inputs are change-gated).</div>
+</div></div>
+<div class="stalebar"><div class="wrap">● Inputs changed — press <b>Calculate</b> to refresh outputs.</div></div>
+
+<div class="wrap">
+
+  <!-- EXEC SUMMARY -->
+  <div class="section-h">Executive summary — the one-screen read <span class="info" data-tip="Your one-screen read: where June stands, the July plan, the decisions you need to make, and the risks to watch. Built automatically from the live numbers; refreshes when you press Calculate.">i</span><span class="ln"></span></div>
+  <div id="execSummary" class="execsum"></div>
+
+  <!-- JUNE BASELINE -->
+  <div class="section-h">① June 2026 baseline — editable, illustrative (cohort split is yours to set) <span class="ln"></span></div>
+  <div class="band june"><div class="band-hd">June baseline (illustrative) <span class="sub">benchmarked default split New 35% / Existing 55% / Reactivated 10% — override freely</span></div>
+    <div class="fields" id="f_june"></div>
+    <div class="metrics" id="m_june"></div>
+  </div>
+
+  <!-- CONTEXT -->
+  <div class="section-h">② Context — the environment (uncontrollable) <span class="ln"></span></div>
+  <div class="band context"><div class="band-hd">The environment — CPM, CPI inflation, churn, store fees<span class="sub">you read it, you don't fight it</span></div>
+    <div class="fields" id="f_context"></div>
+  </div>
+
+  <!-- INPUTS -->
+  <div class="section-h">③ July inputs — my levers vs shared (needs alignment) <span class="ln"></span></div>
+  <div class="cap" style="margin:-6px 0 11px">Each lever carries two icons — <b style="display:inline-flex;width:13px;height:13px;border:1px solid var(--line2);border-radius:50%;color:var(--faint);align-items:center;justify-content:center;font-size:8.5px">i</b> tells you what the number <i>means</i> · <b style="display:inline-flex;width:13px;height:13px;border:1px solid var(--mine-ln);background:var(--mine-bg);border-radius:3px;color:var(--mine);align-items:center;justify-content:center;font-size:8.5px">D</b> tells you <i>how to decide</i> where to set it.</div>
+  <div class="twocol">
+    <div class="band mine"><div class="band-hd">◆ My category levers<span class="sub">slate · greenlight · depth · paywall</span></div>
+      <div class="fields" id="f_mine"></div></div>
+    <div class="band shared"><div class="band-hd">⤿ Shared — needs alignment<span class="sub">UA · monetization · lifecycle</span></div>
+      <div class="fields" id="f_shared"></div></div>
+  </div>
+
+  <!-- PILOT LAB -->
+  <div class="section-h">④ Pilot Lab — named concepts through my greenlight gates <span class="info" data-tip="The real-name version of 'my levers'. Each story idea is checked against your gate bars (click-rate, next-day return, % who pay, return on ad spend). Raise a bar and fewer pass. The ones that survive are the shows you put ad money behind. The larger 1,000-idea funnel (handled by the maths, not shown by name) sets the hit count. Note: the hit rate here is only a rough what-if dial for new-user quality — it nudges how many big spenders the new cohort has, not total demand. Illustrative, not a measured result.">i</span><span class="ln"></span></div>
+  <div class="band mine"><div class="band-hd">16-concept shortlist<span class="sub">tune gate bars in 'my levers' above · each box shows its Ledger-B content cost</span></div>
+    <div class="pilots" id="pilotBoard"></div>
+    <div class="pilotsum" id="pilotSum"></div>
+  </div>
+
+  <!-- STAGE-GATE BUDGET -->
+  <div class="section-h">⑤ Stage-gate content/test budget <span class="info" data-tip="What you spend at each gate to find hits. Gates 1–3 (trailer / pilot / greenlight) are your content + testing spend, and show up in the P&L as the content line. Gate 4 is the big ad spend to scale winners (shared) — already shown under UA, so it isn't counted twice.">i</span><span class="ln"></span></div>
+  <div class="band mine"><div class="band-hd">Funnel budget by gate<span class="sub">edit $/concept in 'my levers' above</span></div>
+    <div style="overflow-x:auto;padding:6px 12px 12px"><table class="tiers" id="gateTable"></table></div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="section-h">⑥ Output — July plan outcomes <span class="ln"></span></div>
+  <div class="band output"><div class="band-hd">★ July plan<span class="sub" id="planVsArc"></span></div>
+    <div class="metrics" id="m_july"></div>
+    <div class="mixwrap">
+      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Revenue mix — coins / ads / subs <span class="info" data-tip="Built from the ground up: coin revenue = payers × episodes unlocked × coins/episode × price/coin × net margin. It leans ~85/10/5 toward coins because a few big spenders unlock far more episodes.">i</span></div>
+        <div class="mixbar" id="mixBar"></div><div id="mixNums" style="font-size:11.5px;color:var(--muted)"></div></div>
+      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Per-tier monetization → contribution <span class="info" data-tip="Each tier's contribution adds up to total July contribution. Ad-acquisition cost is split evenly per active user; other costs by share of revenue — so free users carry the acquisition cost (and run negative) while a few big and mid spenders make the profit. Whale 'episodes' (~600/mo) include bulk coin packs and unlock-ahead, not literal listens.">i</span></div>
+        <table class="tiers" id="tierTable"></table></div>
+    </div>
+  </div>
+
+  <!-- CONTENT VINTAGE -->
+  <div class="section-h">⑦ Revenue by content vintage — existing catalog vs new releases <span class="info" data-tip="A different angle from the user view: users are WHO pays; vintage is WHAT they watch. Your existing catalogue already paid for itself, so it's almost pure profit. New releases bring in revenue but still carry production + testing cost and the ad spend they drive. Catalogue is money in the bank; new content is the pipeline that becomes tomorrow's catalogue.">i</span><span class="ln"></span></div>
+  <div class="band"><div class="band-hd" style="background:var(--paper)">Catalog (sunk content) + new releases − acquisition = contribution</div>
+    <div class="mixwrap">
+      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Revenue by vintage</div>
+        <div class="mixbar" id="cvBar"></div><div id="cvNums" style="font-size:11.5px;color:var(--muted)"></div></div>
+      <div style="overflow-x:auto"><table class="tiers" id="cvTable"></table></div>
+    </div>
+  </div>
+
+  <!-- LIBRARY SHAPE -->
+  <div class="section-h">⑦·b Library shape — a few hits, a long tail (protect the hits) <span class="info" data-tip="What a real Romantasy library looks like. A mature catalogue has ~1,000–1,500 live titles, but a small number of hits earn most of the money. This shows how the per-title numbers add up to the category total — and why the hits are the last thing you'd ever take down.">i</span><span class="ln"></span></div>
+  <div class="band"><div class="band-hd" style="background:var(--paper)">US Romantasy active library — title count × revenue concentration <span class="sub">edit 'Active library titles' in my levers above</span></div>
+    <div class="mixwrap">
+      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Revenue concentration by title tier</div>
+        <div class="mixbar" id="libBar"></div><div id="libNums" style="font-size:11.5px;color:var(--muted)"></div></div>
+      <div style="overflow-x:auto"><table class="tiers" id="libTable"></table></div>
+    </div>
+    <div class="pilotsum" id="libNote"></div>
+  </div>
+
+  <!-- TWO-LEDGER ATTRIBUTION -->
+  <div class="section-h">⑧ Attribution — two ledgers (your category isn't a closed system) <span class="info" data-tip="The category-lead point: the cost to bring in a user is genuinely yours per ad, but the value they create wanders — a user your hook acquired may spend months watching other genres. So judge yourself on TWO scorecards: one as a channel that brings users to the whole app, one as a creator of value inside your own category. Don't collapse them into a single blended number.">i</span><span class="ln"></span></div>
+  <div class="band"><div class="band-hd" style="background:var(--paper)">CPI is yours · LTV roams — acquisition vs consumption ledger</div>
+    <div class="twocol">
+      <div style="overflow-x:auto;padding:4px 6px 8px"><table class="tiers" id="ledgerTable"></table></div>
+      <div style="padding:10px 14px"><div id="ledgerVerdict"></div></div>
+    </div>
+  </div>
+
+  <!-- VARIANCE -->
+  <div class="section-h">⑨ Plan vs Actual — track July as it lands <span class="ln"></span></div>
+  <div class="band"><div class="band-hd" style="background:var(--paper)">June baseline · July plan · July actual (you fill) · variance</div>
+    <div style="overflow-x:auto;padding:4px 6px 10px"><table class="vartable" id="varTable"></table></div>
+  </div>
+
+  <!-- OPTIMIZER -->
+  <div class="section-h">⑩ Constrained optimizer — solve a vector of targets <span class="info" data-tip="Set several targets at once (=, ≥, ≤). The solver hunts across the levers you've freed for a combination that hits them all, while also improving a secondary goal. If it can't hit them, it tells you which target is in the way. Any shared levers it moves are flagged 'needs alignment'.">i</span><span class="ln"></span></div>
+  <div class="optcard">
+    <p class="opthelp">Pick the outcomes you must hit and let it find the lever combination — across <b style="color:var(--mine)">my levers</b> (free by default) and any <b style="color:var(--shared)">shared</b> lever you unlock. It optimizes a secondary objective and, if the targets conflict, tells you which one is binding.</p>
+    <div id="constraintRows"></div>
+    <button class="btn" id="addConstraint" style="margin:4px 0 10px">+ add target</button>
+    <div class="optrow2">
+      <span class="lbl">Free levers</span><span id="freeLeverChips" style="display:flex;gap:6px;flex-wrap:wrap"></span>
+    </div>
+    <div class="optrow2">
+      <span class="lbl">Objective</span>
+      <select id="optObjective"><option value="minua">minimize UA spend</option><option value="maxcontrib">maximize contribution</option></select>
+      <button class="btn primary" id="solveBtn">Solve →</button>
+    </div>
+    <div class="cap">Solve = inverse-solve your free levers to hit the target vector; names the binding constraint if they conflict.</div>
+    <div class="optresult" id="optResult"><span style="color:var(--faint)">Add targets, choose free levers, press Solve. Try: New rev ≥ 1.45 AND margin ≥ 5 AND payback ≤ 6.</span></div>
+  </div>
+
+  <!-- BRIEF -->
+  <div class="section-h">⑪ June → team &amp; stakeholder brief <span class="info" data-tip="The loop in action: a June signal forces a July action. A copy-paste brief with instructions per team (UA / Monetization / Lifecycle / Content) plus a summary for leadership. Refreshes when you press Calculate.">i</span><span class="ln"></span></div>
+  <div class="band"><div class="band-hd" style="background:var(--paper)">Shareable brief — partner teams + stakeholders<button class="btn" id="copyBrief" style="margin-left:auto;padding:5px 11px">⧉ Copy</button></div>
+    <pre id="briefText" class="brief"></pre>
+  </div>
+
+  <!-- ARC + SLATE -->
+  <div class="section-h">Where July sits on the $60M → $200M arc — illustrative US Romantasy <i>category</i> ARR, not company-wide (context only) <span class="ln"></span></div>
+  <div class="arcwrap"><div id="arc"></div></div>
+
+  <div class="section-h">In-market slate — real titles by portfolio role <span class="ln"></span></div>
+  <div class="slate" id="slate"></div>
+
+  <footer>
+    <b>US market only.</b> Illustrative, internally-consistent assumptions — not telemetry. Coins modelled bottoms-up (~$0.02/coin, ~10 coins/episode; episodes/payer by tier). Cohort split, whale concentration and CPI-inflation are editable benchmarks. Public / benchmark context used for calibration (cite sources in the room): PocketFM ARR ~$200M→~$430M/12mo, EBITDA/FCF-positive ~5%, AI content ~$50–60/hr.
+    <br><b>Benchmarks behind the defaults:</b> mix 85/10/5 ≈ PocketFM FY24 (~91% coins+IAP / ~9% ads); monthly churn 8% (sub avg ~9%, streaming ~6.7%); coins/episode 8–10 and $0.01–0.02/coin (app store); entertainment CPI ~$1–5 (Android ~$1.2, iOS ~$3.6–4.7); US Meta CPM ~$10–22; market CPI inflation ~15–25%/yr.
+    <div class="legend">
+      <span><span class="pip pip-c">Context</span> market</span><span><span class="pip pip-m">Mine</span> category/title</span>
+      <span><span class="pip pip-s">Shared</span> needs alignment</span><span><span class="pip pip-o">Output</span> computed</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+/* ============ FORMAT ============ */
+const M=(n)=>{const a=Math.abs(n),s=n<0?'-':'';if(a>=1e9)return s+'$'+(a/1e9).toFixed(2)+'B';if(a>=1e6)return s+'$'+(a/1e6).toFixed(2)+'M';if(a>=1e3)return s+'$'+(a/1e3).toFixed(a>=1e5?0:1)+'k';if(a>=100)return s+'$'+a.toFixed(0);if(a>=10)return s+'$'+a.toFixed(1);return s+'$'+a.toFixed(2);};
+const NUM=(n)=>{const a=Math.abs(n);if(a>=1e6)return(n/1e6).toFixed(a>=1e7?0:1)+'M';if(a>=1e3)return(n/1e3).toFixed(a>=1e4?0:1)+'k';return Math.round(n).toLocaleString();};
+const PC=(x)=>(x*100).toFixed(Math.abs(x)>=0.1?0:1)+'%';
+const arrLabel=(monthly)=>'(≈ '+M(monthly*12)+' ARR)';
+
+/* ============ MONETIZATION CONSTANTS ============ */
+const SPL={L:0.66,Mid:0.28,W:0.06};          // payer tier split
+const EP={L:25,Mid:140,W:600};               // episodes/payer/mo (base, scaled by depth)
+const SUBG={L:0.30,Mid:1.20,W:9.00};         // VIP gross/payer/mo
+const ADU={free:0.08,L:0.07,Mid:0.05,W:0.02};// ad $/user/mo (scaled by adload)
+const JUNE_MONET={coinprice:0.02,coinsep:10,depth:1.0,adload:1.0,nm:0.65}; // June frozen pricing
+// Content-hit → New-cohort whale coupling: identity at default (s4 == S4_BASE → hitMult == 1)
+const S4_BASE=1000*0.25*0.30*0.25*0.50;            // = 9.375 = scaled hits at default gates
+const HIT_FLOOR=0.25, HIT_SENS=0.5;
+function hitMult(s4){return HIT_FLOOR+(1-HIT_FLOOR)*Math.pow(Math.max(s4,0)/S4_BASE,HIT_SENS);}
+
+function valPayer(mon,SP){ SP=SP||SPL;
+  const t={};
+  ['L','Mid','W'].forEach(k=>{
+    const coinG=EP[k]*mon.depth*mon.coinsep*mon.coinprice;
+    const coinN=coinG*mon.nm, subN=SUBG[k]*mon.nm, ad=ADU[k]*mon.adload;
+    t[k]={coinG,coinN,subN,ad,val:coinN+subN+ad};
+  });
+  const blended=SP.L*t.L.val+SP.Mid*t.Mid.val+SP.W*t.W.val;
+  return {blended,adFree:ADU.free*mon.adload,t};
+}
+const ARPU=(conv,vp)=>(1-conv)*vp.adFree+conv*vp.blended;
+function revMix(users,conv,vp,splitN){
+  let coins=0,subs=0,ads=0;
+  ['N','E','R'].forEach(k=>{const u=users[k],c=conv[k],p=u*c,f=u-p; const SP=(k==='N'&&splitN)?splitN:SPL;
+    coins+=p*(SP.L*vp.t.L.coinN+SP.Mid*vp.t.Mid.coinN+SP.W*vp.t.W.coinN);
+    subs +=p*(SP.L*vp.t.L.subN +SP.Mid*vp.t.Mid.subN +SP.W*vp.t.W.subN);
+    ads  +=f*vp.adFree+p*(SP.L*vp.t.L.ad+SP.Mid*vp.t.Mid.ad+SP.W*vp.t.W.ad);});
+  return {coins,subs,ads,tot:coins+subs+ads};
+}
+
+/* ============ INPUT CONFIG ============ */
+// sec: june|context|mine|shared ; fmt: int|usd|usd2|usd3|pct|pct2|x
+const IN={
+  // JUNE baseline (editable actuals)
+  j_new_rev:{sec:'june',label:'New cohort revenue (mo)',pre:'$',suf:'M',fmt:'usd2',val:1.75,tip:'June revenue this month from NEW users (those brought in over the last ~3 months). Multiply by 12 for the yearly run-rate. Editable — your live read.'},
+  j_exist_rev:{sec:'june',label:'Existing cohort revenue (mo)',pre:'$',suf:'M',fmt:'usd2',val:2.75,tip:'June revenue this month from your settled, returning users — the biggest bucket, since regulars drive most revenue. ×12 for the year.'},
+  j_react_rev:{sec:'june',label:'Reactivated cohort revenue (mo)',pre:'$',suf:'M',fmt:'usd2',val:0.50,tip:'June revenue this month from users you won back after they went quiet. ×12 for the year.'},
+  j_new_conv:{sec:'june',label:'New payer conv',suf:'%',fmt:'pct2',val:4.0,tip:'Share of new users who pay. Lower than regulars — new users spend less at first.'},
+  j_exist_conv:{sec:'june',label:'Existing payer conv',suf:'%',fmt:'pct2',val:8.0,tip:'Settled, returning users pay at a higher rate.'},
+  j_react_conv:{sec:'june',label:'Reactivated payer conv',suf:'%',fmt:'pct2',val:5.0,tip:'Won-back users pay somewhere between new and regular users.'},
+  j_installs:{sec:'june',label:'June fresh installs',fmt:'int',val:900000,tip:'How many installs you bought in June (sets June ad cost). Your "new users" bucket is roughly the last 3 months of these.'},
+  // CONTEXT
+  x_cpm:{sec:'context',label:'Meta CPM',pre:'$',suf:'',fmt:'usd2',val:12,tip:'Cost to show your ad 1,000 times. US Meta CPM ran ~$22 in 2025, but install campaigns reach broadly and run cheaper (~$10–15). Cost per install = CPM ÷ (1000 × click-rate × install-rate) ≈ $2.56 — within the usual entertainment-app range.'},
+  x_infl:{sec:'context',label:'CPI inflation Jun→Jul',suf:'%',fmt:'pct',val:2,tip:'How much your cost per install rises going into July. Mobile ad costs have climbed ~15–25% a year (~1.5–2% a month); 2% adds mild pressure. Push it higher to test scaling hard into a crowded ad auction.'},
+  x_ua_ref_installs:{sec:'context',label:'UA saturation reference (installs)',fmt:'int',val:1000000,tip:'The install level where ad costs sit at "normal". Buy more than this and costs rise; buy less and they fall (the ad system serves you cheaper, higher-quality users). Default = the July plan, so cost = normal at rest.'},
+  x_cpi_elastic:{sec:'context',label:'UA saturation exponent',pre:'',suf:'',fmt:'usd2',val:0.40,tip:'How sharply ad costs swing with volume — and it works both ways. Buy 3× as many installs and cost per install rises ~1.5× (~$4) while new users\' intent to pay drops ~35%; cut to 100k installs and cost falls ~60% while intent rebounds (the system picks higher-quality users), capped at 15%. 0 = no friction.'},
+  x_nm:{sec:'context',label:'Net margin (store/refunds)',suf:'%',fmt:'pct',val:65,tip:'What you keep after the app store cut (~30%) and refunds, on coins and subscriptions. The store cut is fixed; refunds are partly controllable.'},
+  x_churn:{sec:'context',label:'Monthly active churn',suf:'%',fmt:'pct',val:8,tip:'Share of active users you lose each month. This ages your user base from June to July. Payers stick around longer — see payer churn below.'},
+  x_payer_churn:{sec:'context',label:'Monthly payer churn (LTV)',suf:'%',fmt:'pct',val:5,tip:'Share of PAYING users you lose each month — used only for lifetime value (lifetime = 1 ÷ this rate). Payers stay longer than the average user, so lifetime value uses this slower rate. Active churn (above) still ages the carried-forward revenue.'},
+  x_spill_out:{sec:'context',label:'Spillover OUT (cohort value to other genres)',suf:'%',fmt:'pct',val:35,tip:'Of the lifetime value the users you bring in go on to create, the share that lands in OTHER genres (your hook brings them in; they then binge romance/mythology). You keep the rest in your category. Used only in the two-scorecard view.'},
+  x_spill_in:{sec:'context',label:'Spillover IN (your rev from other genres’ installs)',suf:'%',fmt:'pct',val:30,tip:'Of YOUR category revenue, the share that comes from users OTHER genres brought in (they installed for a thriller, then found your romantasy). Used only in the two-scorecard view.'},
+  x_trigger_share:{sec:'context',label:'First-purchase-trigger share',suf:'%',fmt:'pct',val:40,tip:'Of all first-time coin purchases across the app, the share your category sets off (the moment a free user first pays). If this is bigger than what you keep, your category is a paying "on-ramp" whose value leaks to other genres. Two-scorecard view only.'},
+  x_window:{sec:'context',label:'New-cohort window',suf:'mo',fmt:'int',val:3,tip:'How many months a user counts as "new" before becoming a "regular". Makes "new" a rolling window, not just one month of installs.'},
+  x_activation:{sec:'context',label:'Install→active',suf:'%',fmt:'pct',val:70,tip:'Share of installs that become active users.'},
+  x_dormant:{sec:'context',label:'Dormant pool',fmt:'int',val:8000000,tip:'Lapsed users available for win-back.'},
+  x_opex:{sec:'context',label:'Variable opex % rev',suf:'%',fmt:'pct',val:21,tip:'Running costs as a share of revenue — royalties, infrastructure, payments, support (content + testing are counted separately). The company\'s ~5% profit is after this; contribution sits above it.'},
+  x_dollarhr:{sec:'context',label:'Content $/finished hr',pre:'$',suf:'',fmt:'usd2',val:55,tip:'AI made content cost ~$50–60 per finished hour. Used only for the rough production-cost figure in the summary — NOT the P&L content line (that\'s your gate testing/commit spend). To one extra user, content costs nothing.'},
+  // MINE (category/title) — grouped by stage
+  m_pilots:{sec:'mine',grp:'Slate',label:'Pilots / month',fmt:'int',val:1000,tip:'Story ideas entering the full testing funnel each month. Cheap to make (~$50/hr).'},
+  m_catalog:{sec:'mine',grp:'Slate',label:'Active library titles (US Romantasy)',fmt:'int',val:1200,tip:'How many US Romantasy titles are live today — hits, mid and long tail. Powers the "Library shape" view below. A mature single-category library usually runs ~1,000–1,500 titles.'},
+  m_newshare:{sec:'mine',grp:'Slate',label:'New-release revenue share',suf:'%',fmt:'pct',val:22,tip:'Share of revenue from recently launched shows vs your older catalogue. New shows carry production + testing cost; older catalogue already paid for itself, so it\'s almost pure profit.'},
+  f_g1:{sec:'mine',grp:'Gate 1 · Trailer',label:'G1 pass-rate',suf:'%',fmt:'pct',val:25,tip:'Overall share of trailers that pass the first test (across the 1,000-idea funnel).'},
+  g1_spend:{sec:'mine',grp:'Gate 1 · Trailer',label:'$/concept',pre:'$',suf:'',fmt:'int',val:250,tip:'Trailer test spend per idea (~$250 in the doc). Cheap, run on every idea. Counts as content/testing in the P&L.'},
+  pl_minCTR:{sec:'mine',grp:'Gate 1 · Trailer',label:'Bar: min CTR',suf:'%',fmt:'pct2',val:1.0,tip:'The pass bar for the named board — the lowest trailer click-rate to clear Gate 1.'},
+  f_g2:{sec:'mine',grp:'Gate 2 · Pilot',label:'G2 pass-rate',suf:'%',fmt:'pct',val:30,tip:'Overall share of pilots (episodes 1–5) that pass the second test.'},
+  g2_spend:{sec:'mine',grp:'Gate 2 · Pilot',label:'$/survivor',pre:'$',suf:'',fmt:'int',val:500,tip:'Pilot test spend per survivor (~$500) — testing episodes 1–5. Content/testing cost.'},
+  pl_minRet:{sec:'mine',grp:'Gate 2 · Pilot',label:'Bar: min D1 ret',suf:'%',fmt:'pct',val:25,tip:'Lowest next-day return rate to clear Gate 2 on the named board.'},
+  f_g3:{sec:'mine',grp:'Gate 3 · Greenlight',label:'G3 pass-rate',suf:'%',fmt:'pct',val:25,tip:'Overall share of shows that pass the greenlight test.'},
+  g3_spend:{sec:'mine',grp:'Gate 3 · Greenlight',label:'$/greenlight',pre:'$',suf:'',fmt:'int',val:3000,tip:'Cost to build a full series + paywall per survivor (doc range $2–20K; an average here). Content/testing cost.'},
+  pl_minConv:{sec:'mine',grp:'Gate 3 · Greenlight',label:'Bar: min unlock conv',suf:'%',fmt:'pct2',val:3.5,tip:'Lowest share of viewers-who-pay needed to clear Gate 3.'},
+  f_g4:{sec:'mine',grp:'Gate 4 · Scale',label:'G4 pass-rate',suf:'%',fmt:'pct',val:50,tip:'Overall share of shows that survive scaling and become hits.'},
+  g4_spend:{sec:'mine',grp:'Gate 4 · Scale',label:'$/hit (scale)',pre:'$',suf:'',fmt:'int',val:50000,tip:'Ad spend to scale a winning hit ($50K+). For reference only — this is the shared ad-scaling line, not double-counted in the P&L.'},
+  pl_minROI:{sec:'mine',grp:'Gate 4 · Scale',label:'Bar: min scale ROI',suf:'×',fmt:'x',val:1.0,tip:'Lowest return-on-ad-spend at scale for a show to count as a hit (Gate 4).'},
+  m_depth:{sec:'mine',grp:'Product levers',label:'Episode depth index',suf:'%',fmt:'pct',val:100,tip:'Scales how many episodes a paying user gets through (better story arcs, continuity). 100 = today. Your main lever on coin revenue.'},
+  m_ctr:{sec:'mine',grp:'Product levers',label:'Trailer CTR (creative)',suf:'%',fmt:'pct2',val:1.3,tip:'Better trailers/IP get more clicks → cheaper installs. A creative lever you own.'},
+  p_newconv:{sec:'mine',grp:'Product levers',label:'July New payer conv',suf:'%',fmt:'pct2',val:4.0,tip:'Share of new users who pay — driven by paywall placement, number of free episodes, and content gating.'},
+  p_existconv:{sec:'mine',grp:'Product levers',label:'July Existing payer conv',suf:'%',fmt:'pct2',val:8.0,tip:'Share of regulars who pay. Modelled as a simple proportional lift on existing revenue (July ÷ June rate) — an approximation; a full finance model would split regulars into payers/non-payers and re-do each.'},
+  p_reactconv:{sec:'mine',grp:'Product levers',label:'July React payer conv',suf:'%',fmt:'pct2',val:5.0,tip:'Share of won-back users who pay — driven by win-back offer quality.'},
+  // SHARED (needs alignment) — grouped by team
+  s_installs:{sec:'shared',grp:'Central UA / Performance',label:'July installs (UA)',fmt:'int',val:1000000,owner:'Central UA',tip:'How many installs UA buys in July. Central UA/Performance owns the budget; you agree on the volume and the cost-per-install you\'ll accept.'},
+  s_ir:{sec:'shared',grp:'Growth / ASO',label:'Install rate (ASO)',suf:'%',fmt:'pct',val:36,owner:'Growth/ASO',tip:'Share of store-page visitors who install (store page / ASO). Higher = cheaper installs. Owned by Growth.'},
+  s_promo:{sec:'shared',grp:'Growth / ASO',label:'Promo % rev',suf:'%',fmt:'pct',val:6,owner:'Growth',tip:'Spend on in-app promos / discounts, as a share of revenue.'},
+  s_coinprice:{sec:'shared',grp:'Monetization',label:'Price per coin',pre:'$',suf:'',fmt:'usd3',val:0.02,owner:'Monetization',tip:'Price of one coin (USD). Monetization/Finance sets pack pricing.'},
+  s_coinsep:{sec:'shared',grp:'Monetization',label:'Coins per episode',fmt:'int',val:10,owner:'Monetization',tip:'Coins needed to unlock one episode (~8–10 typical).'},
+  s_adload:{sec:'shared',grp:'Monetization',label:'Ad-load index',suf:'%',fmt:'pct',val:100,owner:'Monetization',tip:'Scales ad revenue per user. Too many ads drives away the users you just paid to acquire.'},
+  s_crm:{sec:'shared',grp:'Lifecycle / Retention',label:'CRM % rev',suf:'%',fmt:'pct',val:4,owner:'Lifecycle',tip:'Spend on lifecycle messaging / retention, as a share of revenue.'},
+  p_reach:{sec:'shared',grp:'Lifecycle / Retention',label:'Dormant reached (Jul)',fmt:'int',val:2000000,owner:'Lifecycle',tip:'How many dormant users the win-back team messages. Lifecycle runs the calendar.'},
+  p_winconv:{sec:'shared',grp:'Lifecycle / Retention',label:'Dormant → active return rate',suf:'%',fmt:'pct',val:35,owner:'Lifecycle',tip:'Share of messaged dormant users who come back as active (not yet paying). Their paying rate is applied separately via "React payer conv" — so no double-count.'},
+  p_freecoin:{sec:'shared',grp:'Lifecycle / Retention',label:'Free-coin / reach',pre:'$',suf:'',fmt:'usd2',val:0.15,owner:'Lifecycle',tip:'Free coins + messaging cost per user you reach.'},
+  // June win-back assumption (used for June P&L)
+  j_winconv:{sec:'june',label:'June win-back conv',suf:'%',fmt:'pct',val:35,tip:'Used to work backwards to June\'s win-back reach and cost.'},
+  j_freecoin:{sec:'june',label:'June free-coin / reach',pre:'$',suf:'',fmt:'usd2',val:0.15,tip:'June\'s subsidy cost per user reached.'}
+};
+let S={}; Object.keys(IN).forEach(k=>S[k]=IN[k].val);
+
+/* ============ DECISION BASIS — on what basis to move each lever ============ */
+const DEC={
+  // MINE
+  m_pilots:'How many new story ideas you test each month. Testing is cheap, so push this up until your team can’t review the results fast enough — not because of cost.',
+  m_catalog:'How many Romantasy titles are live today. Grow it by greenlighting winners. Don’t delete old titles to save money — they cost nothing to keep and still earn; only retire truly dead ones.',
+  m_newshare:'How much you’re betting on this month’s new shows vs. your proven back-catalogue. Push up when lots of new hits are landing; pull back when the pipeline is dry.',
+  f_g1:'The share of trailers that pass the first test. This is a result you measure, not a number you pick — change it only when real trailer data changes.',
+  g1_spend:'What you spend testing each trailer (~$250). Spend just enough to trust the result — it’s a cheap early test.',
+  pl_minCTR:'The lowest trailer click-rate you’ll accept to move forward. Set it to the click-rate ads need to pay off, and raise it when ads get more expensive.',
+  f_g2:'The share of pilots that pass the second test. A measured result from how well early episodes hold viewers — not a dial you set.',
+  g2_spend:'What you spend testing the first 5 episodes (~$500) — enough viewers to see where people drop off.',
+  pl_minRet:'The lowest next-day return rate you’ll accept to move forward. Set it to the level that usually predicts people will pay later.',
+  f_g3:'The share of shows that pass the greenlight test. A measured result, not a number you pick.',
+  g3_spend:'What it costs to build a full series + paywall ($2K–$20K). Set by the size of the show — this is your real content bet.',
+  pl_minConv:'The lowest share of viewers-who-pay you’ll accept to move forward. Set it where the show earns back what you paid to bring its viewers in.',
+  f_g4:'The share of greenlit shows that still make money once you spend big on ads. Driven by the ad market, not something you freely set.',
+  g4_spend:'Ad spend to scale a proven hit ($50K+). This is the marketing team’s budget — agree it with them, don’t treat it as a content cost.',
+  pl_minROI:'The minimum return before you scale ad spend. 1.0× = break even; set it above 1.0× if you want real profit, not just breaking even.',
+  m_depth:'How many episodes a paying viewer gets through. Push it up only where data shows people will actually watch more — otherwise you pay to make episodes no one finishes.',
+  m_ctr:'Your trailer’s click-rate — a real test result, not a wish. Set it to your best trailer’s number; it fades as ads get stale, so refresh creative to hold it.',
+  p_newconv:'Share of new viewers who pay. Only change it from paywall tests (where it sits, how many free episodes) — it’s a tested outcome, not a guess.',
+  p_existconv:'Share of your existing viewers who pay. Lift it with deeper content and better recommendations, proven against a control group.',
+  p_reactconv:'Share of returning viewers who pay. Change it from win-back offer tests — and make sure they’re real payers, not people just grabbing free coins.',
+  // SHARED
+  s_installs:'How many new users to buy. The rule: only buy while a new user is worth clearly more than they cost — never just to hit a number. Don’t raise spend more than ~20% in a month or the ad system breaks. Agree the budget with the central UA team.',
+  s_ir:'Share of store-page visitors who install. A measured result from store-page tests — improve the page to lift it, don’t just assume it.',
+  s_promo:'Promo / discount spend. Set it by how many extra payers promos actually create (measured against a control group), and stop when the next dollar stops paying off.',
+  s_coinprice:'Price per coin. Only change it after price tests. Keep a floor — big spenders won’t notice a rise, but casual payers will leave. Monetization / Finance owns this.',
+  s_coinsep:'Coins needed to unlock an episode (usually 8–10). More coins = more revenue per episode but can scare off new viewers — test it on new users first.',
+  s_adload:'How many ads each user sees. Set by ad earnings vs. the risk of annoying users you just paid to get. Don’t overdo it. Monetization owns this.',
+  s_crm:'Spend on emails / notifications to keep users active. Set it by how much extra activity it really creates (measured against a control group).',
+  p_reach:'How many dormant users to message. Keep reaching out until the next batch costs more than it brings back. Limited by how many lapsed users exist and team capacity.',
+  p_winconv:'Share of messaged dormant users who come back. A measured result from win-back tests, not a target you set.',
+  p_freecoin:'Free coins / incentive per user you message. Set it so the offer pays for itself in recovered spend. Drop offers that only attract freebie-hunters who never pay.'
+};
+
+/* ============ PILOT LAB ============ */
+// src = sourcing provenance ; score = sourcing-algorithm score 0–100 (provenance × trope novelty × creator tier)
+const PILOTS=[
+  {n:'Moonlit Reject',tp:'Werewolf',src:'Proprietary IP',score:90,ctr:1.8,d1:42,conv:6.2,roi:1.6,ltv:240,launch:"Aug '26"},
+  {n:"Alpha's Forbidden Heir",tp:'Werewolf',src:'Webtoon adaptation',score:84,ctr:1.5,d1:38,conv:5.0,roi:1.3,ltv:200,launch:"Aug '26"},
+  {n:"Don's Captive Bride",tp:'Mafia',src:'Licensed bestseller',score:72,ctr:1.6,d1:40,conv:5.5,roi:0.8,ltv:175,launch:"Sep '26"},
+  {n:'Throne of Ash & Fae',tp:'Fae-dragon',src:'Proprietary IP',score:92,ctr:1.9,d1:45,conv:6.8,roi:1.4,ltv:260,launch:"Aug '26"},
+  {n:'Reborn as the Villainess',tp:'System-fantasy',src:'Webtoon adaptation',score:80,ctr:1.3,d1:33,conv:4.2,roi:1.1,ltv:165,launch:"Sep '26"},
+  {n:"Billionaire's Contract Heart",tp:'Billionaire',src:'Original concept',score:60,ctr:1.4,d1:30,conv:3.8,roi:0.7,ltv:130,launch:"Sep '26"},
+  {n:'Her Dragon-Bonded Mate',tp:'Fae-dragon',src:'Licensed bestseller',score:68,ctr:1.1,d1:28,conv:3.6,roi:0.9,ltv:150,launch:"Oct '26"},
+  {n:"Mafia King's Obsession",tp:'Mafia',src:'Webtoon adaptation',score:82,ctr:1.2,d1:24,conv:3.0,roi:1.0,ltv:210,launch:"Sep '26"},
+  {n:'Rejected by the Moon',tp:'Werewolf',src:'Proprietary IP',score:85,ctr:0.9,d1:35,conv:4.0,roi:1.2,ltv:225,launch:"Sep '26"},
+  {n:"Fae Queen's Gambit",tp:'Fae-dragon',src:'Original concept',score:55,ctr:1.05,d1:26,conv:3.2,roi:1.0,ltv:120,launch:"Oct '26"},
+  {n:"CEO's Secret Omega",tp:'Billionaire-WW',src:'Webtoon adaptation',score:86,ctr:1.25,d1:31,conv:4.5,roi:1.5,ltv:230,launch:"Aug '26"},
+  {n:'Blood Empire',tp:'Mafia',src:'Original concept',score:38,ctr:0.8,d1:20,conv:2.5,roi:0.6,ltv:70,launch:"Nov '26"},
+  {n:'Cursed Crown',tp:'Fae-dragon',src:'Original concept',score:45,ctr:1.0,d1:22,conv:2.8,roi:0.7,ltv:95,launch:"Oct '26"},
+  {n:'Reborn to Reject Him',tp:'System-WW',src:'Licensed bestseller',score:62,ctr:1.35,d1:29,conv:3.4,roi:0.9,ltv:140,launch:"Oct '26"},
+  {n:"The Tycoon's Fake Luna",tp:'Billionaire-WW',src:'Proprietary IP',score:70,ctr:1.15,d1:27,conv:3.7,roi:0.85,ltv:160,launch:"Oct '26"},
+  {n:'Dragonsworn',tp:'Fae-dragon',src:'Original concept',score:50,ctr:0.95,d1:30,conv:3.9,roi:1.1,ltv:110,launch:"Nov '26"}
+];
+function evalPilots(v){
+  return PILOTS.map(p=>{
+    let stage=0;
+    if(p.ctr>=v.pl_minCTR){stage=1;
+      if(p.d1>=v.pl_minRet){stage=2;
+        if(p.conv>=v.pl_minConv){stage=3;
+          if(p.roi>=v.pl_minROI){stage=4;}}}}
+    return {...p,stage,verdict:['Killed @ G1','Killed @ G2','Killed @ G3','Greenlit','Scaled hit'][stage]};
+  });
+}
+
+/* ============ ENGINE ============ */
+function julyMonet(v){return {coinprice:v.s_coinprice,coinsep:v.s_coinsep,depth:v.m_depth/100,adload:v.s_adload/100,nm:v.x_nm/100};}
+function contentHits(v){
+  const p=v.m_pilots, s1=p*v.f_g1/100, s2=s1*v.f_g2/100, s3=s2*v.f_g3/100, s4=s3*v.f_g4/100;
+  const hrs=s1*5*0.33+s3*40*0.33;
+  const hd=p*v.g1_spend + s1*v.g2_spend + s2*v.g3_spend;   // Gates 1–3 hit-detection (test + production)
+  return {s1,s2,s3,s4,hrs,cost:hrs*v.x_dollarhr,hd};
+}
+// Per-tier (Free/Light/Mid/Whale) contribution — sums to jl.contribution
+function computeTierBreakdown(jl){
+  const vp=jl.vp, conv=jl.conv, users=jl.users;
+  const T={Free:{u:0,rev:0},Light:{u:0,rev:0},Mid:{u:0,rev:0},Whale:{u:0,rev:0}};
+  ['N','E','R'].forEach(k=>{const u=users[k],c=conv[k],pe=u*c,free=u-pe; const SP=(k==='N'&&jl.splitN)?jl.splitN:SPL;
+    T.Free.u+=free; T.Free.rev+=free*vp.adFree;
+    T.Light.u+=pe*SP.L; T.Light.rev+=pe*SP.L*vp.t.L.val;
+    T.Mid.u+=pe*SP.Mid; T.Mid.rev+=pe*SP.Mid*vp.t.Mid.val;
+    T.Whale.u+=pe*SP.W; T.Whale.rev+=pe*SP.W*vp.t.W.val;});
+  const totU=T.Free.u+T.Light.u+T.Mid.u+T.Whale.u;
+  const otherCosts=jl.promo+jl.crm+jl.winback+jl.opex+jl.content; // all costs except UA
+  Object.values(T).forEach(t=>{ t.contribution = t.rev - jl.ua*(t.u/totU) - otherCosts*(t.rev/jl.totRev); });
+  return {T,totU};
+}
+function engineJune(v){
+  const vp=valPayer(JUNE_MONET);
+  const conv={N:v.j_new_conv/100,E:v.j_exist_conv/100,R:v.j_react_conv/100};
+  const rev={N:v.j_new_rev*1e6,E:v.j_exist_rev*1e6,R:v.j_react_rev*1e6};
+  const users={N:rev.N/ARPU(conv.N,vp),E:rev.E/ARPU(conv.E,vp),R:rev.R/ARPU(conv.R,vp)};
+  const totRev=rev.N+rev.E+rev.R, totUsers=users.N+users.E+users.R;
+  const mix=revMix(users,conv,vp);
+  const cpi=v.x_cpm/(1000*(v.m_ctr/100)*(v.s_ir/100));
+  const ua=v.j_installs*cpi;
+  const winback=(users.R/(v.j_winconv/100))*v.j_freecoin;
+  const promo=totRev*v.s_promo/100, crm=totRev*v.s_crm/100, opex=totRev*v.x_opex/100;
+  const ch=contentHits(v), content=ch.hd;
+  const contribution=totRev-ua-promo-crm-winback-opex-content;
+  const lifetime=1/(v.x_payer_churn/100), ltv=vp.blended*lifetime, cac=cpi/conv.N, ltvcac=ltv/cac, payback=cac/vp.blended;
+  const payers=users.N*conv.N+users.E*conv.E+users.R*conv.R;
+  return {vp,conv,rev,users,totRev,totUsers,payers,arppu:vp.blended,mix,cpi,ua,winback,promo,crm,opex,content,contribution,
+    margin:contribution/totRev,ltv,cac,ltvcac,payback,
+    arr:{N:v.j_new_rev*12,E:v.j_exist_rev*12,R:v.j_react_rev*12,tot:(v.j_new_rev+v.j_exist_rev+v.j_react_rev)*12}};
+}
+function engineJuly(v,june){
+  const vp=valPayer(julyMonet(v));
+  const s=1-v.x_churn/100, W=v.x_window, act=v.x_activation/100;
+  const pf=vp.blended/june.vp.blended;               // pricing/depth/adload factor on rolled-forward base
+  // D1 — TWO-WAY elastic CPI on install VOLUME vs reference (no circularity; identity at ratio=1).
+  // Scaling up → CPI inflates; retreating below the reference → CPI falls (auction "retreat to efficiency").
+  const baseCpi=(v.x_cpm/(1000*(v.m_ctr/100)*(v.s_ir/100)))*(1+v.x_infl/100);
+  const ratio=Math.max(v.s_installs/v.x_ua_ref_installs, 0.05);   // floor avoids div-by-zero at micro-spend
+  const cpi=baseCpi*Math.pow(ratio, v.x_cpi_elastic);
+  const convN=Math.min((v.p_newconv/100)*(baseCpi/cpi), 0.15);    // intent rebounds when cheaper; capped at 15%
+  // D2 — content hit-rate modulates ONLY the New cohort's whale share (existing base = sunk CAC, unaffected)
+  const hm=hitMult(contentHits(v).s4);
+  const wW=SPL.W*hm, rn=1/(SPL.L+SPL.Mid+wW);
+  const splitN={L:SPL.L*rn,Mid:SPL.Mid*rn,W:wW*rn};
+  const vpNew=valPayer(julyMonet(v),splitN);
+  const pfNew=vpNew.blended/june.vp.blended;
+  // D3-6 — existing-conversion is now a real revenue lever (cf = 1 at default)
+  const cfE=(v.p_existconv/100)/(v.j_exist_conv/100);
+  const Fusers=v.s_installs*act, Frev=Fusers*ARPU(convN,vpNew);
+  const newRev=june.rev.N*s*(1-1/W)*pfNew+Frev;
+  const grad=june.rev.N*(1/W)*s*pf;
+  const existRev=((june.rev.E+june.rev.R)*s*pf+grad)*cfE;
+  const reactUsers=Math.min(v.x_dormant,v.p_reach)*(v.p_winconv/100);
+  const reactRev=reactUsers*ARPU(v.p_reactconv/100,vp);
+  const totRev=newRev+existRev+reactRev;
+  const ua=v.s_installs*cpi, winback=v.p_reach*v.p_freecoin;
+  const promo=totRev*v.s_promo/100, crm=totRev*v.s_crm/100, opex=totRev*v.x_opex/100;
+  const ch=contentHits(v), content=ch.hd;
+  const contribution=totRev-ua-promo-crm-winback-opex-content;
+  const lifetime=1/(v.x_payer_churn/100), ltv=vp.blended*lifetime, cac=cpi/convN, ltvcac=ltv/cac, payback=cac/vp.blended;
+  const arr={N:newRev*12/1e6,E:existRev*12/1e6,R:reactRev*12/1e6,tot:totRev*12/1e6};
+  const conv={N:convN,E:v.p_existconv/100,R:v.p_reactconv/100};
+  const users={N:newRev/ARPU(conv.N,vpNew),E:existRev/ARPU(conv.E,vp),R:reactUsers};
+  const totUsers=users.N+users.E+users.R, payers=users.N*conv.N+users.E*conv.E+users.R*conv.R;
+  const mix=revMix(users,conv,vp,splitN);
+  return {vp,vpNew,splitN,newRev,existRev,reactRev,totRev,totUsers,payers,arppu:vp.blended,arr,cpi,ua,winback,promo,crm,opex,content,contribution,
+    margin:contribution/totRev,ltv,cac,ltvcac,payback,users,conv,mix,ch,reactUsers,Frev,
+    dorm:v.x_dormant+june.totUsers*(v.x_churn/100)-reactUsers};
+}
+
+/* ============ METRICS (for optimizer + variance) ============ */
+const MET={
+  newRev:{label:'New rev/mo',unit:'$M',scale:1e6,get:(jl)=>jl.newRev},
+  existRev:{label:'Existing rev/mo',unit:'$M',scale:1e6,get:(jl)=>jl.existRev},
+  reactRev:{label:'Reactivated rev/mo',unit:'$M',scale:1e6,get:(jl)=>jl.reactRev},
+  totRev:{label:'Total rev/mo',unit:'$M',scale:1e6,get:(jl)=>jl.totRev},
+  contribution:{label:'Contribution/mo',unit:'$M',scale:1e6,get:(jl)=>jl.contribution},
+  margin:{label:'Contribution margin',unit:'%',scale:0.01,get:(jl)=>jl.margin},
+  ltvcac:{label:'LTV : CAC',unit:'×',scale:1,get:(jl)=>jl.ltvcac},
+  payback:{label:'Payback (mo)',unit:'mo',scale:1,get:(jl)=>jl.payback},
+  hits:{label:'Scaled hits',unit:'#',scale:1,get:(jl)=>jl.ch.s4}
+};
+const FREE_LEVERS=['m_ctr','m_depth','p_newconv','p_existconv','p_reactconv','f_g4','s_installs','s_coinprice','s_adload','p_reach','p_winconv'];
+
+/* ============ RENDER HELPERS ============ */
+function step(fmt,range){return fmt==='usd2'||fmt==='pct2'?'0.1':fmt==='usd3'?'0.001':fmt==='x'?'0.05':fmt==='pct'?'1':'1';}
+function buildFields(sec,host){
+  host.innerHTML=''; let lastGrp=null;
+  Object.keys(IN).filter(k=>IN[k].sec===sec).forEach(k=>{
+    const c=IN[k], locked=sec==='context';
+    if(c.grp && c.grp!==lastGrp){ lastGrp=c.grp; const g=document.createElement('div'); g.className='grp'; g.textContent=c.grp; host.appendChild(g); }
+    const d=document.createElement('div'); d.className='field'+(locked?' locked':''); d.dataset.field=k;
+    const decTip=DEC[k]; const decIcon=decTip?`<span class="decic" data-tip="${decTip.replace(/"/g,'&quot;')}">D</span>`:'';
+    d.innerHTML=`<label>${c.label}<span class="info" data-tip="${c.tip.replace(/"/g,'&quot;')}">i</span>${decIcon}</label>
+      <div class="ig">${c.pre?`<span class="pre">${c.pre}</span>`:''}<input type="number" data-k="${k}" value="${S[k]}" step="${step(c.fmt)}">${c.suf?`<span class="suf">${c.suf}</span>`:''}</div>`;
+    host.appendChild(d);
+  });
+  host.querySelectorAll('input[data-k]').forEach(inp=>inp.addEventListener('input',()=>{S[inp.dataset.k]=parseFloat(inp.value)||0;markDirty();}));
+}
+const mcard=(k,tip,v,s,cls)=>`<div class="metric"><div class="mk">${k}${tip?`<span class="info" data-tip="${tip.replace(/"/g,'&quot;')}">i</span>`:''}</div><div class="mv ${cls||''}">${v}</div><div class="ms">${s||''}</div></div>`;
+
+/* ============ MAIN RENDER ============ */
+let JUNE=null, JULY=null;
+function render(){
+  const jn=engineJune(S); JUNE=jn;
+  const jl=engineJuly(S,jn); JULY=jl;
+
+  // June metrics
+  document.getElementById('m_june').innerHTML=
+    mcard('Total revenue','Adds up the three user groups (this month).',M(jn.totRev)+'/mo',arrLabel(jn.totRev),'')
+   +mcard('Cohort split','Editable above — default leans on regulars.',Math.round(jn.rev.N/jn.totRev*100)+'/'+Math.round(jn.rev.E/jn.totRev*100)+'/'+Math.round(jn.rev.R/jn.totRev*100),'New/Exist/React %','')
+   +mcard('Contribution','Revenue minus ads, promo, CRM, win-back, running costs and content/testing.',M(jn.contribution)+'/mo','margin '+PC(jn.margin),jn.contribution<0?'neg':'pos')
+   +mcard('LTV : CAC','What a paying user is worth over time ÷ what it cost to get one.',jn.ltvcac.toFixed(2)+'×','payback '+jn.payback.toFixed(1)+'mo',jn.ltvcac>=2?'pos':'warn')
+   +mcard('Active users','Active users this month = revenue ÷ revenue-per-user. Cross-check: '+NUM(jn.totUsers)+' users × '+PC(jn.payers/jn.totUsers)+' who pay = '+NUM(jn.payers)+' payers × '+M(jn.arppu)+'/mo each + ad revenue = '+M(jn.totRev)+'/mo ('+M(jn.totRev*12)+'/yr).',NUM(jn.totUsers),NUM(jn.payers)+' payers ('+PC(jn.payers/jn.totUsers)+') · '+M(jn.arppu)+'/payer/mo','');
+
+  // July metrics
+  const arcTarget=60*Math.pow(200/60,1/12); // month-1 ARR on the arc ($M)
+  const julyARR=jl.totRev*12/1e6;
+  const onArc=julyARR>=arcTarget*0.97;
+  document.getElementById('planVsArc').innerHTML=`plan ${M(jl.totRev)}/mo ${arrLabel(jl.totRev)} · arc pace ${M(arcTarget*1e6)} ARR <span style="color:${onArc?'var(--out)':'var(--warn)'};font-weight:700">${onArc?'✓ on pace':'▼ below pace'}</span>`;
+  document.getElementById('m_july').innerHTML=
+    mcard('Total revenue','July monthly revenue after carrying June forward and applying your levers.',M(jl.totRev)+'/mo',arrLabel(jl.totRev),'pos')
+   +mcard('Cohort split','New rises/falls with how much you acquire; regulars absorb users who graduate from "new".',Math.round(jl.newRev/jl.totRev*100)+'/'+Math.round(jl.existRev/jl.totRev*100)+'/'+Math.round(jl.reactRev/jl.totRev*100),'N '+M(jl.newRev)+' E '+M(jl.existRev)+' R '+M(jl.reactRev),'')
+   +mcard('Contribution','July contribution — revenue minus all the costs above, per month.',M(jl.contribution)+'/mo','margin '+PC(jl.margin),jl.contribution<0?'neg':'pos')
+   +mcard('LTV : CAC','Watch it shrink as installs get more expensive.',jl.ltvcac.toFixed(2)+'×','CPI '+M(jl.cpi)+' · payback '+jl.payback.toFixed(1)+'mo',jl.ltvcac>=2?'pos':jl.ltvcac>=1?'warn':'neg')
+   +mcard('Scaled hits','Hits that come out of the 1,000-idea funnel.',NUM(jl.ch.s4),NUM(S.m_pilots)+' pilots → '+NUM(jl.ch.s4)+' hits','')
+   +mcard('UA spend','Shared — agree this with Central UA.',M(jl.ua)+'/mo',NUM(S.s_installs)+' installs @ '+M(jl.cpi),'');
+
+  // mix
+  const mx=jl.mix, cP=mx.coins/mx.tot,aP=mx.ads/mx.tot,sP=mx.subs/mx.tot;
+  document.getElementById('mixBar').innerHTML=
+    `<div class="seg-coin" style="width:${cP*100}%">${cP>0.08?'Coins '+PC(cP):''}</div><div class="seg-ad" style="width:${aP*100}%">${aP>0.06?'Ads '+PC(aP):''}</div><div class="seg-sub" style="width:${sP*100}%">${sP>0.05?'Subs '+PC(sP):''}</div>`;
+  document.getElementById('mixNums').innerHTML=`Coins <b>${M(mx.coins)}</b> · Ads <b>${M(mx.ads)}</b> · Subs <b>${M(mx.subs)}</b> · net mo rev ${M(mx.tot)}`;
+  const vp=jl.vp, p=S.m_depth/100;
+  const TB=computeTierBreakdown(jl);
+  const trow=(nm,tk,isFree)=>{const ep=isFree?0:Math.round(EP[tk]*p), coin=isFree?0:vp.t[tk].coinN, sub=isFree?0:vp.t[tk].subN, ad=isFree?vp.adFree:vp.t[tk].ad, tt=coin+sub+ad;
+    const tb=TB.T[isFree?'Free':tk==='L'?'Light':tk==='Mid'?'Mid':'Whale'];
+    return `<tr><td>${nm}</td><td>${isFree?'—':ep}</td><td>${M(coin+sub)}</td><td>${PC(ad/tt)}</td><td>${NUM(tb.u)}</td><td>${M(tb.rev)}</td><td class="${tb.contribution<0?'dneg':'dpos'}"><b>${M(tb.contribution)}</b></td></tr>`;};
+  document.getElementById('tierTable').innerHTML=`<thead><tr><th>Tier</th><th>Eps</th><th>Coins+subs</th><th>Ad%</th><th>Users</th><th>Net rev/mo</th><th>Contrib/mo</th></tr></thead><tbody>`
+    +trow('Free',null,true)+trow('Light','L')+trow('Mid','Mid')+trow('Whale','W')
+    +`<tr style="border-top:2px solid var(--line2)"><td><b>Total</b></td><td></td><td></td><td></td><td><b>${NUM(TB.totU)}</b></td><td><b>${M(jl.totRev)}</b></td><td class="${jl.contribution<0?'dneg':'dpos'}"><b>${M(jl.contribution)}</b></td></tr></tbody>`;
+
+  renderExecSummary(jn,jl);
+  renderPilots();
+  renderGateBudget(jl);
+  renderContentVintage(jl);
+  renderLibrary(jl);
+  renderTwoLedger(jl);
+  renderVariance(jn,jl);
+  renderArc(jl);
+  renderBrief(jn,jl);
+  document.body.classList.remove('dirty');
+}
+
+/* ============ EXECUTIVE SUMMARY ============ */
+function renderExecSummary(jn,jl){
+  const onPace=jl.totRev*12/1e6>=60*Math.pow(200/60,1/12)*0.97;
+  document.getElementById('execSummary').innerHTML=
+    `<div class="exs problem"><h4>① June — as-is baseline</h4><p>Where the category stands today: <b>${M(jn.totRev)}/mo</b> ${arrLabel(jn.totRev)} at a thin <b>${PC(jn.margin)}</b> margin; acquisition runs expensive (CPI <b>${M(jn.cpi)}</b>, payback <b>${jn.payback.toFixed(1)}mo</b>). The read I take from it: growth can't come from buying users alone — it has to come from the content engine.</p></div>`
+   +`<div class="exs answer"><h4>② July plan</h4><p>Scale UA only while <b>LTV:CAC ${jl.ltvcac.toFixed(1)}×</b> holds; let the gates find cheaper winners — <b>${NUM(jl.ch.s4)} scaled hits</b> from ${NUM(S.m_pilots)} pilots feed acquisition. Plan: <b>${M(jl.totRev)}/mo</b> ${arrLabel(jl.totRev)} ${onPace?'(on arc pace)':'(below arc pace)'}, margin <b>${PC(jl.margin)}</b>. Content test budget <b>${M(jl.content)}/mo</b> (gates 1–3); AI production itself ~<b>${M(jl.ch.cost)}/mo</b> — near-free, so the spend is testing, not production.</p></div>`
+   +`<div class="exs decide"><h4>③ Decisions needed</h4><ul><li>UA budget → <b>${NUM(S.s_installs)}</b> installs (${M(jl.ua)}/mo)</li><li>Monetization → coin $${(+S.s_coinprice).toFixed(3)}, ad-load ${S.s_adload}%</li><li>Lifecycle → win-back reach ${NUM(S.p_reach)}</li><li>Content test → ${M(jl.content)}/mo (gates 1–3)</li></ul></div>`
+   +`<div class="exs risk"><h4>④ Red flags</h4><ul><li><b>Installs get pricier as you scale:</b> buy too many and the cost per install jumps while fewer of them pay — the next dollar stops paying for itself.</li><li><b>A weak slate:</b> if few shows pass the final gate, the new users you buy have fewer big spenders in the mix (a rough what-if, not a measured number) → profit margin shrinks fast.</li></ul></div>`;
+}
+
+/* ============ TWO-LEDGER ATTRIBUTION (category isn't a closed system) ============ */
+function renderTwoLedger(jl){
+  const so=S.x_spill_out/100, si=S.x_spill_in/100, trig=S.x_trigger_share/100, retained=1-so;
+  const inCat=jl.ltvcac;                    // consumption ledger (category-attribution)
+  const cohort=jl.ltvcac/(1-so);            // acquisition ledger (app-wide, grossed up for spill-out)
+  document.getElementById('ledgerTable').innerHTML=
+    `<thead><tr><th>Ledger</th><th>LTV/payer</th><th>LTV:CAC</th><th>Reads as</th></tr></thead><tbody>`
+   +`<tr><td>Consumption (in-category)</td><td>${M(jl.ltv)}</td><td><b>${inCat.toFixed(2)}×</b></td><td style="font-size:10px;color:var(--muted)">value created in MY category</td></tr>`
+   +`<tr><td>Acquisition (cohort · app-wide)</td><td>${M(jl.ltv/(1-so))}</td><td><b>${cohort.toFixed(2)}×</b></td><td style="font-size:10px;color:var(--muted)">full value my hooks generate · grossed up for ${PC(so)} spill-out</td></tr>`
+   +`<tr><td>Incremental (causal)</td><td>—</td><td>—</td><td style="font-size:10px;color:var(--muted)">gold standard — requires a geo-holdout</td></tr></tbody>`;
+  const netSpill=so-si; const onRamp=trig>retained;
+  let verdict,cls;
+  if(netSpill>0.05){verdict=`Net <b>acquisition engine</b> — your hooks pull installs for the app (spill-out ${PC(so)} &gt; in ${PC(si)}); defend budget on the cohort ledger (${cohort.toFixed(1)}×), not in-category.`;cls='answer';}
+  else if(netSpill<-0.05){verdict=`Net <b>consumption magnet</b> — you absorb users other genres acquired (spill-in ${PC(si)} &gt; out ${PC(so)}); your value shows on the consumption ledger.`;cls='decide';}
+  else {verdict=`<b>Both</b> — spill in ≈ out; you're a UA channel <i>and</i> a retainer. Refuse a single blended number.`;cls='decide';}
+  if(onRamp) verdict+=` Also a monetization <b>on-ramp</b>: you trigger ${PC(trig)} of first purchases but retain ${PC(retained)} of the value — the gap leaks to other genres.`;
+  document.getElementById('ledgerVerdict').innerHTML=
+    `<div style="font-size:11px;color:var(--muted);margin-bottom:8px">CAC/payer <b>${M(jl.cac)}</b> · spill-out <b>${PC(so)}</b> · spill-in <b>${PC(si)}</b> · first-purchase-trigger <b>${PC(trig)}</b></div>`
+   +`<div class="exs ${cls}" style="border-top-width:3px"><h4>Verdict</h4><p>${verdict}</p></div>`
+   +`<div style="font-size:10.5px;color:var(--faint);margin-top:8px">CPI is per-creative and yours; LTV roams across categories. The org must pick one attribution convention (or run incrementality) and apply it uniformly — else every category's P&L sums to more than the app's revenue.</div>`;
+}
+
+/* ============ CONTENT VINTAGE (existing catalog vs new releases) ============ */
+function renderContentVintage(jl){
+  const ns=S.m_newshare/100;
+  const newRev=jl.totRev*ns, catRev=jl.totRev*(1-ns);
+  const catContrib=catRev - jl.opex*(1-ns);                 // catalog: rev − opex share; content cost SUNK ($0)
+  const newContrib=newRev - jl.opex*ns - jl.content;        // new: rev − opex share − production/hit-detection
+  const marketing=jl.ua+jl.promo+jl.crm+jl.winback;         // acquisition & marketing (drives new users)
+  const total=catContrib+newContrib-marketing;
+  document.getElementById('cvBar').innerHTML=
+    `<div class="seg-coin" style="width:${(1-ns)*100}%">Catalog ${PC(1-ns)}</div><div class="seg-sub" style="width:${ns*100}%">New ${PC(ns)}</div>`;
+  document.getElementById('cvNums').innerHTML=`Catalog <b>${M(catRev)}</b>/mo · New releases <b>${M(newRev)}</b>/mo · net rev ${M(jl.totRev)}/mo`;
+  const row=(lab,sub,val,cls)=>`<tr><td>${lab}<small style="display:block;color:var(--faint);font-size:9.5px">${sub}</small></td><td class="${cls||''}"><b>${val}</b></td></tr>`;
+  document.getElementById('cvTable').innerHTML=`<thead><tr><th>Content P&amp;L (July, monthly)</th><th>Contribution</th></tr></thead><tbody>`
+    +row('Existing catalog','rev '+M(catRev)+' − opex · content cost sunk ($0)',M(catContrib),'dpos')
+    +row('New releases','rev '+M(newRev)+' − opex − production/hit-detection '+M(jl.content),M(newContrib),newContrib<0?'dneg':'dpos')
+    +row('− Acquisition &amp; marketing','UA + promo + CRM + win-back (buys users for both)','−'+M(marketing).slice(1),'dneg')
+    +`<tr style="border-top:2px solid var(--line2)"><td><b>= Total contribution</b></td><td class="${total<0?'dneg':'dpos'}"><b>${M(total)}</b></td></tr></tbody>`;
+}
+
+/* ============ STAGE-GATE BUDGET ============ */
+function renderGateBudget(jl){
+  const ch=contentHits(S);
+  const rows=[
+    ['Gate 1 · Trailer test', S.m_pilots, S.g1_spend, S.m_pilots*S.g1_spend, 'hit-detection', 'mine'],
+    ['Gate 2 · Pilot (Ep 1–5)', ch.s1, S.g2_spend, ch.s1*S.g2_spend, 'hit-detection', 'mine'],
+    ['Gate 3 · Greenlight', ch.s2, S.g3_spend, ch.s2*S.g3_spend, 'hit-detection', 'mine'],
+    ['Gate 4 · Scale (winning hits)', ch.s3, S.g4_spend, jl.ua, '= scaled UA (shared)', 'shared']
+  ];
+  let h=`<thead><tr><th>Gate</th><th>Concepts</th><th>$/concept</th><th>Spend/mo</th><th>P&amp;L line</th></tr></thead><tbody>`;
+  rows.forEach((r,i)=>{ h+=`<tr><td>${r[0]}</td><td>${NUM(r[1])}</td><td>$${NUM(r[2])}${i===3?'+':''}</td><td><b>${M(r[3])}</b></td><td style="font-size:10px;color:${r[5]==='mine'?'var(--mine)':'var(--shared)'}">${r[4]}</td></tr>`;});
+  h+=`<tr style="border-top:2px solid var(--line2)"><td><b>Hit-detection (Gates 1–3) → P&amp;L</b></td><td></td><td></td><td><b>${M(ch.hd)}</b></td><td style="font-size:10px;color:var(--mine)">content line</td></tr></tbody>`;
+  document.getElementById('gateTable').innerHTML=h;
+}
+
+/* ============ JUNE → TEAM/STAKEHOLDER BRIEF ============ */
+function renderBrief(jn,jl){
+  const ev=evalPilots(S), scaled=ev.filter(p=>p.stage===4);
+  const tropes=[...new Set(scaled.map(p=>p.tp))].join(', ')||'—';
+  const srcMix=[...new Set(scaled.map(p=>p.src))].join(', ')||'—';
+  const sl2=ev.filter(p=>p.stage<3&&p.ltv>=180).map(p=>p.n);
+  const arcTarget=60*Math.pow(200/60,1/12);
+  const mix=jl.mix;
+  const txt=
+`PocketFM — US Romantasy · June read → July plan   (illustrative; benchmarked assumptions)
+
+═══ STAKEHOLDER SUMMARY ═══
+• June baseline: ${M(jn.totRev)}/mo ${arrLabel(jn.totRev)} — split New ${Math.round(jn.rev.N/jn.totRev*100)} / Existing ${Math.round(jn.rev.E/jn.totRev*100)} / Reactivated ${Math.round(jn.rev.R/jn.totRev*100)}; contribution ${M(jn.contribution)}/mo (margin ${PC(jn.margin)}); LTV:CAC ${jn.ltvcac.toFixed(2)}×, payback ${jn.payback.toFixed(1)}mo.
+• July plan: ${M(jl.totRev)}/mo ${arrLabel(jl.totRev)} vs the $${arcTarget.toFixed(0)}M-ARR arc pace; contribution ${M(jl.contribution)}/mo (margin ${PC(jl.margin)}); LTV:CAC ${jl.ltvcac.toFixed(2)}×.
+• Key risk: CPI inflation compresses margin as you scale — hold the marginal-ROI hurdle (fund UA only while LTV:CAC ≥ ~2 / payback ≤ target).
+• The ask: fund UA to the hurdle, not a volume target, and lock the cross-functional asks below.
+
+═══ TEAM DIRECTIVES ═══
+▶ Central UA / Performance — CPI ${M(jl.cpi)}, LTV:CAC ${jl.ltvcac.toFixed(2)}×, payback ${jl.payback.toFixed(1)}mo. Fund July installs to ${NUM(S.s_installs)} only while LTV:CAC ≥ ~2; optimize marginal ROI, not blended ROAS.
+▶ Monetization — mix ${PC(mix.coins/mix.tot)} coins / ${PC(mix.ads/mix.tot)} ads / ${PC(mix.subs/mix.tot)} subs. Hold coin price ≥ $${S.s_coinprice.toFixed(3)}; keep ad-load ≤ ${S.s_adload}% to protect retention of freshly-acquired cohorts.
+▶ Lifecycle — churn ${S.x_churn}%/mo → lifetime ${(1/(S.x_churn/100)).toFixed(1)}mo. Win-back reach ${NUM(S.p_reach)} at conv ≥ ${S.p_winconv}% ($${S.p_freecoin}/reach); kill subsidy-only cohorts.
+▶ Content [mine] — ${NUM(S.m_pilots)} pilots → ${NUM(jl.ch.s4)} scaled hits; hit-detection ${M(jl.content)}/mo. New releases = ${PC(S.m_newshare/100)} of revenue; the existing catalog earns the rest at near-pure margin (content sunk). Source toward proven provenance (${srcMix}) & fresh tropes (${tropes}); second-look the high-score kills${sl2.length?': '+sl2.join(', '):''}. Hold greenlight bars (CTR≥${S.pl_minCTR}%, D1≥${S.pl_minRet}%, unlock≥${S.pl_minConv}%).`;
+  document.getElementById('briefText').textContent=txt;
+}
+/* ============ LIBRARY SHAPE (hits vs long tail — protect the hits) ============ */
+function renderLibrary(jl){
+  const N=Math.max(1,Math.round(S.m_catalog||1200)), tot=jl.totRev;
+  const tiers=[
+    {k:'Hits',fc:0.05,fr:0.60,role:'PROTECT — never decommission',cls:'seg-coin'},
+    {k:'Mid catalog',fc:0.20,fr:0.30,role:'Grow — promote toward hits',cls:'seg-ad'},
+    {k:'Long tail',fc:0.75,fr:0.10,role:'Keep — sunk content, still +ve; prune only dead weight',cls:'seg-sub'}
+  ];
+  document.getElementById('libBar').innerHTML=tiers.map(t=>`<div class="${t.cls}" style="width:${t.fr*100}%">${t.fr>0.06?t.k+' '+PC(t.fr):''}</div>`).join('');
+  document.getElementById('libNums').innerHTML=`${NUM(N)} active titles · top <b>${PC(0.05)}</b> (~${NUM(Math.round(N*0.05))} hits) carry <b>${PC(0.60)}</b> of revenue`;
+  let h=`<thead><tr><th>Title tier</th><th>Titles</th><th>% cat</th><th>Rev/mo</th><th>% rev</th><th>Rev/title/mo</th><th>Stance</th></tr></thead><tbody>`;
+  tiers.forEach(t=>{const n=Math.max(1,Math.round(N*t.fc)),rev=tot*t.fr,per=rev/n;
+    h+=`<tr><td>${t.k}</td><td>${NUM(n)}</td><td>${PC(t.fc)}</td><td><b>${M(rev)}</b></td><td>${PC(t.fr)}</td><td>${M(per)}</td><td style="font-size:9.5px;color:var(--muted);text-align:left">${t.role}</td></tr>`;});
+  h+=`<tr style="border-top:2px solid var(--line2)"><td><b>Total</b></td><td><b>${NUM(N)}</b></td><td>100%</td><td><b>${M(tot)}</b></td><td>100%</td><td>${M(tot/N)}</td><td></td></tr></tbody>`;
+  document.getElementById('libTable').innerHTML=h;
+  const perHit=tot*0.60/Math.max(1,Math.round(N*0.05)), perTail=tot*0.10/Math.max(1,Math.round(N*0.75));
+  document.getElementById('libNote').innerHTML=`<b>Protect the hits.</b> One hit earns ~<b>${M(perHit)}/mo</b>; a long-tail title earns ~<b>${M(perTail)}/mo</b> — about a <b>${Math.round(perHit/perTail)}×</b> gap. Old titles cost nothing to keep, so even the long tail still makes money. Only retire a title for clean-up or licensing reasons — never to cut costs, and never the hits. <br><i>To clear up the story cards: the <b>$240 "LTV/payer"</b> there is what <b>one paying viewer</b> is worth over their lifetime — not the show's revenue. A hit has thousands of them, which is how it reaches ~${M(perHit)}/mo.</i>`;
+}
+/* per-pilot Ledger-B content cost (test spend + production), by gate reached */
+function pilotBCost(p){
+  let test=S.g1_spend, prod=0;                                  // trailer test on every concept
+  if(p.stage>=1){ test+=S.g2_spend; prod+=Math.round(5*0.33*S.x_dollarhr); }   // Ep1–5 pilot produced + tested
+  if(p.stage>=2){ test+=S.g3_spend; }                            // greenlight evaluation spend
+  if(p.stage>=3){ prod+=Math.round(40*0.33*S.x_dollarhr); }      // full series produced
+  return {test:Math.round(test),prod,total:Math.round(test)+prod};
+}
+function renderPilots(){
+  const ev=evalPilots(S);
+  const cl=['v-kill','v-kill','v-kill','v-green','v-scaled'];
+  document.getElementById('pilotBoard').innerHTML=ev.map(p=>{
+    const g=(ok,lbl)=>`<div class="g ${ok?'ok':'no'}">${lbl}</div>`;
+    // show only metrics observed up to the gate reached
+    const m=['CTR '+p.ctr+'%'];
+    if(p.stage>=1) m.push('D1 '+p.d1+'%');
+    if(p.stage>=2) m.push('conv '+p.conv+'%');
+    if(p.stage>=4) m.push('ROI '+p.roi+'×');
+    const secondLook = p.stage<3 && p.ltv>=180;
+    const sc={'Webtoon adaptation':'s-web','Proprietary IP':'s-ip','Licensed bestseller':'s-lic','Original concept':'s-orig'}[p.src]||'s-orig';
+    const bc=pilotBCost(p);
+    return `<div class="pilot"><div class="ptop"><h4>${p.n}</h4><span class="ltvb" title="What ONE paying viewer is worth over their lifetime — not the show's total revenue. A hit has thousands of these viewers; see the 'Library shape' section for per-show economics.">LTV/payer $${p.ltv}</span></div>
+      <div class="srcrow"><span class="srctag ${sc}">${p.src}</span><span class="srcscore">Src ${p.score}</span></div>
+      <div class="tp">${p.tp} · launch ${p.launch}</div>
+      <div class="gates">${g(p.stage>=1,'G1')}${g(p.stage>=2,'G2')}${g(p.stage>=3,'G3')}${g(p.stage>=4,'G4')}</div>
+      <div class="verdict ${cl[p.stage]}">${p.verdict}${secondLook?' <span class="slook">⚠ second look</span>':''}</div>
+      <div class="mm">${m.join(' · ')}</div>
+      <div class="bcost">Ledger B · content cost <b>$${NUM(bc.total)}</b> <small>(test $${NUM(bc.test)}${bc.prod?' + prod $'+NUM(bc.prod):''})</small></div></div>`;}).join('');
+  const sc=ev.filter(p=>p.stage===4).length, gr=ev.filter(p=>p.stage===3).length, k=ev.filter(p=>p.stage<3).length;
+  const sl=ev.filter(p=>p.stage<3&&p.ltv>=180).length;
+  document.getElementById('pilotSum').innerHTML=`<b>${sc}</b> scaled · <b>${gr}</b> greenlit · <b>${k}</b> killed (of 16). Bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${sl?` <b style="color:var(--warn)">${sl} high-sourcing-score title(s) killed on execution → ⚠ second look.</b>`:''} <br><i>Src score = provenance (Webtoon adaptation / Proprietary IP / Licensed bestseller / Original) × trope novelty × creator tier — the sourcing signal you commission on. Metrics show only what's observed up to each title's gate.</i>`;
+}
+
+/* ============ VARIANCE (Plan vs Actual) ============ */
+let ACTUAL={}; // user-entered July actuals by metric key
+const VAR_ROWS=[
+  ['totRev','Total rev/mo'],['newRev','New rev/mo'],['existRev','Existing rev/mo'],['reactRev','Reactivated rev/mo'],
+  ['contribution','Contribution/mo'],['margin','Contribution margin'],['ltvcac','LTV:CAC'],['payback','Payback (mo)']
+];
+function fmtMet(mk,raw){const u=MET[mk].unit,x=raw/MET[mk].scale;return u==='$M'?'$'+x.toFixed(1)+'M':u==='%'?x.toFixed(1)+'%':u==='×'?x.toFixed(2)+'×':u==='mo'?x.toFixed(1):NUM(x);}
+function renderVariance(jn,jl){
+  // June equivalents
+  const juneVal={totRev:jn.totRev,newRev:jn.rev.N,existRev:jn.rev.E,reactRev:jn.rev.R,contribution:jn.contribution,margin:jn.margin,ltvcac:jn.ltvcac,payback:jn.payback};
+  let h=`<thead><tr><th>Metric</th><th>June baseline</th><th>July plan</th><th>July actual</th><th>Δ vs plan</th><th>Δ%</th></tr></thead><tbody>`;
+  VAR_ROWS.forEach(([mk,lab])=>{
+    const plan=MET[mk].get(jl), jv=juneVal[mk];
+    const act=ACTUAL[mk];
+    let dCell='—',dpCell='—',rag='';
+    if(act!=null && !isNaN(act)){
+      const actRaw=act*MET[mk].scale, d=actRaw-plan, dp=plan!==0?d/Math.abs(plan):0;
+      const good = (mk==='payback')? d<=0 : d>=0;     // lower payback is good
+      const cls=good?'dpos':'dneg'; rag=Math.abs(dp)<0.03?'rag-g':(good?'rag-g':(Math.abs(dp)<0.1?'rag-a':'rag-r'));
+      dCell=`<span class="${cls}">${d>=0?'+':''}${fmtMet(mk,actRaw-plan+0).replace('$','$')}</span>`;
+      dCell=`<span class="${cls}">${(d>=0?'+':'')+fmtMet(mk,d)}</span>`;
+      dpCell=`<span class="${cls}">${(dp>=0?'+':'')+(dp*100).toFixed(0)}%</span>`;
+    }
+    const step=MET[mk].unit==='%'?'0.1':MET[mk].unit==='×'?'0.05':'0.1';
+    h+=`<tr><td><span class="rag ${rag||''}"></span>${lab}</td><td>${fmtMet(mk,jv)}</td><td><b>${fmtMet(mk,plan)}</b></td>
+      <td><input type="number" data-act="${mk}" step="${step}" value="${act!=null?act:''}" placeholder="—"></td>
+      <td>${dCell}</td><td>${dpCell}</td></tr>`;
+  });
+  h+=`</tbody>`;
+  const t=document.getElementById('varTable'); t.innerHTML=h;
+  t.querySelectorAll('input[data-act]').forEach(inp=>inp.addEventListener('input',()=>{
+    const mk=inp.dataset.act; ACTUAL[mk]=inp.value===''?null:parseFloat(inp.value); renderVariance(JUNE,JULY);}));
+}
+
+/* ============ ARC ============ */
+function renderArc(jl){
+  const W=1000,H=130,padL=42,padR=20,padT=12,padB=22, G=Math.pow(200/60,1/12);
+  const xs=i=>padL+(i/12)*(W-padL-padR), y=v=>padT+(1-v/210)*(H-padT-padB);
+  let path=''; for(let i=0;i<=12;i++){path+=(i?'L':'M')+xs(i).toFixed(1)+','+y(60*Math.pow(G,i)).toFixed(1)+' ';}
+  const grid=[60,120,200].map(v=>`<line x1="${padL}" y1="${y(v)}" x2="${W-padR}" y2="${y(v)}" stroke="#eef0f3"></line><text x="${padL-6}" y="${y(v)+3}" text-anchor="end" font-size="9" fill="#97a1af">$${v}M</text>`).join('');
+  document.getElementById('arc').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${grid}
+    <path d="${path}" fill="none" stroke="#97a1af" stroke-width="1.6" stroke-dasharray="5 4"></path>
+    <text x="${padL}" y="${H-6}" font-size="9" fill="#97a1af">Jun 26</text><text x="${W-padR}" y="${H-6}" text-anchor="end" font-size="9" fill="#97a1af">Jun 27</text>
+    <circle cx="${xs(0)}" cy="${y(60)}" r="4" fill="#9aa4b2"></circle>
+    <circle cx="${xs(1)}" cy="${y(jl.arr.tot)}" r="5" fill="#3b54c4"></circle>
+    <text x="${xs(1)+8}" y="${y(jl.arr.tot)+3}" font-size="10" fill="#3b54c4" font-weight="700">Jul plan ${M(jl.arr.tot*1e6)}</text></svg>`;
+}
+
+/* ============ OPTIMIZER ============ */
+let CONSTRAINTS=[{metric:'newRev',op:'>=',val:1.45},{metric:'margin',op:'>=',val:5},{metric:'payback',op:'<=',val:6}];
+let FREE=new Set(['m_ctr','m_depth','p_newconv','f_g4','s_installs']);
+function renderConstraints(){
+  const host=document.getElementById('constraintRows'); host.innerHTML='';
+  CONSTRAINTS.forEach((c,i)=>{
+    const r=document.createElement('div'); r.className='crow';
+    r.innerHTML=`<span class="lbl">target</span>
+      <select data-i="${i}" data-f="metric">${Object.keys(MET).map(m=>`<option value="${m}" ${m===c.metric?'selected':''}>${MET[m].label}</option>`).join('')}</select>
+      <select data-i="${i}" data-f="op">${['>=','<=','='].map(o=>`<option ${o===c.op?'selected':''}>${o}</option>`).join('')}</select>
+      <input type="number" data-i="${i}" data-f="val" value="${c.val}" step="0.5"><span class="lbl">${MET[c.metric].unit}</span>
+      <span class="rm" data-rm="${i}">✕</span>`;
+    host.appendChild(r);
+  });
+  host.querySelectorAll('select,input').forEach(el=>el.addEventListener('input',()=>{const i=+el.dataset.i,f=el.dataset.f;CONSTRAINTS[i][f]=f==='val'?parseFloat(el.value):el.value;if(f==='metric')renderConstraints();}));
+  host.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',()=>{CONSTRAINTS.splice(+b.dataset.rm,1);renderConstraints();}));
+  // free lever chips
+  document.getElementById('freeLeverChips').innerHTML=FREE_LEVERS.map(k=>{
+    const on=FREE.has(k), shared=IN[k].sec==='shared';
+    return `<label class="btn" style="padding:5px 9px;${on?'border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent)':''}"><input type="checkbox" data-free="${k}" ${on?'checked':''} style="margin-right:5px">${IN[k].label}${shared?' <span style="color:var(--shared)">⤿</span>':''}</label>`;
+  }).join('');
+  document.getElementById('freeLeverChips').querySelectorAll('input[data-free]').forEach(cb=>cb.addEventListener('change',()=>{cb.checked?FREE.add(cb.dataset.free):FREE.delete(cb.dataset.free);renderConstraints();}));
+}
+function metricAt(over){const v=Object.assign({},S,over);const jn=engineJune(v);return engineJuly(v,jn);}
+const UA_MOM_CAP=0.20;   // algorithmic bidding breaks if budgets jump >20% MoM
+function penalty(over,obj){
+  const jl=metricAt(over); let pen=0;
+  CONSTRAINTS.forEach(c=>{const m=MET[c.metric].get(jl), t=c.val*MET[c.metric].scale, sc=Math.max(Math.abs(t),MET[c.metric].scale);
+    let viol=0; if(c.op==='=')viol=(m-t)/sc; else if(c.op==='>=')viol=Math.max(0,(t-m)/sc); else viol=Math.max(0,(m-t)/sc);
+    pen+=viol*viol;});
+  // hard wall: forbid >20% MoM UA-spend scaling (market absorption limit; uses the same elastic engine)
+  const baseUA=metricAt({}).ua;
+  if(jl.ua > baseUA*(1+UA_MOM_CAP)) pen+=1e9;
+  // least-change regularization: prefer the smallest move from current levers
+  [...FREE].forEach(k=>{const[a,b]=RANGE(k),span=b-a; if(over[k]!=null){const d=(over[k]-S[k])/span; pen+=0.06*d*d;}});
+  // secondary objective (tie-breaker only)
+  if(obj==='minua') pen+=0.0003*(jl.ua/1e6); else pen-=0.0003*(jl.contribution/1e6);
+  return pen;
+}
+function golden(f,a,b){const g=0.6180339887;let c=b-g*(b-a),d=a+g*(b-a),fc=f(c),fd=f(d);for(let i=0;i<36;i++){if(fc<fd){b=d;d=c;fd=fc;c=b-g*(b-a);fc=f(c);}else{a=c;c=d;fc=fd;d=a+g*(b-a);fd=f(d);}}return (a+b)/2;}
+function solve(obj){
+  const levers=[...FREE]; if(!levers.length||!CONSTRAINTS.length)return null;
+  const starts=[{},...levers.map(k=>({[k]:IN[k].range?IN[k].range[0]:S[k]}))]; // we'll seed from current + a couple
+  let best=null,bestPen=Infinity;
+  const seeds=[Object.assign({},S)];
+  // add lo/hi/mid seeds
+  const mk=(frac)=>{const o={};levers.forEach(k=>{const[a,b]=RANGE(k);o[k]=a+frac*(b-a);});return Object.assign({},S,o);};
+  seeds.push(mk(0.25),mk(0.5),mk(0.75),mk(0.9));
+  seeds.forEach(seed=>{
+    let cur=Object.assign({},seed);
+    for(let sweep=0;sweep<30;sweep++){
+      let moved=0;
+      levers.forEach(k=>{const[a,b]=RANGE(k);const f=x=>penalty(Object.assign({},cur,{[k]:x}),obj);
+        const xb=golden(f,a,b); const damp=cur[k]+0.7*(xb-cur[k]); if(Math.abs(damp-cur[k])>1e-6*Math.max(1,Math.abs(cur[k])))moved++; cur[k]=damp;});
+      if(!moved)break;
+    }
+    const pen=penalty(cur,obj); if(pen<bestPen){bestPen=pen;best=cur;}
+  });
+  return {best,pen:bestPen};
+}
+function RANGE(k){ // sensible solver bounds per lever
+  const r={m_ctr:[0.4,3],m_depth:[60,180],p_newconv:[0.5,12],p_existconv:[3,20],p_reactconv:[0.5,15],f_g4:[10,90],
+    s_installs:[100000,6000000],s_coinprice:[0.008,0.05],s_adload:[40,200],p_reach:[100000,6000000],p_winconv:[5,70]};
+  return r[k]||[S[k]*0.5,S[k]*1.5];
+}
+function runSolve(){
+  const obj=document.getElementById('optObjective').value;
+  const res=solve(obj);
+  const out=document.getElementById('optResult');
+  if(!res){out.innerHTML='<span style="color:var(--warn)">Add at least one target and one free lever.</span>';return;}
+  // apply
+  const before={}; [...FREE].forEach(k=>before[k]=S[k]);
+  Object.assign(S,res.best);
+  [...FREE].forEach(k=>{const fld=document.querySelector(`input[data-k="${k}"]`); if(fld){fld.value=roundLever(k,S[k]);S[k]=parseFloat(fld.value);} });
+  render();
+  // feasibility: re-check each constraint
+  const jl=engineJuly(S,engineJune(S));
+  let worst=null,worstV=0;
+  CONSTRAINTS.forEach(c=>{const m=MET[c.metric].get(jl),t=c.val*MET[c.metric].scale,sc=Math.max(Math.abs(t),MET[c.metric].scale);
+    let v=0;if(c.op==='=')v=Math.abs(m-t)/sc;else if(c.op==='>=')v=Math.max(0,(t-m)/sc);else v=Math.max(0,(m-t)/sc);
+    if(v>worstV){worstV=v;worst=c;}});
+  const feasible=worstV<0.02;
+  const levHtml=[...FREE].map(k=>{const shared=IN[k].sec==='shared';
+    return `<div class="lv">${IN[k].label}: <span class="opt-from">${fmtLever(k,before[k])}</span><b>${fmtLever(k,S[k])}</b>${shared?`<span class="al">⤿ needs ${IN[k].owner} alignment</span>`:''}</div>`;}).join('');
+  if(feasible){
+    out.innerHTML=`<span class="opt-ok">✓ feasible</span><div>All targets met. Resulting July: revenue <b>${M(jl.totRev)}/mo</b> ${arrLabel(jl.totRev)}, contribution <b>${M(jl.contribution)}/mo</b>, margin <b>${PC(jl.margin)}</b>, LTV:CAC <b>${jl.ltvcac.toFixed(2)}×</b>.</div><div class="opt-lev">${levHtml}</div>`;
+  } else {
+    out.innerHTML=`<span class="opt-warn">✕ infeasible — binding: ${MET[worst.metric].label} ${worst.op} ${worst.val}${MET[worst.metric].unit}</span>
+      <div>Closest reachable ${MET[worst.metric].label} = <b>${fmtMet(worst.metric,MET[worst.metric].get(jl))}</b>. Relax that target, or unlock more shared levers.</div><div class="opt-lev">${levHtml}</div>`;
+  }
+}
+function roundLever(k,x){const f=IN[k].fmt;if(f==='usd3')return Math.round(x*1000)/1000;if(f==='usd2'||f==='pct2'||f==='x')return Math.round(x*100)/100;if(f==='pct')return Math.round(x*10)/10;return Math.round(x);}
+function fmtLever(k,x){const f=IN[k].fmt;if(f==='usd3')return '$'+x.toFixed(3);if(f==='usd2')return '$'+x.toFixed(2);if(f==='x')return x.toFixed(2)+'×';if(f==='pct'||f==='pct2')return roundLever(k,x)+'%';return NUM(x);}
+
+/* ============ WIRE ============ */
+function markDirty(){document.body.classList.add('dirty');}
+function buildAll(){buildFields('june',document.getElementById('f_june'));buildFields('context',document.getElementById('f_context'));buildFields('mine',document.getElementById('f_mine'));buildFields('shared',document.getElementById('f_shared'));}
+document.getElementById('calcBtn').addEventListener('click',render);
+document.getElementById('resetBtn').addEventListener('click',()=>{Object.keys(IN).forEach(k=>S[k]=IN[k].val);ACTUAL={};buildAll();render();});
+document.getElementById('addConstraint').addEventListener('click',()=>{CONSTRAINTS.push({metric:'totRev',op:'>=',val:5.5});renderConstraints();});
+document.getElementById('solveBtn').addEventListener('click',runSolve);
+document.getElementById('copyBrief').addEventListener('click',(e)=>{const t=document.getElementById('briefText').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);const b=e.target;const o=b.textContent;b.textContent='✓ Copied';setTimeout(()=>b.textContent=o,1400);});
+
+/* ============ SLATE ============ */
+const SLATE=[
+  {t:'Insta Millionaire',tr:'System fantasy · 850M+ plays',role:'Acquisition bait',cls:'r-acq'},
+  {t:"The Alpha's Bride",tr:'Werewolf · 700+ eps',role:'Whale saga',cls:'r-whale'},
+  {t:'The Undercover Billionaire',tr:'Billionaire · revenge',role:'Monetization engine',cls:'r-mon'},
+  {t:'The Icy Billionaire',tr:'Billionaire · healing',role:'Reactivation asset',cls:'r-react'},
+  {t:'Wolves of Blood Moon',tr:'Werewolf · dark academy',role:'Bridge → franchise',cls:'r-bridge'},
+  {t:'Eclipse Princess',tr:'Fae · system fantasy',role:'Hidden gem',cls:'r-gem'}
+];
+document.getElementById('slate').innerHTML=SLATE.map(s=>`<div class="tcard"><span class="role ${s.cls}">${s.role}</span><h4>${s.t}</h4><div class="tr">${s.tr}</div></div>`).join('');
+
+/* ============ INIT ============ */
+buildAll(); renderConstraints(); render();
+</script>
+</body>
+</html>
