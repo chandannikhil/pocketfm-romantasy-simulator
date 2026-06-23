@@ -30,19 +30,20 @@ h1 b{color:var(--accent)}
 
 .info{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;
   border:1px solid var(--line2);color:var(--faint);font-size:9.5px;font-weight:700;cursor:help;margin-left:4px;position:relative;font-style:normal;vertical-align:middle}
-.info:hover{border-color:var(--accent);color:var(--accent)}
-.info:hover::after{content:attr(data-tip);position:absolute;top:160%;left:50%;transform:translateX(-50%);
+.info:hover,.info:focus-visible{border-color:var(--accent);color:var(--accent)}
+.info:focus-visible,.decic:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.info:hover::after,.info:focus-visible::after{content:attr(data-tip);position:absolute;top:160%;left:50%;transform:translateX(-50%);
   width:250px;background:#23303f;color:#eef2f7;font-size:11px;font-weight:400;line-height:1.45;text-align:left;
   padding:9px 11px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.22);z-index:90;pointer-events:none}
 
 /* decision icon — "on what basis to move this number" */
 .decic{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:3px;
   border:1px solid var(--mine-ln);color:var(--mine);background:var(--mine-bg);font-size:9px;font-weight:800;cursor:help;margin-left:4px;position:relative;font-style:normal;vertical-align:middle}
-.decic:hover{border-color:var(--mine);filter:brightness(.97)}
-.decic:hover::after{content:attr(data-tip);position:absolute;top:160%;left:50%;transform:translateX(-50%);
+.decic:hover,.decic:focus-visible{border-color:var(--mine);filter:brightness(.97)}
+.decic:hover::after,.decic:focus-visible::after{content:attr(data-tip);position:absolute;top:160%;left:50%;transform:translateX(-50%);
   width:260px;background:#2a2436;color:#f1ecf7;font-size:11px;font-weight:400;line-height:1.45;text-align:left;
   padding:9px 11px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.22);z-index:91;pointer-events:none}
-.decic:hover::before{content:"▸ How to decide";position:absolute;top:160%;left:50%;transform:translate(-50%,-100%);
+.decic:hover::before,.decic:focus-visible::before{content:"▸ How to decide";position:absolute;top:160%;left:50%;transform:translate(-50%,-100%);
   margin-top:-3px;font-size:9px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--shared);
   background:#fff;border:1px solid var(--shared-ln);border-radius:5px;padding:2px 6px;white-space:nowrap;z-index:92;pointer-events:none}
 
@@ -185,6 +186,22 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
 .legend{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 0;font-size:11px;color:var(--muted)}
 .legend .pip{font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;text-transform:uppercase}
 .pip-c{background:var(--ctx-bg);color:var(--ctx)}.pip-m{background:var(--mine-bg);color:var(--mine)}.pip-s{background:var(--shared-bg);color:var(--shared)}.pip-o{background:var(--out-bg);color:var(--out)}
+
+/* ===== mobile ===== */
+@media(max-width:600px){
+  .wrap{padding:0 13px}
+  h1{font-size:17px;overflow-wrap:break-word}
+  .thesis{font-size:12px}
+  header .wrap{padding:15px 13px 12px}
+  .controls .wrap{padding:10px 13px;gap:8px}
+  .controls .btn{flex:1 1 auto}
+  .badge{margin-left:0;flex-basis:100%;text-align:center}
+  .fields{grid-template-columns:1fr 1fr;gap:9px 10px;padding:13px}
+  .metrics{grid-template-columns:1fr 1fr}
+  .field input,.vartable input{font-size:16px}            /* ≥16px stops iOS focus-zoom */
+  .info,.decic{width:18px;height:18px}                     /* larger tap target */
+  table.tiers th,table.tiers td,.vartable th,.vartable td{padding:6px 6px}
+}
 </style>
 </head>
 <body>
@@ -253,7 +270,8 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
       <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Revenue mix — coins / ads / subs <span class="info" data-tip="Built from the ground up: coin revenue = payers × episodes unlocked × coins/episode × price/coin × net margin. It leans ~85/10/5 toward coins because a few big spenders unlock far more episodes.">i</span></div>
         <div class="mixbar" id="mixBar"></div><div id="mixNums" style="font-size:11.5px;color:var(--muted)"></div></div>
       <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Per-tier monetization → contribution <span class="info" data-tip="Each tier's contribution adds up to total July contribution. Ad-acquisition cost is split evenly per active user; other costs by share of revenue — so free users carry the acquisition cost (and run negative) while a few big and mid spenders make the profit. Whale 'episodes' (~600/mo) include bulk coin packs and unlock-ahead, not literal listens.">i</span></div>
-        <table class="tiers" id="tierTable"></table></div>
+        <div style="overflow-x:auto"><table class="tiers" id="tierTable"></table></div>
+        <div id="whaleNote" style="font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.5"></div></div>
     </div>
   </div>
 
@@ -268,7 +286,7 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
   </div>
 
   <!-- LIBRARY SHAPE -->
-  <div class="section-h">⑦·b Library shape — a few hits, a long tail (protect the hits) <span class="info" data-tip="What a real Romantasy library looks like. A mature catalogue has ~1,000–1,500 live titles, but a small number of hits earn most of the money. This shows how the per-title numbers add up to the category total — and why the hits are the last thing you'd ever take down.">i</span><span class="ln"></span></div>
+  <div class="section-h">⑦·b Library shape — a few hits, a long tail (protect the hits) <span class="info" data-tip="What a real Romantasy library looks like. A mature catalogue has ~1,000–1,500 live titles, but a small number of hits earn most of the money. An illustrative power-law benchmark (not measured per-title data) scaled to your catalogue size and total revenue — to show why the hits are the last thing you'd ever take down.">i</span><span class="ln"></span></div>
   <div class="band"><div class="band-hd" style="background:var(--paper)">US Romantasy active library — title count × revenue concentration <span class="sub">edit 'Active library titles' in my levers above</span></div>
     <div class="mixwrap">
       <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Revenue concentration by title tier</div>
@@ -294,9 +312,9 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
   </div>
 
   <!-- OPTIMIZER -->
-  <div class="section-h">⑩ Constrained optimizer — solve a vector of targets <span class="info" data-tip="Set several targets at once (=, ≥, ≤). The solver hunts across the levers you've freed for a combination that hits them all, while also improving a secondary goal. If it can't hit them, it tells you which target is in the way. Any shared levers it moves are flagged 'needs alignment'.">i</span><span class="ln"></span></div>
+  <div class="section-h">⑩ What must be true — back-solve the levers for a set of targets <span class="info" data-tip="Set the outcomes you must hit (=, ≥, ≤). The solver finds the smallest set of lever moves that would make them all true, while also improving a secondary goal — i.e. 'for this plan to work, here's what would have to be true.' If the targets can't be reached it names the binding one. It only changes your inputs when a feasible solution is found; an unreachable solve leaves them untouched. Shared levers it moves are flagged 'needs alignment.'">i</span><span class="ln"></span></div>
   <div class="optcard">
-    <p class="opthelp">Pick the outcomes you must hit and let it find the lever combination — across <b style="color:var(--mine)">my levers</b> (free by default) and any <b style="color:var(--shared)">shared</b> lever you unlock. It optimizes a secondary objective and, if the targets conflict, tells you which one is binding.</p>
+    <p class="opthelp">Pick the outcomes you must hit and let it back-solve <i>what would have to be true</i> — the smallest lever moves across <b style="color:var(--mine)">my levers</b> (free by default) and any <b style="color:var(--shared)">shared</b> lever you unlock. It optimizes a secondary objective and, if the targets can't be reached, names the binding one and leaves your inputs unchanged.</p>
     <div id="constraintRows"></div>
     <button class="btn" id="addConstraint" style="margin:4px 0 10px">+ add target</button>
     <div class="optrow2">
@@ -336,17 +354,39 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
 
 <script>
 /* ============ FORMAT ============ */
-const M=(n)=>{const a=Math.abs(n),s=n<0?'-':'';if(a>=1e9)return s+'$'+(a/1e9).toFixed(2)+'B';if(a>=1e6)return s+'$'+(a/1e6).toFixed(2)+'M';if(a>=1e3)return s+'$'+(a/1e3).toFixed(a>=1e5?0:1)+'k';if(a>=100)return s+'$'+a.toFixed(0);if(a>=10)return s+'$'+a.toFixed(1);return s+'$'+a.toFixed(2);};
-const NUM=(n)=>{const a=Math.abs(n);if(a>=1e6)return(n/1e6).toFixed(a>=1e7?0:1)+'M';if(a>=1e3)return(n/1e3).toFixed(a>=1e4?0:1)+'k';return Math.round(n).toLocaleString();};
-const PC=(x)=>(x*100).toFixed(Math.abs(x)>=0.1?0:1)+'%';
+const M=(n)=>{if(!isFinite(n))return '—';const a=Math.abs(n),s=n<0?'-':'';if(a>=1e9)return s+'$'+(a/1e9).toFixed(2)+'B';if(a>=1e6)return s+'$'+(a/1e6).toFixed(2)+'M';if(a>=1e3)return s+'$'+(a/1e3).toFixed(a>=1e5?0:1)+'k';if(a>=100)return s+'$'+a.toFixed(0);if(a>=10)return s+'$'+a.toFixed(1);return s+'$'+a.toFixed(2);};
+const NUM=(n)=>{if(!isFinite(n))return '—';const a=Math.abs(n);if(a>=1e6)return(n/1e6).toFixed(a>=1e7?0:1)+'M';if(a>=1e3)return(n/1e3).toFixed(a>=1e4?0:1)+'k';return Math.round(n).toLocaleString();};
+const PC=(x)=>isFinite(x)?(x*100).toFixed(Math.abs(x)>=0.1?0:1)+'%':'—';
 const arrLabel=(monthly)=>'(≈ '+M(monthly*12)+' ARR)';
 
 /* ============ MONETIZATION CONSTANTS ============ */
-const SPL={L:0.66,Mid:0.28,W:0.06};          // payer tier split
-const EP={L:25,Mid:140,W:600};               // episodes/payer/mo (base, scaled by depth)
+let SPL={L:0.66,Mid:0.28,W:0.06};            // payer tier split (whale share re-derived from inputs)
+let EP={L:25,Mid:140,W:600};                 // episodes/payer/mo (whale depth re-derived from inputs)
+const NW_RATIO={L:0.66/0.94,Mid:0.28/0.94};  // light:mid proportions WITHIN the non-whale base
 const SUBG={L:0.30,Mid:1.20,W:9.00};         // VIP gross/payer/mo
 const ADU={free:0.08,L:0.07,Mid:0.05,W:0.02};// ad $/user/mo (scaled by adload)
 const JUNE_MONET={coinprice:0.02,coinsep:10,depth:1.0,adload:1.0,nm:0.65}; // June frozen pricing
+// Whale concentration is now an INPUT pair, not an output: you assert (a) what % of PAYERS are whales
+// and (b) what % of payer revenue they drive; the model back-solves the implied per-whale depth.
+let WHALE_IMPLIED={ep:600,val:0,sharePayers:0.06,shareRev:0.40};
+function calibrateWhales(mon){
+  const w=Math.min(Math.max((S.s_whale_pct||6)/100,0.001),0.9);   // whale share of payers (the unknown x)
+  const r=Math.min(Math.max((S.s_whale_rev||40)/100,0.01),0.985); // whale share of payer revenue (asserted)
+  const EP0={L:25,Mid:140,W:600};                                 // base depth → the fixed total per-payer value
+  const v0=k=>EP0[k]*mon.depth*mon.coinsep*mon.coinprice*mon.nm + SUBG[k]*mon.nm + ADU[k]*mon.adload;
+  const vL0=v0('L'), vM0=v0('Mid'), vW0=v0('W');
+  const baseBlended=0.66*vL0+0.28*vM0+0.06*vW0;                   // HELD FIXED — concentration redistributes, not inflates
+  const Vnw0=NW_RATIO.L*vL0+NW_RATIO.Mid*vM0;
+  SPL={L:(1-w)*NW_RATIO.L, Mid:(1-w)*NW_RATIO.Mid, W:w};
+  const valW=r*baseBlended/w;                                     // whale value to drive share r of the FIXED blended
+  const f=(1-r)*baseBlended/((1-w)*Vnw0);                         // light/mid scale so totals still sum to baseBlended
+  const setEP=(k,val)=>Math.max(val-SUBG[k]*mon.nm-ADU[k]*mon.adload,0)/(mon.depth*mon.coinsep*mon.coinprice*mon.nm);
+  EP={L:setEP('L',f*vL0), Mid:setEP('Mid',f*vM0), W:setEP('W',valW)};  // implied depth per tier
+  // floor fires when a tier's target value drops below its sub+ad floor (extreme concentration) → realized ≠ target
+  const realized=k=>EP[k]*mon.depth*mon.coinsep*mon.coinprice*mon.nm + SUBG[k]*mon.nm + ADU[k]*mon.adload;
+  const floored=(f*vL0 < SUBG.L*mon.nm+ADU.L*mon.adload) || (valW < SUBG.W*mon.nm+ADU.W*mon.adload);
+  WHALE_IMPLIED={ep:EP.W,val:realized('W'),target:valW,sharePayers:w,shareRev:r,floored};
+}
 // Content-hit → New-cohort whale coupling: identity at default (s4 == S4_BASE → hitMult == 1)
 const S4_BASE=1000*0.25*0.30*0.25*0.50;            // = 9.375 = scaled hits at default gates
 const HIT_FLOOR=0.25, HIT_SENS=0.5;
@@ -427,6 +467,8 @@ const IN={
   s_coinprice:{sec:'shared',grp:'Monetization',label:'Price per coin',pre:'$',suf:'',fmt:'usd3',val:0.02,owner:'Monetization',tip:'Price of one coin (USD). Monetization/Finance sets pack pricing.'},
   s_coinsep:{sec:'shared',grp:'Monetization',label:'Coins per episode',fmt:'int',val:10,owner:'Monetization',tip:'Coins needed to unlock one episode (~8–10 typical).'},
   s_adload:{sec:'shared',grp:'Monetization',label:'Ad-load index',suf:'%',fmt:'pct',val:100,owner:'Monetization',tip:'Scales ad revenue per user. Too many ads drives away the users you just paid to acquire.'},
+  s_whale_pct:{sec:'shared',grp:'Monetization',label:'Whales — % of payers',suf:'%',fmt:'pct2',val:6,owner:'Monetization',tip:'What share of PAYING users are whales (the heavy-spend tier). This is the unknown — you usually don\'t know it without telemetry. Pair it with the revenue share below: the model back-solves how deep each whale must spend, and the per-tier table shows whether that implied depth is believable.'},
+  s_whale_rev:{sec:'shared',grp:'Monetization',label:'Whales — % of payer revenue',suf:'%',fmt:'pct',val:40,owner:'Monetization',tip:'What share of payer revenue (coins + subs + ads from payers) the whale tier drives. Default ~40% is the model\'s benchmarked power law; set it to ~95% to model the gacha / microdrama shape an interviewer might assert. The implied per-whale spend then jumps — a reality check on the whale-% above.'},
   s_crm:{sec:'shared',grp:'Lifecycle / Retention',label:'CRM % rev',suf:'%',fmt:'pct',val:4,owner:'Lifecycle',tip:'Spend on lifecycle messaging / retention, as a share of revenue.'},
   p_reach:{sec:'shared',grp:'Lifecycle / Retention',label:'Dormant reached (Jul)',fmt:'int',val:2000000,owner:'Lifecycle',tip:'How many dormant users the win-back team messages. Lifecycle runs the calendar.'},
   p_winconv:{sec:'shared',grp:'Lifecycle / Retention',label:'Dormant → active return rate',suf:'%',fmt:'pct',val:35,owner:'Lifecycle',tip:'Share of messaged dormant users who come back as active (not yet paying). Their paying rate is applied separately via "React payer conv" — so no double-count.'},
@@ -436,6 +478,10 @@ const IN={
   j_freecoin:{sec:'june',label:'June free-coin / reach',pre:'$',suf:'',fmt:'usd2',val:0.15,tip:'June\'s subsidy cost per user reached.'}
 };
 let S={}; Object.keys(IN).forEach(k=>S[k]=IN[k].val);
+
+/* ===== FROZEN JUNE BASELINE — snapshotted from defaults so editing JULY levers can't rewrite the benchmark ===== */
+const JUNE_CPI=IN.x_cpm.val/(1000*(IN.m_ctr.val/100)*(IN.s_ir.val/100));   // June creative/ASO are historical, not the July plan
+const JUNE_CONTENT=(()=>{const p=IN.m_pilots.val,s1=p*IN.f_g1.val/100,s2=s1*IN.f_g2.val/100;return p*IN.g1_spend.val+s1*IN.g2_spend.val+s2*IN.g3_spend.val;})();
 
 /* ============ DECISION BASIS — on what basis to move each lever ============ */
 const DEC={
@@ -467,6 +513,8 @@ const DEC={
   s_coinprice:'Price per coin. Only change it after price tests. Keep a floor — big spenders won’t notice a rise, but casual payers will leave. Monetization / Finance owns this.',
   s_coinsep:'Coins needed to unlock an episode (usually 8–10). More coins = more revenue per episode but can scare off new viewers — test it on new users first.',
   s_adload:'How many ads each user sees. Set by ad earnings vs. the risk of annoying users you just paid to get. Don’t overdo it. Monetization owns this.',
+  s_whale_pct:'You rarely know this without data — treat it as the unknown. Set the revenue share to what you believe (e.g. 95%), then move this until the implied per-whale spend in the tier table looks realistic. If 2% of payers forces $7k/mo each, the 2% is too low.',
+  s_whale_rev:'Set it to what the data (or the interviewer) says — e.g. ~95% for a gacha/microdrama shape. It’s an observed concentration, not a dial you choose; once set, watch the implied per-whale depth and whether mid-tier revenue all but disappears.',
   s_crm:'Spend on emails / notifications to keep users active. Set it by how much extra activity it really creates (measured against a control group).',
   p_reach:'How many dormant users to message. Keep reaching out until the next batch costs more than it brings back. Limited by how many lapsed users exist and team capacity.',
   p_winconv:'Share of messaged dormant users who come back. A measured result from win-back tests, not a target you set.',
@@ -527,17 +575,18 @@ function computeTierBreakdown(jl){
   return {T,totU};
 }
 function engineJune(v){
+  calibrateWhales(JUNE_MONET);
   const vp=valPayer(JUNE_MONET);
   const conv={N:v.j_new_conv/100,E:v.j_exist_conv/100,R:v.j_react_conv/100};
   const rev={N:v.j_new_rev*1e6,E:v.j_exist_rev*1e6,R:v.j_react_rev*1e6};
   const users={N:rev.N/ARPU(conv.N,vp),E:rev.E/ARPU(conv.E,vp),R:rev.R/ARPU(conv.R,vp)};
   const totRev=rev.N+rev.E+rev.R, totUsers=users.N+users.E+users.R;
   const mix=revMix(users,conv,vp);
-  const cpi=v.x_cpm/(1000*(v.m_ctr/100)*(v.s_ir/100));
+  const cpi=JUNE_CPI;                                  // frozen: June is the as-is benchmark, not a function of July levers
   const ua=v.j_installs*cpi;
   const winback=(users.R/(v.j_winconv/100))*v.j_freecoin;
   const promo=totRev*v.s_promo/100, crm=totRev*v.s_crm/100, opex=totRev*v.x_opex/100;
-  const ch=contentHits(v), content=ch.hd;
+  const content=JUNE_CONTENT;                          // frozen June test/commit budget
   const contribution=totRev-ua-promo-crm-winback-opex-content;
   const lifetime=1/(v.x_payer_churn/100), ltv=vp.blended*lifetime, cac=cpi/conv.N, ltvcac=ltv/cac, payback=cac/vp.blended;
   const payers=users.N*conv.N+users.E*conv.E+users.R*conv.R;
@@ -546,6 +595,7 @@ function engineJune(v){
     arr:{N:v.j_new_rev*12,E:v.j_exist_rev*12,R:v.j_react_rev*12,tot:(v.j_new_rev+v.j_exist_rev+v.j_react_rev)*12}};
 }
 function engineJuly(v,june){
+  calibrateWhales(julyMonet(v));
   const vp=valPayer(julyMonet(v));
   const s=1-v.x_churn/100, W=v.x_window, act=v.x_activation/100;
   const pf=vp.blended/june.vp.blended;               // pricing/depth/adload factor on rolled-forward base
@@ -566,11 +616,12 @@ function engineJuly(v,june){
   const Fusers=v.s_installs*act, Frev=Fusers*ARPU(convN,vpNew);
   const newRev=june.rev.N*s*(1-1/W)*pfNew+Frev;
   const grad=june.rev.N*(1/W)*s*pf;
-  const existRev=((june.rev.E+june.rev.R)*s*pf+grad)*cfE;
+  // cfE (existing-conv lift) applies to the existing base + graduated new users, NOT to rolled-forward reactivated rev (it has its own lever)
+  const existRev=(june.rev.E*s*pf+grad)*cfE + june.rev.R*s*pf;
   const reactUsers=Math.min(v.x_dormant,v.p_reach)*(v.p_winconv/100);
   const reactRev=reactUsers*ARPU(v.p_reactconv/100,vp);
   const totRev=newRev+existRev+reactRev;
-  const ua=v.s_installs*cpi, winback=v.p_reach*v.p_freecoin;
+  const ua=v.s_installs*cpi, winback=Math.min(v.x_dormant,v.p_reach)*v.p_freecoin;  // pay subsidy only for dormant users who actually exist
   const promo=totRev*v.s_promo/100, crm=totRev*v.s_crm/100, opex=totRev*v.x_opex/100;
   const ch=contentHits(v), content=ch.hd;
   const contribution=totRev-ua-promo-crm-winback-opex-content;
@@ -601,6 +652,10 @@ const FREE_LEVERS=['m_ctr','m_depth','p_newconv','p_existconv','p_reactconv','f_
 
 /* ============ RENDER HELPERS ============ */
 function step(fmt,range){return fmt==='usd2'||fmt==='pct2'?'0.1':fmt==='usd3'?'0.001':fmt==='x'?'0.05':fmt==='pct'?'1':'1';}
+// guardrails: keep denominators > 0 and shares < 100 so the engine can't be driven to NaN/Infinity
+const MINV={x_cpm:0.5,m_ctr:0.05,s_ir:1,x_nm:1,x_window:1,x_activation:1,s_coinprice:0.001,s_coinsep:1,m_depth:1,j_new_conv:0.05,j_exist_conv:0.05,j_react_conv:0.05,p_newconv:0.05,p_existconv:0.05,p_reactconv:0.05,s_whale_pct:0.1,s_installs:1000,p_reach:0,x_dormant:0,j_installs:0};
+const MAXV={x_spill_out:99,s_whale_rev:98.5,x_churn:99,x_payer_churn:99,x_nm:95,s_adload:300};
+function clampInput(k,x){let lo=MINV[k],hi=MAXV[k]; if(lo!=null)x=Math.max(x,lo); if(hi!=null)x=Math.min(x,hi); return x;}
 function buildFields(sec,host){
   host.innerHTML=''; let lastGrp=null;
   Object.keys(IN).filter(k=>IN[k].sec===sec).forEach(k=>{
@@ -612,7 +667,10 @@ function buildFields(sec,host){
       <div class="ig">${c.pre?`<span class="pre">${c.pre}</span>`:''}<input type="number" data-k="${k}" value="${S[k]}" step="${step(c.fmt)}">${c.suf?`<span class="suf">${c.suf}</span>`:''}</div>`;
     host.appendChild(d);
   });
-  host.querySelectorAll('input[data-k]').forEach(inp=>inp.addEventListener('input',()=>{S[inp.dataset.k]=parseFloat(inp.value)||0;markDirty();}));
+  host.querySelectorAll('input[data-k]').forEach(inp=>{
+    inp.addEventListener('input',()=>{S[inp.dataset.k]=clampInput(inp.dataset.k,parseFloat(inp.value)||0);markDirty();});
+    inp.addEventListener('change',()=>{const k=inp.dataset.k,c=clampInput(k,parseFloat(inp.value)||0);if(parseFloat(inp.value)!==c)inp.value=c;S[k]=c;});  // reflect the clamp on blur
+  });
 }
 const mcard=(k,tip,v,s,cls)=>`<div class="metric"><div class="mk">${k}${tip?`<span class="info" data-tip="${tip.replace(/"/g,'&quot;')}">i</span>`:''}</div><div class="mv ${cls||''}">${v}</div><div class="ms">${s||''}</div></div>`;
 
@@ -657,6 +715,16 @@ function render(){
     +trow('Free',null,true)+trow('Light','L')+trow('Mid','Mid')+trow('Whale','W')
     +`<tr style="border-top:2px solid var(--line2)"><td><b>Total</b></td><td></td><td></td><td></td><td><b>${NUM(TB.totU)}</b></td><td><b>${M(jl.totRev)}</b></td><td class="${jl.contribution<0?'dneg':'dpos'}"><b>${M(jl.contribution)}</b></td></tr></tbody>`;
 
+  // implied per-whale depth — the reality check on the whale-% assumption (perWhale is the REALIZED value, after any floor)
+  const epW=Math.round(WHALE_IMPLIED.ep*(S.m_depth/100)), perWhale=WHALE_IMPLIED.val, vsLight=perWhale/jl.vp.t.L.val;
+  const implausible=epW>2500||perWhale>1000;
+  let whaleFlag;
+  if(WHALE_IMPLIED.floored) whaleFlag=` <span style="color:var(--neg);font-weight:700">⚠ light/mid spend has hit its floor — at this revenue share the non-whale tiers can't go lower, so the concentration can't actually reach the asserted figure. Raise the whale-% or lower the revenue share.</span>`;
+  else if(implausible) whaleFlag=` <span style="color:var(--neg);font-weight:700">⚠ implausibly deep — the whale-% is likely too low for this revenue share (or light/mid spend far less than modelled).</span>`;
+  else whaleFlag=` <span style="color:var(--muted)">Sanity-check: is that per-whale spend believable? If not, raise the whale-%.</span>`;
+  document.getElementById('whaleNote').innerHTML=
+    `<b>Whale concentration:</b> ${PC(S.s_whale_pct/100)} of payers asserted to drive ${PC(S.s_whale_rev/100)} of payer revenue → model back-solves <b>${M(perWhale)}/mo net per whale</b> (~${NUM(epW)} episode-equiv/mo, ${vsLight.toFixed(0)}× a light payer).`+whaleFlag;
+
   renderExecSummary(jn,jl);
   renderPilots();
   renderGateBudget(jl);
@@ -666,6 +734,7 @@ function render(){
   renderVariance(jn,jl);
   renderArc(jl);
   renderBrief(jn,jl);
+  a11yTips();
   document.body.classList.remove('dirty');
 }
 
@@ -755,7 +824,7 @@ function renderBrief(jn,jl){
 ═══ TEAM DIRECTIVES ═══
 ▶ Central UA / Performance — CPI ${M(jl.cpi)}, LTV:CAC ${jl.ltvcac.toFixed(2)}×, payback ${jl.payback.toFixed(1)}mo. Fund July installs to ${NUM(S.s_installs)} only while LTV:CAC ≥ ~2; optimize marginal ROI, not blended ROAS.
 ▶ Monetization — mix ${PC(mix.coins/mix.tot)} coins / ${PC(mix.ads/mix.tot)} ads / ${PC(mix.subs/mix.tot)} subs. Hold coin price ≥ $${S.s_coinprice.toFixed(3)}; keep ad-load ≤ ${S.s_adload}% to protect retention of freshly-acquired cohorts.
-▶ Lifecycle — churn ${S.x_churn}%/mo → lifetime ${(1/(S.x_churn/100)).toFixed(1)}mo. Win-back reach ${NUM(S.p_reach)} at conv ≥ ${S.p_winconv}% ($${S.p_freecoin}/reach); kill subsidy-only cohorts.
+▶ Lifecycle — active churn ${S.x_churn}%/mo (ages the base); payer churn ${S.x_payer_churn}%/mo → payer lifetime ${(1/(S.x_payer_churn/100)).toFixed(1)}mo (drives LTV). Win-back reach ${NUM(S.p_reach)} at conv ≥ ${S.p_winconv}% ($${S.p_freecoin}/reach); kill subsidy-only cohorts.
 ▶ Content [mine] — ${NUM(S.m_pilots)} pilots → ${NUM(jl.ch.s4)} scaled hits; hit-detection ${M(jl.content)}/mo. New releases = ${PC(S.m_newshare/100)} of revenue; the existing catalog earns the rest at near-pure margin (content sunk). Source toward proven provenance (${srcMix}) & fresh tropes (${tropes}); second-look the high-score kills${sl2.length?': '+sl2.join(', '):''}. Hold greenlight bars (CTR≥${S.pl_minCTR}%, D1≥${S.pl_minRet}%, unlock≥${S.pl_minConv}%).`;
   document.getElementById('briefText').textContent=txt;
 }
@@ -775,7 +844,7 @@ function renderLibrary(jl){
   h+=`<tr style="border-top:2px solid var(--line2)"><td><b>Total</b></td><td><b>${NUM(N)}</b></td><td>100%</td><td><b>${M(tot)}</b></td><td>100%</td><td>${M(tot/N)}</td><td></td></tr></tbody>`;
   document.getElementById('libTable').innerHTML=h;
   const perHit=tot*0.60/Math.max(1,Math.round(N*0.05)), perTail=tot*0.10/Math.max(1,Math.round(N*0.75));
-  document.getElementById('libNote').innerHTML=`<b>Protect the hits.</b> One hit earns ~<b>${M(perHit)}/mo</b>; a long-tail title earns ~<b>${M(perTail)}/mo</b> — about a <b>${Math.round(perHit/perTail)}×</b> gap. Old titles cost nothing to keep, so even the long tail still makes money. Only retire a title for clean-up or licensing reasons — never to cut costs, and never the hits. <br><i>To clear up the story cards: the <b>$240 "LTV/payer"</b> there is what <b>one paying viewer</b> is worth over their lifetime — not the show's revenue. A hit has thousands of them, which is how it reaches ~${M(perHit)}/mo.</i>`;
+  document.getElementById('libNote').innerHTML=`<b>Protect the hits.</b> One hit earns ~<b>${M(perHit)}/mo</b>; a long-tail title earns ~<b>${M(perTail)}/mo</b> — about a <b>${Math.round(perHit/perTail)}×</b> gap. Old titles cost nothing to keep, so even the long tail still makes money. Only retire a title for clean-up or licensing reasons — never to cut costs, and never the hits. <br><span style="color:var(--faint)">Shape is an illustrative power-law benchmark (top 5% / next 20% / tail 75% ≈ 60 / 30 / 10 of revenue), scaled to your catalogue size and total revenue — not measured per-title data.</span> <br><i>To clear up the story cards: the <b>$240 "LTV/payer"</b> there is what <b>one paying viewer</b> is worth over their lifetime — not the show's revenue. A hit has thousands of them, which is how it reaches ~${M(perHit)}/mo.</i>`;
 }
 /* per-pilot Ledger-B content cost (test spend + production), by gate reached */
 function pilotBCost(p){
@@ -807,7 +876,7 @@ function renderPilots(){
       <div class="bcost">Ledger B · content cost <b>$${NUM(bc.total)}</b> <small>(test $${NUM(bc.test)}${bc.prod?' + prod $'+NUM(bc.prod):''})</small></div></div>`;}).join('');
   const sc=ev.filter(p=>p.stage===4).length, gr=ev.filter(p=>p.stage===3).length, k=ev.filter(p=>p.stage<3).length;
   const sl=ev.filter(p=>p.stage<3&&p.ltv>=180).length;
-  document.getElementById('pilotSum').innerHTML=`<b>${sc}</b> scaled · <b>${gr}</b> greenlit · <b>${k}</b> killed (of 16). Bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${sl?` <b style="color:var(--warn)">${sl} high-sourcing-score title(s) killed on execution → ⚠ second look.</b>`:''} <br><i>Src score = provenance (Webtoon adaptation / Proprietary IP / Licensed bestseller / Original) × trope novelty × creator tier — the sourcing signal you commission on. Metrics show only what's observed up to each title's gate.</i>`;
+  document.getElementById('pilotSum').innerHTML=`<b>${sc}</b> scaled · <b>${gr}</b> greenlit · <b>${k}</b> killed (of 16). <i>These 16 are an illustrative shortlist; the statistical funnel above runs <b>${NUM(S.m_pilots)}</b> concepts/mo → ~<b>${NUM(contentHits(S).s4)}</b> scaled hits.</i> Bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${sl?` <b style="color:var(--warn)">${sl} high-sourcing-score title(s) killed on execution → ⚠ second look.</b>`:''} <br><i>Src score = provenance (Webtoon adaptation / Proprietary IP / Licensed bestseller / Original) × trope novelty × creator tier — the sourcing signal you commission on. Metrics show only what's observed up to each title's gate.</i>`;
 }
 
 /* ============ VARIANCE (Plan vs Actual) ============ */
@@ -829,12 +898,12 @@ function renderVariance(jn,jl){
       const actRaw=act*MET[mk].scale, d=actRaw-plan, dp=plan!==0?d/Math.abs(plan):0;
       const good = (mk==='payback')? d<=0 : d>=0;     // lower payback is good
       const cls=good?'dpos':'dneg'; rag=Math.abs(dp)<0.03?'rag-g':(good?'rag-g':(Math.abs(dp)<0.1?'rag-a':'rag-r'));
-      dCell=`<span class="${cls}">${d>=0?'+':''}${fmtMet(mk,actRaw-plan+0).replace('$','$')}</span>`;
       dCell=`<span class="${cls}">${(d>=0?'+':'')+fmtMet(mk,d)}</span>`;
       dpCell=`<span class="${cls}">${(dp>=0?'+':'')+(dp*100).toFixed(0)}%</span>`;
     }
     const step=MET[mk].unit==='%'?'0.1':MET[mk].unit==='×'?'0.05':'0.1';
-    h+=`<tr><td><span class="rag ${rag||''}"></span>${lab}</td><td>${fmtMet(mk,jv)}</td><td><b>${fmtMet(mk,plan)}</b></td>
+    const ragLbl={'rag-g':'on track','rag-a':'slightly off','rag-r':'off plan'}[rag]||'';
+    h+=`<tr><td><span class="rag ${rag||''}" role="img" aria-label="${ragLbl}" title="${ragLbl}"></span>${lab}</td><td>${fmtMet(mk,jv)}</td><td><b>${fmtMet(mk,plan)}</b></td>
       <td><input type="number" data-act="${mk}" step="${step}" value="${act!=null?act:''}" placeholder="—"></td>
       <td>${dCell}</td><td>${dpCell}</td></tr>`;
   });
@@ -847,7 +916,7 @@ function renderVariance(jn,jl){
 /* ============ ARC ============ */
 function renderArc(jl){
   const W=1000,H=130,padL=42,padR=20,padT=12,padB=22, G=Math.pow(200/60,1/12);
-  const xs=i=>padL+(i/12)*(W-padL-padR), y=v=>padT+(1-v/210)*(H-padT-padB);
+  const xs=i=>padL+(i/12)*(W-padL-padR), y=v=>padT+(1-Math.min(v,210)/210)*(H-padT-padB);  // clamp so a >$210M plan can't plot off-canvas
   let path=''; for(let i=0;i<=12;i++){path+=(i?'L':'M')+xs(i).toFixed(1)+','+y(60*Math.pow(G,i)).toFixed(1)+' ';}
   const grid=[60,120,200].map(v=>`<line x1="${padL}" y1="${y(v)}" x2="${W-padR}" y2="${y(v)}" stroke="#eef0f3"></line><text x="${padL-6}" y="${y(v)+3}" text-anchor="end" font-size="9" fill="#97a1af">$${v}M</text>`).join('');
   document.getElementById('arc').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">${grid}
@@ -888,8 +957,8 @@ function penalty(over,obj){
   CONSTRAINTS.forEach(c=>{const m=MET[c.metric].get(jl), t=c.val*MET[c.metric].scale, sc=Math.max(Math.abs(t),MET[c.metric].scale);
     let viol=0; if(c.op==='=')viol=(m-t)/sc; else if(c.op==='>=')viol=Math.max(0,(t-m)/sc); else viol=Math.max(0,(m-t)/sc);
     pen+=viol*viol;});
-  // hard wall: forbid >20% MoM UA-spend scaling (market absorption limit; uses the same elastic engine)
-  const baseUA=metricAt({}).ua;
+  // hard wall: forbid >20% MoM UA-spend scaling vs the JUNE baseline (fixed anchor — not the live July plan, which would ratchet)
+  const baseUA=S.j_installs*JUNE_CPI;
   if(jl.ua > baseUA*(1+UA_MOM_CAP)) pen+=1e9;
   // least-change regularization: prefer the smallest move from current levers
   [...FREE].forEach(k=>{const[a,b]=RANGE(k),span=b-a; if(over[k]!=null){const d=(over[k]-S[k])/span; pen+=0.06*d*d;}});
@@ -900,7 +969,6 @@ function penalty(over,obj){
 function golden(f,a,b){const g=0.6180339887;let c=b-g*(b-a),d=a+g*(b-a),fc=f(c),fd=f(d);for(let i=0;i<36;i++){if(fc<fd){b=d;d=c;fd=fc;c=b-g*(b-a);fc=f(c);}else{a=c;c=d;fc=fd;d=a+g*(b-a);fd=f(d);}}return (a+b)/2;}
 function solve(obj){
   const levers=[...FREE]; if(!levers.length||!CONSTRAINTS.length)return null;
-  const starts=[{},...levers.map(k=>({[k]:IN[k].range?IN[k].range[0]:S[k]}))]; // we'll seed from current + a couple
   let best=null,bestPen=Infinity;
   const seeds=[Object.assign({},S)];
   // add lo/hi/mid seeds
@@ -928,25 +996,23 @@ function runSolve(){
   const res=solve(obj);
   const out=document.getElementById('optResult');
   if(!res){out.innerHTML='<span style="color:var(--warn)">Add at least one target and one free lever.</span>';return;}
-  // apply
-  const before={}; [...FREE].forEach(k=>before[k]=S[k]);
-  Object.assign(S,res.best);
-  [...FREE].forEach(k=>{const fld=document.querySelector(`input[data-k="${k}"]`); if(fld){fld.value=roundLever(k,S[k]);S[k]=parseFloat(fld.value);} });
-  render();
-  // feasibility: re-check each constraint
-  const jl=engineJuly(S,engineJune(S));
+  // evaluate the candidate WITHOUT committing it to S, so an infeasible solve never destroys your inputs
+  const before={}, cand={}; [...FREE].forEach(k=>{before[k]=S[k];cand[k]=roundLever(k,res.best[k]);});
+  const jl=metricAt(cand);
   let worst=null,worstV=0;
   CONSTRAINTS.forEach(c=>{const m=MET[c.metric].get(jl),t=c.val*MET[c.metric].scale,sc=Math.max(Math.abs(t),MET[c.metric].scale);
     let v=0;if(c.op==='=')v=Math.abs(m-t)/sc;else if(c.op==='>=')v=Math.max(0,(t-m)/sc);else v=Math.max(0,(m-t)/sc);
     if(v>worstV){worstV=v;worst=c;}});
   const feasible=worstV<0.02;
   const levHtml=[...FREE].map(k=>{const shared=IN[k].sec==='shared';
-    return `<div class="lv">${IN[k].label}: <span class="opt-from">${fmtLever(k,before[k])}</span><b>${fmtLever(k,S[k])}</b>${shared?`<span class="al">⤿ needs ${IN[k].owner} alignment</span>`:''}</div>`;}).join('');
+    return `<div class="lv">${IN[k].label}: <span class="opt-from">${fmtLever(k,before[k])}</span><b>${fmtLever(k,cand[k])}</b>${shared?`<span class="al">⤿ needs ${IN[k].owner} alignment</span>`:''}</div>`;}).join('');
   if(feasible){
-    out.innerHTML=`<span class="opt-ok">✓ feasible</span><div>All targets met. Resulting July: revenue <b>${M(jl.totRev)}/mo</b> ${arrLabel(jl.totRev)}, contribution <b>${M(jl.contribution)}/mo</b>, margin <b>${PC(jl.margin)}</b>, LTV:CAC <b>${jl.ltvcac.toFixed(2)}×</b>.</div><div class="opt-lev">${levHtml}</div>`;
+    [...FREE].forEach(k=>{S[k]=cand[k];const fld=document.querySelector(`input[data-k="${k}"]`);if(fld)fld.value=cand[k];});
+    render();
+    out.innerHTML=`<span class="opt-ok">✓ feasible — applied</span><div>For these targets to hold, the levers below must move to: revenue <b>${M(jl.totRev)}/mo</b> ${arrLabel(jl.totRev)}, contribution <b>${M(jl.contribution)}/mo</b>, margin <b>${PC(jl.margin)}</b>, LTV:CAC <b>${jl.ltvcac.toFixed(2)}×</b>.</div><div class="opt-lev">${levHtml}</div>`;
   } else {
-    out.innerHTML=`<span class="opt-warn">✕ infeasible — binding: ${MET[worst.metric].label} ${worst.op} ${worst.val}${MET[worst.metric].unit}</span>
-      <div>Closest reachable ${MET[worst.metric].label} = <b>${fmtMet(worst.metric,MET[worst.metric].get(jl))}</b>. Relax that target, or unlock more shared levers.</div><div class="opt-lev">${levHtml}</div>`;
+    out.innerHTML=`<span class="opt-warn">✕ not reachable — binding: ${MET[worst.metric].label} ${worst.op} ${worst.val}${MET[worst.metric].unit}</span>
+      <div>Closest reachable ${MET[worst.metric].label} = <b>${fmtMet(worst.metric,MET[worst.metric].get(jl))}</b>. Relax that target, or unlock more shared levers. <i>Your inputs were left unchanged</i> — the moves below are the closest attempt:</div><div class="opt-lev">${levHtml}</div>`;
   }
 }
 function roundLever(k,x){const f=IN[k].fmt;if(f==='usd3')return Math.round(x*1000)/1000;if(f==='usd2'||f==='pct2'||f==='x')return Math.round(x*100)/100;if(f==='pct')return Math.round(x*10)/10;return Math.round(x);}
@@ -954,12 +1020,25 @@ function fmtLever(k,x){const f=IN[k].fmt;if(f==='usd3')return '$'+x.toFixed(3);i
 
 /* ============ WIRE ============ */
 function markDirty(){document.body.classList.add('dirty');}
+// keyboard + screen-reader access for the span-based info/decision tooltips
+function a11yTips(){document.querySelectorAll('.info,.decic').forEach(e=>{e.tabIndex=0;e.setAttribute('role','note');const t=e.getAttribute('data-tip');if(t)e.setAttribute('aria-label',(e.classList.contains('decic')?'How to decide: ':'Info: ')+t);});}
 function buildAll(){buildFields('june',document.getElementById('f_june'));buildFields('context',document.getElementById('f_context'));buildFields('mine',document.getElementById('f_mine'));buildFields('shared',document.getElementById('f_shared'));}
 document.getElementById('calcBtn').addEventListener('click',render);
-document.getElementById('resetBtn').addEventListener('click',()=>{Object.keys(IN).forEach(k=>S[k]=IN[k].val);ACTUAL={};buildAll();render();});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  Object.keys(IN).forEach(k=>S[k]=IN[k].val);ACTUAL={};
+  CONSTRAINTS=[{metric:'newRev',op:'>=',val:1.45},{metric:'margin',op:'>=',val:5},{metric:'payback',op:'<=',val:6}];
+  FREE=new Set(['m_ctr','m_depth','p_newconv','f_g4','s_installs']);
+  buildAll();renderConstraints();render();
+});
 document.getElementById('addConstraint').addEventListener('click',()=>{CONSTRAINTS.push({metric:'totRev',op:'>=',val:5.5});renderConstraints();});
 document.getElementById('solveBtn').addEventListener('click',runSolve);
-document.getElementById('copyBrief').addEventListener('click',(e)=>{const t=document.getElementById('briefText').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);const b=e.target;const o=b.textContent;b.textContent='✓ Copied';setTimeout(()=>b.textContent=o,1400);});
+document.getElementById('copyBrief').addEventListener('click',(e)=>{
+  const t=document.getElementById('briefText').textContent, b=e.target, o=b.textContent;
+  const ok=()=>{b.textContent='✓ Copied';setTimeout(()=>b.textContent=o,1400);};
+  const fail=()=>{b.textContent='⚠ Copy failed';setTimeout(()=>b.textContent=o,1600);};
+  const fallback=()=>{try{const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();const done=document.execCommand('copy');document.body.removeChild(ta);done?ok():fail();}catch(_){fail();}};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok).catch(fallback);}else fallback();
+});
 
 /* ============ SLATE ============ */
 const SLATE=[
