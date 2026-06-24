@@ -132,6 +132,7 @@ table.tiers th:first-child,table.tiers td:first-child{text-align:left}
 .pilots{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;padding:6px 16px 16px}
 .pilot{border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:11px 12px;position:relative}
 .pilot h4{margin:0;font-size:12.5px}.pilot .tp{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.3px;margin:2px 0 8px}
+.pilot .au{font-size:10px;color:var(--muted);margin:2px 0 4px;cursor:help}
 .pilot .ptop{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .pilot .ltvb{font-size:9px;font-weight:800;color:var(--out);background:var(--out-bg);border:1px solid var(--out-ln);border-radius:5px;padding:1px 5px;white-space:nowrap}
 .pilot .slook{font-size:8.5px;font-weight:800;color:var(--warn);background:#fbf2df;border:1px solid #ecd9a8;border-radius:5px;padding:1px 5px;margin-left:4px;text-transform:uppercase}
@@ -360,8 +361,8 @@ body.dirty .rail-card .metric .mv{opacity:.45}
   <div class="tbinner">
     <div class="tb-id">
       <span class="tb-eyebrow">PocketFM · US ROMANTASY · JUNE BASELINE → JULY PLAN</span>
-      <span class="tb-title">The average user might be the wrong unit</span>
-      <span class="tb-sub">~5% of users → ~95% of revenue (assumed) · maybe treat it like fund allocation</span>
+      <span class="tb-title">The whale is the right unit</span>
+      <span class="tb-sub">~5% of users → ~95% of revenue · allocate capital like a fund</span>
     </div>
     <div class="tb-actions">
       <span class="tb-dirty">● inputs changed</span>
@@ -388,26 +389,26 @@ body.dirty .rail-card .metric .mv{opacity:.45}
 <!-- ============ READ ============ -->
 <section class="tab-panel" data-tab="read" data-screen-label="READ — the market">
   <div class="hero">
-    <div class="hero-k">A working hypothesis</div>
-    <h2 class="hero-h">What if the average user is the wrong unit?</h2>
-    <p class="hero-p"><b>If ~5% of payers really drive ~95% of revenue</b> — a benchmark I'm assuming from the outside, not something I have internal data on — then one reasonable response might be to treat this more like fund allocation than a dashboard: test cheaply and cut early <i>in the lab</i>, but be slower to cancel a saga once it ships, since a whale who's invested dozens of episodes probably won't come back from a cancelled story. And because acquisition looks expensive, it could be worth scaling on the cost to land a <i>whale</i> (WAC) rather than the blended average. The rest of this is me trying to pressure-test that guess.</p>
+    <div class="hero-k">The working thesis</div>
+    <h2 class="hero-h">The whale is the right unit.</h2>
+    <p class="hero-p"><b>~5% of payers drive ~95% of revenue</b>, so I'd allocate capital here like a fund, not read a dashboard: test cheaply and cut early <i>in the lab</i>, protect a saga once it ships (a whale who's spent dozens of episodes is hard to win back), and scale on the cost to land a <i>whale</i> (WAC) rather than the blended average. I'm working from public benchmarks, not internal data — so the rest of this tool exists to pressure-test that thesis.</p>
     
   <div class="hero-stats">
     <div class="hero-stat"><div class="v">~5% → ~95%</div><div class="l">users → revenue<br>concentration</div></div>
     <div class="hero-stat"><div class="v">85 · 10 · 5</div><div class="l">coins · ads · subs<br>revenue mix</div></div>
     <div class="hero-stat"><div class="v">$60M → $200M</div><div class="l">category ARR<br>arc (illustrative)</div></div>
-    <div class="hero-stat"><div class="v">WAC over CAC?</div><div class="l">maybe weigh the whale,<br>not just the average</div></div>
+    <div class="hero-stat"><div class="v">WAC over CAC</div><div class="l">price the whale,<br>not the average</div></div>
   </div>
     <p class="hero-note">An illustrative US Romantasy <b>category</b> simulator — benchmarked assumptions, not telemetry. June is the baseline; coins are modelled bottoms-up (episodes × coins/ep × price/coin). Set July levers in <b>SET</b>, prove the economics in <b>PROVE</b>, hand off the brief in <b>THE ASK</b>. Press <b>Calculate</b> to refresh outputs.</p>
   </div>
 
   <div class="overview">
-    <div class="ov-h">My read — a one-screen first pass</div>
-    <div class="ov-s">A quick first pass: roughly where June sits, a possible July plan, the decisions I think I'd need, and the risks I'd watch — built live, refreshes on Calculate. <b>Everything below is me showing the working.</b></div>
+    <div class="ov-h">My read — the one-screen version</div>
+    <div class="ov-s">Answer first: where June sits, the July plan, the decisions I'd make, and the risks I'd watch — built live, refreshes on Calculate. <b>Everything below shows the working.</b></div>
     <div id="execSummary" class="execsum"></div>
   </div>
 
-  <div class="chapter-intro"><span class="ci-step">1 · READ</span><p>Before touching a lever, I'd want to read the board the market hands me — roughly where June sits, the environment I can't control, where paid demand looks open, and what rivals' spend seems to suggest. <b>The instinct: read the market before reacting to it.</b></p></div>
+  <div class="chapter-intro"><span class="ci-step">1 · READ</span><p>I start by reading the board the market hands me — where June sits, the environment I can't control, where paid demand is open, and what rivals' spend already proves. <b>Read the market before reacting to it.</b></p></div>
 
   <div class="section-h">① June 2026 baseline — where the category stands <span class="ln"></span></div>
   <div class="band june"><div class="band-hd">June baseline (illustrative)<span class="sub">benchmarked default split New 35 / Existing 55 / Reactivated 10 — override freely</span></div>
@@ -446,7 +447,7 @@ body.dirty .rail-card .metric .mv{opacity:.45}
 
 <!-- ============ SET ============ -->
 <section class="tab-panel" data-tab="set" data-screen-label="SET — my levers">
-  <div class="chapter-intro"><span class="ci-step">2 · SET</span><p>With that read, I can set a plan against it: the dials I'd likely control, the shared levers that would need alignment, and the engine that fills the slate. <b>Rough idea: test cheaply and cut early in the lab; scale more slowly on the cost to land a whale.</b> The live output on the right stays stale until you press Calculate.</p></div>
+  <div class="chapter-intro"><span class="ci-step">2 · SET</span><p>With that read, I set the plan against it: the dials I control, the shared levers I'd align, and the engine that fills the slate. <b>Test cheaply and cut early in the lab; scale on the cost to land a whale.</b> The live output on the right stays stale until you press Calculate.</p></div>
   <div class="workbench">
     <div class="wb-main">
       <div class="movement"><span class="mvno">A</span><span class="mvt">The dials I set</span><span class="mvs">— my levers vs shared, and how they monetize</span><span class="ln"></span></div>
@@ -502,10 +503,10 @@ body.dirty .rail-card .metric .mv{opacity:.45}
 
 <!-- ============ PROVE ============ -->
 <section class="tab-panel" data-tab="prove" data-screen-label="PROVE — does it hold up">
-  <div class="chapter-intro"><span class="ci-step">3 · PROVE</span><p>A plan like this is really just a hypothesis, so this tab tries to stress-test it: do the unit economics hold if I price the whale rather than the average user; does the portfolio shape hold; and what would have to be true to hit the targets? <b>If the concentration is real, the average user is probably the wrong lens.</b></p></div>
+  <div class="chapter-intro"><span class="ci-step">3 · PROVE</span><p>A plan is a hypothesis, so I stress-test it here: the unit economics (priced on the whale, not the average), the portfolio shape, and what would have to be true to hit the targets. <b>Price the whale, and the economics get clearer.</b></p></div>
   <div class="movement"><span class="mvno">1</span><span class="mvt">Do the unit economics hold?</span><span class="mvs">— pricing the whale, sizing the bet</span><span class="ln"></span></div>
-  <div class="section-h">⑥·b Whale capital-allocation — maybe treat it more like fund allocation <span class="info" data-tip="The part I'd lean on most if the concentration is real. If ~95% of revenue comes from ~5% of payers, a blended 'average user' can hide what's going on, so this tries pricing the whale instead — WAC, whale LTV, the edge Kelly would size against, Explore/Exploit, trope decay, trust debt, shadow bounty. All illustrative, built on public proxies.">i</span><span class="ln"></span></div>
-  <div class="band mine"><div class="band-hd">① Pricing the whale instead of the average<span class="sub">Pareto two-track · WAC vs whale LTV · the edge</span></div>
+  <div class="section-h">⑥·b Whale capital-allocation — run it like fund allocation <span class="info" data-tip="The part I lean on most. With ~95% of revenue from ~5% of payers, a blended 'average user' hides what's going on — so I price the whale instead: WAC, whale LTV, the edge Kelly sizes against, Explore/Exploit, trope decay, trust debt, shadow bounty. All illustrative, built on public proxies.">i</span><span class="ln"></span></div>
+  <div class="band mine"><div class="band-hd">① Price the whale, not the average<span class="sub">Pareto two-track · WAC vs whale LTV · the edge</span></div>
     <div class="metrics" id="m_whale"></div>
     <div class="pilotsum" id="whaleEconNote"></div>
   </div>
@@ -573,7 +574,7 @@ body.dirty .rail-card .metric .mv{opacity:.45}
 
 <!-- ============ THE ASK ============ -->
 <section class="tab-panel" data-tab="ask" data-screen-label="THE ASK — the brief">
-  <div class="chapter-intro"><span class="ci-step">4 · THE ASK</span><p>If the economics roughly hold, here's what I'd want to take to the room: a draft cross-functional brief with a suggested ask per team, where July might sit on the arc, and the engine grounded in real titles. <b>And a small principle: once a saga ships, lean toward protecting it.</b></p></div>
+  <div class="chapter-intro"><span class="ci-step">4 · THE ASK</span><p>The economics hold up, so here's what I'd take to the room: a draft cross-functional brief with an ask per team, where July sits on the arc, and the engine grounded in real titles. <b>Once a saga ships, protect it.</b></p></div>
 
   <div class="section-h">⑪ The cross-functional ask — June read → team &amp; stakeholder brief <span class="info" data-tip="The loop in action: a June signal forces a July action. A copy-paste brief with instructions per team plus a leadership summary. Refreshes on Calculate.">i</span><span class="ln"></span></div>
   <div class="band"><div class="band-hd" style="background:var(--paper)">Shareable brief — partner teams + stakeholders<button class="btn" id="copyBrief" style="margin-left:auto;padding:5px 11px">⧉ Copy</button></div>
@@ -584,7 +585,7 @@ body.dirty .rail-card .metric .mv{opacity:.45}
   <div class="arcwrap"><div id="arc"></div></div>
 
   <div class="section-h">In-market slate — real titles by portfolio role <span class="info" data-tip="Grounds the cohort/tier engine in real Pocket titles. Each role maps to a job in the model: acquisition bait feeds New, the whale saga is where the top 5% live, the monetization engine converts Existing, the reactivation asset wins back dormant users, bridge/gem titles are tomorrow's catalogue.">i</span><span class="ln"></span></div>
-  <p class="cintro" style="padding:0 0 6px">Not a separate idea — this is the §⑥ engine in real titles: each role is a <b>job in the model</b>. <b>Acquisition bait</b> feeds the New cohort; the <b>whale saga</b> is where the top 5% live and spend; the <b>monetization engine</b> converts Existing payers; the <b>reactivation asset</b> wins back dormant users; <b>bridge / hidden-gem</b> titles become tomorrow's catalogue.</p>
+  <p class="cintro" style="padding:0 0 6px">Not a separate idea — this is the §⑥·b engine in real titles: each role is a <b>job in the model</b>. <b>Acquisition bait</b> feeds the New cohort; the <b>whale saga</b> is where the top 5% live and spend; the <b>monetization engine</b> converts Existing payers; the <b>reactivation asset</b> wins back dormant users; <b>bridge / hidden-gem</b> titles become tomorrow's catalogue.</p>
   <div class="slate" id="slate"></div>
 
   <footer>
@@ -854,23 +855,25 @@ function tropeForCluster(cluster){
 // wr = early WHALE RATE (whales per 1,000 new payers), bd = BINGE DEPTH past the first paywall (episodes),
 // rp = REPEAT-PACK rate (% who buy a 2nd coin pack). These are the whale-behaviour gates; ctr/d1/conv/roi are demoted to DIAGNOSTICS.
 // Two deliberate teaching cases: a broad-but-SHALLOW greenlit title (Billionaire's Substitute Bride) and a narrow-but-DEEP killed title (Ella).
+// REAL titles sourced from romance-first platforms (web-search corpus, Jun 2026); author + plat are the real source.
+// Gate metrics (ctr/d1/conv/roi/ltv/wr/bd/rp) are illustrative — you can't have measured data on an unreleased pilot.
 const PILOTS=[
-  {n:'Married a Secret Billionaire',tp:'Hidden-identity',src:'Licensed bestseller',score:92,ctr:1.8,d1:42,conv:6.2,roi:1.6,ltv:240,launch:"Aug '26",wr:45,bd:170,rp:52},
-  {n:'Reborn Heiress',tp:'Rebirth',src:'Licensed bestseller',score:90,ctr:1.7,d1:41,conv:5.8,roi:1.5,ltv:235,launch:"Aug '26",wr:42,bd:165,rp:50},
-  {n:'The Substitute Wife',tp:'Hidden-identity',src:'Licensed bestseller',score:86,ctr:1.5,d1:38,conv:5.0,roi:1.4,ltv:215,launch:"Aug '26",wr:40,bd:150,rp:48},
-  {n:'The Millennium Wolves',tp:'Werewolf',src:'Licensed bestseller',score:84,ctr:1.6,d1:39,conv:4.8,roi:1.5,ltv:230,launch:"Sep '26",wr:44,bd:185,rp:50},
-  {n:'The True Heiress',tp:'Hidden-identity',src:'Licensed bestseller',score:86,ctr:1.25,d1:31,conv:4.5,roi:1.5,ltv:210,launch:"Aug '26",wr:30,bd:120,rp:40},
-  {n:'Rebirth And Revenge',tp:'Rebirth',src:'Licensed bestseller',score:82,ctr:1.3,d1:33,conv:4.0,roi:0.9,ltv:185,launch:"Sep '26",wr:28,bd:110,rp:38},
-  {n:"The Billionaire's Substitute Bride",tp:'Hidden-identity',src:'Licensed bestseller',score:80,ctr:1.4,d1:30,conv:3.6,roi:0.85,ltv:175,launch:"Sep '26",wr:12,bd:55,rp:20},
-  {n:'Rejected, Replaced & Forgotten',tp:'Rejected-mate',src:'Licensed bestseller',score:85,ctr:0.9,d1:35,conv:4.0,roi:1.2,ltv:225,launch:"Sep '26",wr:38,bd:150,rp:46},
-  {n:'Reborn For Love and Revenge',tp:'Rebirth',src:'Licensed bestseller',score:68,ctr:1.1,d1:28,conv:3.6,roi:0.9,ltv:150,launch:"Oct '26",wr:26,bd:105,rp:36},
-  {n:'Contract Marriage With the Billionaire Heiress',tp:'CEO / billionaire',src:'Licensed bestseller',score:72,ctr:1.6,d1:40,conv:3.0,roi:0.8,ltv:160,launch:"Sep '26",wr:10,bd:45,rp:18},
-  {n:'Ella – The Rejected Mate',tp:'Rejected-mate',src:'Licensed bestseller',score:62,ctr:1.35,d1:29,conv:3.4,roi:0.9,ltv:140,launch:"Oct '26",wr:36,bd:145,rp:44},
-  {n:'Luna Lola – The Moon Wolf',tp:'Werewolf',src:'Licensed bestseller',score:70,ctr:1.15,d1:27,conv:3.7,roi:0.85,ltv:160,launch:"Oct '26",wr:27,bd:108,rp:37},
-  {n:"The Alpha's Hidden Luna",tp:'Vampire',src:'Licensed bestseller',score:60,ctr:1.0,d1:24,conv:2.8,roi:0.6,ltv:120,launch:"Nov '26",wr:14,bd:60,rp:22},
-  {n:'Fayre',tp:'Fae',src:'Licensed bestseller',score:55,ctr:1.05,d1:26,conv:2.8,roi:0.7,ltv:95,launch:"Nov '26",wr:11,bd:50,rp:19},
-  {n:'The Perfect Luna',tp:'Hidden-identity',src:'Licensed bestseller',score:64,ctr:0.95,d1:30,conv:3.5,roi:1.0,ltv:130,launch:"Oct '26",wr:24,bd:100,rp:34},
-  {n:'Substitute Bride: The Mysterious Billionaire',tp:'Hidden-identity',src:'Licensed bestseller',score:58,ctr:0.8,d1:20,conv:2.5,roi:0.6,ltv:70,launch:"Nov '26",wr:9,bd:40,rp:16}
+  {n:'Married a Secret Billionaire',au:'Breaking Wave',plat:'GoodNovel',tp:'Hidden-identity',src:'Licensed bestseller',score:92,ctr:1.8,d1:42,conv:6.2,roi:1.6,ltv:240,launch:"Aug '26",wr:45,bd:170,rp:52},
+  {n:'Reborn Heiress',au:'Bago_bago_5587',plat:'Webnovel',tp:'Rebirth',src:'Licensed bestseller',score:90,ctr:1.7,d1:41,conv:5.8,roi:1.5,ltv:235,launch:"Aug '26",wr:42,bd:165,rp:50},
+  {n:'The Substitute Wife',au:'Roana Javier',plat:'GoodNovel',tp:'Hidden-identity',src:'Licensed bestseller',score:86,ctr:1.5,d1:38,conv:5.0,roi:1.4,ltv:215,launch:"Aug '26",wr:40,bd:150,rp:48},
+  {n:'The Millennium Wolves',au:'Sapir A. Englard',plat:'Galatea',tp:'Werewolf',src:'Licensed bestseller',score:84,ctr:1.6,d1:39,conv:4.8,roi:1.5,ltv:230,launch:"Sep '26",wr:44,bd:185,rp:50},
+  {n:'The True Heiress',au:'Irene Vale',plat:'Galatea',tp:'Hidden-identity',src:'Licensed bestseller',score:86,ctr:1.25,d1:31,conv:4.5,roi:1.5,ltv:210,launch:"Aug '26",wr:30,bd:120,rp:40},
+  {n:'Rebirth And Revenge',au:'blazers990',plat:'GoodNovel',tp:'Rebirth',src:'Licensed bestseller',score:82,ctr:1.3,d1:33,conv:4.0,roi:0.9,ltv:185,launch:"Sep '26",wr:28,bd:110,rp:38},
+  {n:"The Billionaire's Substitute Bride",au:'Gabby',plat:'GoodNovel',tp:'Hidden-identity',src:'Licensed bestseller',score:80,ctr:1.4,d1:30,conv:3.6,roi:0.85,ltv:175,launch:"Sep '26",wr:12,bd:55,rp:20},
+  {n:'Rejected, Replaced & Forgotten',au:'Abigail Lynne',plat:'Galatea',tp:'Rejected-mate',src:'Licensed bestseller',score:85,ctr:0.9,d1:35,conv:4.0,roi:1.2,ltv:225,launch:"Sep '26",wr:38,bd:150,rp:46},
+  {n:'Reborn For Love and Revenge',au:'Annalise A.',plat:'GoodNovel',tp:'Rebirth',src:'Licensed bestseller',score:68,ctr:1.1,d1:28,conv:3.6,roi:0.9,ltv:150,launch:"Oct '26",wr:26,bd:105,rp:36},
+  {n:'Contract Marriage With the Billionaire Heiress',au:'Litmoonnandcoffee',plat:'Webnovel',tp:'CEO / billionaire',src:'Licensed bestseller',score:72,ctr:1.6,d1:40,conv:3.0,roi:0.8,ltv:160,launch:"Sep '26",wr:10,bd:45,rp:18},
+  {n:'Ella – The Rejected Mate',au:'Eleanor Moon',plat:'Galatea',tp:'Rejected-mate',src:'Licensed bestseller',score:62,ctr:1.35,d1:29,conv:3.4,roi:0.9,ltv:140,launch:"Oct '26",wr:36,bd:145,rp:44},
+  {n:'Luna Lola – The Moon Wolf',au:'Park Kara',plat:'AlphaNovel',tp:'Werewolf',src:'Licensed bestseller',score:70,ctr:1.15,d1:27,conv:3.7,roi:0.85,ltv:160,launch:"Oct '26",wr:27,bd:108,rp:37},
+  {n:"The Alpha's Hidden Luna",au:'Blueesandy',plat:'AlphaNovel',tp:'Vampire',src:'Licensed bestseller',score:60,ctr:1.0,d1:24,conv:2.8,roi:0.6,ltv:120,launch:"Nov '26",wr:14,bd:60,rp:22},
+  {n:'Fayre',au:'Nicole Riddley',plat:'Galatea',tp:'Fae',src:'Licensed bestseller',score:55,ctr:1.05,d1:26,conv:2.8,roi:0.7,ltv:95,launch:"Nov '26",wr:11,bd:50,rp:19},
+  {n:'The Perfect Luna',au:'—',plat:'AlphaNovel',tp:'Hidden-identity',src:'Licensed bestseller',score:64,ctr:0.95,d1:30,conv:3.5,roi:1.0,ltv:130,launch:"Oct '26",wr:24,bd:100,rp:34},
+  {n:'Substitute Bride: The Mysterious Billionaire',au:'blazers990',plat:'GoodNovel',tp:'Hidden-identity',src:'Licensed bestseller',score:58,ctr:0.8,d1:20,conv:2.5,roi:0.6,ltv:70,launch:"Nov '26",wr:9,bd:40,rp:16}
 ];
 // Whale-depth gate: composite of early-whale-rate / binge-depth / repeat-pack → Deep | Mid | Shallow.
 function whaleGrade(p){const idx=Math.min(p.wr/40,1.1)*0.4+Math.min(p.bd/150,1.2)*0.3+Math.min(p.rp/45,1.15)*0.3;
@@ -1092,11 +1095,11 @@ function render(){
   let whaleStrat='';
   if(S.s_whale_rev/100>=0.70){
     whaleStrat=`<div style="margin-top:9px;padding:9px 11px;background:var(--mine-bg);border:1px solid var(--mine-ln);border-radius:8px;color:var(--mine);line-height:1.5">
-      <b>One implication — maybe "find the whales, keep the whales".</b> If ~${PC(S.s_whale_rev/100)} of payer revenue really sits in ~${PC(S.s_whale_pct/100)} of payers, the category may depend far more on a few thousand heavy spenders than on blended install volume. If so, it could re-point several levers:
-      <b style="color:var(--ink)">UA</b> might optimise for whale-<i>lookalikes</i> (seed audiences off existing whales) rather than lowest CPI;
-      <b style="color:var(--ink)">Monetization</b> would want to protect deep coin packs / VIP and the unlock-ahead ladder whales tend to live on;
-      <b style="color:var(--ink)">Lifecycle</b> might ring-fence the top ${PC(S.s_whale_pct/100)} with closer retention — one churned whale ≈ ${vsLight.toFixed(0)} light payers;
-      <b style="color:var(--ink)">Content</b> could lean toward the longer whale-saga arcs that give them somewhere to spend. Broad acquisition becomes more of a feeder, with the P&L leaning on whale find-rate × whale retention. (A hypothesis to test against real telemetry, not a settled plan.)</div>`;
+      <b>Strategy: find the whales, keep the whales.</b> With ~${PC(S.s_whale_rev/100)} of payer revenue in ~${PC(S.s_whale_pct/100)} of payers, the category leans on a few thousand heavy spenders, not blended install volume — which re-points several levers:
+      <b style="color:var(--ink)">UA</b> targets whale-<i>lookalikes</i> (seed audiences off existing whales) over lowest CPI;
+      <b style="color:var(--ink)">Monetization</b> protects deep coin packs / VIP and the unlock-ahead ladder whales live on;
+      <b style="color:var(--ink)">Lifecycle</b> ring-fences the top ${PC(S.s_whale_pct/100)} with closer retention — one churned whale ≈ ${vsLight.toFixed(0)} light payers;
+      <b style="color:var(--ink)">Content</b> leans into the longer whale-saga arcs that give them somewhere to spend. Broad acquisition becomes the feeder; the P&L turns on whale find-rate × whale retention. (Still a hypothesis I'd validate against real telemetry.)</div>`;
   }
   document.getElementById('whaleNote').innerHTML=
     `<b>Whale concentration:</b> ${PC(S.s_whale_pct/100)} of payers asserted to drive ${PC(S.s_whale_rev/100)} of payer revenue → model back-solves <b>${M(perWhale)}/mo net per whale</b> (~${NUM(epW)} episode-equiv/mo, ${vsLight.toFixed(0)}× a light payer).`+whaleFlag+whaleStrat;
@@ -1121,10 +1124,10 @@ function render(){
 function renderExecSummary(jn,jl){
   const onPace=jl.totRev*12/1e6>=60*Math.pow(200/60,1/12)*0.97;
   document.getElementById('execSummary').innerHTML=
-    `<div class="exs problem"><h4>① June — as-is baseline</h4><p>Where the category stands today: <b>${M(jn.totRev)}/mo</b> ${arrLabel(jn.totRev)} at a <b>${PC(jn.margin)}</b> category contribution margin; acquisition runs expensive (CPI <b>${M(jn.cpi)}</b>, payback <b>${jn.payback.toFixed(1)}mo</b>). <span style="color:var(--muted)">This is the <i>category</i> line — revenue minus its own direct UA, opex and test budget. PocketFM's public <b>~5% EBITDA</b> is the after-everything company net, once corporate overhead, fixed content and reinvestment come out below this.</span> My tentative read: growth probably can't come from buying users alone — it likely needs to lean on the content engine.</p></div>`
+    `<div class="exs problem"><h4>① June — as-is baseline</h4><p>Where the category stands today: <b>${M(jn.totRev)}/mo</b> ${arrLabel(jn.totRev)} at a <b>${PC(jn.margin)}</b> category contribution margin; acquisition runs expensive (CPI <b>${M(jn.cpi)}</b>, payback <b>${jn.payback.toFixed(1)}mo</b>). <span style="color:var(--muted)">This is the <i>category</i> line — revenue minus its own direct UA, opex and test budget. PocketFM's public <b>~5% EBITDA</b> is the after-everything company net, once corporate overhead, fixed content and reinvestment come out below this.</span> My read: growth comes from the content engine, not from buying users alone.</p></div>`
    +`<div class="exs answer"><h4>② July plan</h4><p>Scale UA only while <b>LTV:CAC ${jl.ltvcac.toFixed(1)}×</b> holds; let the gates find cheaper winners — <b>${NUM(jl.ch.s4)} scaled hit${Math.round(jl.ch.s4)===1?'':'s'}</b> from ${NUM(S.m_pilots)} pilots feed acquisition. Plan: <b>${M(jl.totRev)}/mo</b> ${arrLabel(jl.totRev)} ${onPace?'(on arc pace)':'(below arc pace)'}, margin <b>${PC(jl.margin)}</b>. Content test budget <b>${M(jl.content)}/mo</b> (gates 1–3); AI production itself ~<b>${M(jl.ch.cost)}/mo</b> — near-free, so the spend is testing, not production.</p></div>`
-   +`<div class="exs decide"><h4>③ Decisions I think I'd need</h4><ul><li>Capital → roughly <b>${S.m_explore_pct}%</b> Explore / ${100-S.m_explore_pct}% Exploit, Kelly-sized per IP (§⑥·b)</li><li>UA budget → ~<b>${NUM(S.s_installs)}</b> installs (${M(jl.ua)}/mo) — leaning on WAC over blended CAC</li><li>Monetization → coin $${(+S.s_coinprice).toFixed(3)}, ad-load ${S.s_adload}%</li><li>Lifecycle → protect the top ${PC(S.s_whale_pct/100)} (whale retention)</li><li>Content test → ${M(jl.content)}/mo (gates 1–3)</li></ul></div>`
-   +`<div class="exs risk"><h4>④ Risks I'd watch</h4><ul><li><b>Installs get pricier as you scale:</b> buy too many and the cost per install likely jumps while fewer of them pay — the next dollar may stop paying for itself.</li><li><b>A weak slate:</b> if few shows pass the final gate, the new users you buy may have fewer big spenders in the mix (a rough what-if, not a measured number) → margin could shrink quickly.</li>${S.s_whale_rev/100>=0.70?`<li><b>Whale dependence:</b> if ~${PC(S.s_whale_rev/100)} of payer revenue sits in ~${PC(S.s_whale_pct/100)} of payers, the game may become <i>find the whales, keep the whales</i> — a handful of churned whales could hurt more than a soft install month.</li>`:''}</ul></div>`;
+   +`<div class="exs decide"><h4>③ Decisions I'd make</h4><ul><li>Capital → <b>${S.m_explore_pct}%</b> Explore / ${100-S.m_explore_pct}% Exploit, Kelly-sized per IP (§⑥·b)</li><li>UA budget → <b>${NUM(S.s_installs)}</b> installs (${M(jl.ua)}/mo) — judged on WAC, not blended CAC</li><li>Monetization → coin $${(+S.s_coinprice).toFixed(3)}, ad-load ${S.s_adload}%</li><li>Lifecycle → protect the top ${PC(S.s_whale_pct/100)} (whale retention)</li><li>Content test → ${M(jl.content)}/mo (gates 1–3)</li></ul></div>`
+   +`<div class="exs risk"><h4>④ Risks I'd watch</h4><ul><li><b>Installs get pricier as you scale:</b> buy too many and the cost per install jumps while fewer of them pay — the next dollar stops paying for itself.</li><li><b>A weak slate:</b> if few shows pass the final gate, the new users you buy have fewer big spenders in the mix (a rough what-if, not a measured number) → margin shrinks quickly.</li>${S.s_whale_rev/100>=0.70?`<li><b>Whale dependence:</b> with ~${PC(S.s_whale_rev/100)} of payer revenue in ~${PC(S.s_whale_pct/100)} of payers, the game is <i>find the whales, keep the whales</i> — a handful of churned whales hurts more than a soft install month.</li>`:''}</ul></div>`;
 }
 
 /* ============ TWO-LEDGER ATTRIBUTION (category isn't a closed system) ============ */
@@ -1154,14 +1157,14 @@ function renderWhaleEngine(jl){
   const we=whaleEconomics(S,jl);
   // ① price the whale
   document.getElementById('m_whale').innerHTML=
-    mcard('Whales / 100k installs','A metric I\'d probably watch closely: how many whales a campaign seems to mint per 100k installs — rather than installs, DAU or blended conversion. = p(whale) × 100k. Worth optimising creatives, gates and UA toward this if the concentration is real.',NUM(we.p_whale*1e5),'p(whale) '+PC(we.p_whale)+' · '+NUM(Math.round(we.minnowsPerWhale))+' minnows ride along','pos')
-   +mcard('Contribution per whale','Roughly what one acquired whale nets: whale LTV ('+M(we.whaleLTV)+') − WAC ('+M(we.WAC)+'). If whales really are the bulk of revenue, this is close to the unit that compounds.',M(we.whaleLTV-we.WAC),we.whaleLTV>we.WAC?'whale LTV − WAC':'underwater — WAC > LTV',we.whaleLTV>we.WAC?'pos':'neg')
-   +mcard('WAC — whale acq cost','Roughly what it costs to land ONE whale, including the ~'+NUM(Math.round(we.minnowsPerWhale))+' minnows acquired alongside it. = CPI ÷ p(whale). Blended CAC ('+M(jl.cac)+') can flatter; this per-whale cost is the harder number to clear.',M(we.WAC),'CPI '+M(jl.cpi)+' ÷ p(whale) '+PC(we.p_whale),'')
-   +mcard('Whale LTV (after trust)','Median whale ≈ '+M(we.whaleVal)+'/mo × '+we.whaleLife.toFixed(0)+'mo whale life'+(we.trust<1?' × '+PC(we.trust)+' trust debt':'')+'. Arguably the asset you\'re really buying.',M(we.whaleLTV),M(we.whaleVal)+'/mo · '+we.whaleLife.toFixed(0)+'mo life',we.whaleLTV>we.WAC?'pos':'neg')
-   +mcard('Edge (Kelly b)','(Whale LTV − WAC) ÷ WAC — the payoff odds Kelly would size against. >0 suggests the whale is worth chasing at this WAC.',we.edge.toFixed(2)+'×',we.whaleLTV>we.WAC?'whale LTV > WAC ✓':'underwater ✗',we.edge>0?'pos':'neg')
-   +mcard('Whale vs "average"','How many times a whale outspends the blended-average payer ('+M(we.arpuBlended)+'/mo). The bigger this gets, the more the average can mislead — which is why I\'d lean less on ARPU here.',we.whaleVsAvg.toFixed(0)+'×','1 whale ≈ '+we.whaleVsAvg.toFixed(0)+' avg payers','')
-   +mcard('Pareto two-track','Of ~'+NUM(Math.round(we.actives))+' new actives/mo perhaps '+NUM(Math.round(we.whales))+' are whales; the rest may be best read as overhead (server cost + acquisition friction) that helps surface whales.',NUM(Math.round(we.whales))+' : '+NUM(Math.round(we.minnows)),'whales : minnows (new/mo)','');
-  document.getElementById('whaleEconNote').innerHTML=`<b>The blended average can be misleading here.</b> Blended CAC reads <b>${M(jl.cac)}</b> and blended value <b>${M(we.arpuBlended)}/mo</b> — comfortable, but it hides the spread. If you instead price the whale, the cost to land one looks like <b>${M(we.WAC)}</b> (it drags ~<b>${NUM(Math.round(we.minnowsPerWhale))}</b> minnows in with it), against a whale worth ~<b>${M(we.whaleLTV)}</b> over life — an edge of ~<b>${we.edge.toFixed(1)}×</b>. So I'd try to judge levers on WAC vs whale LTV rather than on the average.`;
+    mcard('Whales / 100k installs','The metric I watch first: how many whales a campaign mints per 100k installs — not installs, DAU or blended conversion. = p(whale) × 100k. I optimise creatives, gates and UA toward this.',NUM(we.p_whale*1e5),'p(whale) '+PC(we.p_whale)+' · '+NUM(Math.round(we.minnowsPerWhale))+' minnows ride along','pos')
+   +mcard('Contribution per whale','What one acquired whale nets: whale LTV ('+M(we.whaleLTV)+') − WAC ('+M(we.WAC)+'). Since whales are the bulk of revenue, this is the unit that compounds.',M(we.whaleLTV-we.WAC),we.whaleLTV>we.WAC?'whale LTV − WAC':'underwater — WAC > LTV',we.whaleLTV>we.WAC?'pos':'neg')
+   +mcard('WAC — whale acq cost','What it costs to land ONE whale, including the ~'+NUM(Math.round(we.minnowsPerWhale))+' minnows acquired alongside it. = CPI ÷ p(whale). Blended CAC ('+M(jl.cac)+') flatters; this per-whale cost is the number to clear.',M(we.WAC),'CPI '+M(jl.cpi)+' ÷ p(whale) '+PC(we.p_whale),'')
+   +mcard('Whale LTV (after trust)','Median whale ≈ '+M(we.whaleVal)+'/mo × '+we.whaleLife.toFixed(0)+'mo whale life'+(we.trust<1?' × '+PC(we.trust)+' trust debt':'')+'. This is the asset I\'m really buying.',M(we.whaleLTV),M(we.whaleVal)+'/mo · '+we.whaleLife.toFixed(0)+'mo life',we.whaleLTV>we.WAC?'pos':'neg')
+   +mcard('Edge (Kelly b)','(Whale LTV − WAC) ÷ WAC — the payoff odds Kelly sizes against. >0 means the whale is worth chasing at this WAC.',we.edge.toFixed(2)+'×',we.whaleLTV>we.WAC?'whale LTV > WAC ✓':'underwater ✗',we.edge>0?'pos':'neg')
+   +mcard('Whale vs "average"','How many times a whale outspends the blended-average payer ('+M(we.arpuBlended)+'/mo). The bigger this gets, the more the average misleads — which is why I lead with the whale, not ARPU.',we.whaleVsAvg.toFixed(0)+'×','1 whale ≈ '+we.whaleVsAvg.toFixed(0)+' avg payers','')
+   +mcard('Pareto two-track','Of ~'+NUM(Math.round(we.actives))+' new actives/mo, ~'+NUM(Math.round(we.whales))+' are whales; the rest are overhead (server cost + acquisition friction) that helps surface whales.',NUM(Math.round(we.whales))+' : '+NUM(Math.round(we.minnows)),'whales : minnows (new/mo)','');
+  document.getElementById('whaleEconNote').innerHTML=`<b>Price the whale, not the average.</b> Blended CAC reads <b>${M(jl.cac)}</b> and blended value <b>${M(we.arpuBlended)}/mo</b> — fine on the surface, but it hides the spread. Priced per whale, landing one costs ~<b>${M(we.WAC)}</b> (dragging ~<b>${NUM(Math.round(we.minnowsPerWhale))}</b> minnows in with it), against a whale worth ~<b>${M(we.whaleLTV)}</b> over life — an edge of ~<b>${we.edge.toFixed(1)}×</b>. So I judge levers on WAC vs whale LTV, and lead with the whale.`;
   // ② Explore / Exploit + Kelly
   const explorePct=S.m_explore_pct/100, exploreBud=jl.ua*explorePct, exploitBud=jl.ua-exploreBud;
   const cands=TITLES.filter(t=>t.role==='candidate').map(t=>{
@@ -1178,7 +1181,7 @@ function renderWhaleEngine(jl){
     h+=`<tr><td style="text-align:left">${c.name.length>28?c.name.slice(0,27)+'…':c.name}</td><td>${c.mkt}</td><td>${M(c.wac)}</td><td>${PC(c.p)}</td><td class="${c.b>0?'dpos':'dneg'}">${c.b.toFixed(2)}×</td><td>${locked?'<span class="dneg">0 · locked</span>':'<b>'+PC(c.f)+'</b>'}</td><td>${locked?'<span class="dneg">$0</span>':'<b>'+M(c.alloc)+'</b>'}</td></tr>`;});
   document.getElementById('kellyTable').innerHTML=h+`</tbody>`;
   const lockedN=exploitPool.filter(c=>c.f<=0).length, fundedN=exploitPool.filter(c=>c.f>0).length;
-  document.getElementById('kellyNote').innerHTML=`<b>Kelly position-sizing — f* = p − q/b.</b> ${fundedN} proven IP(s) clear the bar and share the Exploit pool by edge; ${lockedN?`<b>${lockedN}</b> returned f* ≤ 0 → locked to $0 (mostly the saturated tropes whose decayed WAC has eaten the edge); `:''}the Explore ${M(exploreBud)} hunts the next Genesis trope so you're never caught when a proven one decays out. <i>p(whale) is mapped from the sourcing score (illustrative prior); b uses each trope's time-decayed WAC.</i>`;
+  document.getElementById('kellyNote').innerHTML=`<b>Kelly position-sizing — f* = p − q/b.</b> ${fundedN} proven IP(s) clear the bar and share the Exploit pool by edge; ${lockedN?`<b>${lockedN}</b> return f* ≤ 0 and lock to $0 (the saturated tropes whose decayed WAC has eaten the edge); `:''}the Explore ${M(exploreBud)} hunts the next Genesis trope so a decaying winner never strands the book. <b>This closes the §④ loop:</b> the lanes READ flags to <i>commission</i> — hidden-identity and rebirth — get funded, while the <i>defend / already-own</i> lanes (werewolf, CEO) lock out of new acquisition spend. <i>p(whale) is mapped from the sourcing score (illustrative prior); b uses each trope's time-decayed WAC.</i>`;
   // ③ decay + trust + shadow
   let d=`<thead><tr><th>Trope</th><th>Mkt mo</th><th>WAC now</th><th>vs base</th><th>Status</th></tr></thead><tbody>`;
   TROPES.filter(t=>t.paid==='High'||t.paid==='Medium').slice().sort((a,b)=>a.mkt-b.mkt).forEach(t=>{const w=tropeDecayedWAC(we.WAC,t.mkt,S),mult=w/we.WAC,under=w>we.whaleLTV;
@@ -1192,7 +1195,7 @@ function renderWhaleEngine(jl){
     +row('+ Shadow bounty (our whales spend elsewhere)','+'+M(exportCredit).slice(1),'dpos')
     +row('− Import (others’ whales spend here)','−'+M(importDebit).slice(1),'dneg')
     +`<tr style="border-top:2px solid var(--line2)"><td style="text-align:left"><b>= True cross-category contribution</b></td><td class="${truePnl<0?'dneg':'dpos'}"><b>${M(truePnl)}</b></td></tr></tbody>`;
-  document.getElementById('trustNote').innerHTML=`<b>Trust debt:</b> ${S.m_kills_pre50>0?`${S.m_kills_pre50} shipped saga(s) killed pre-ep50 → whale LTV haircut to <b>${PC(we.trust)}</b> (−${M(we.whaleVal*we.whaleLife*(1-we.trust))}/whale lifetime). `:`0 shipped sagas killed → whale LTV intact. `}The instinct: kill ideas in testing (cheap), but think twice before abandoning a saga whales have invested in. <br><b>Shadow bounty:</b> net <b>${netShadow>=0?'+':''}${M(netShadow)}/mo</b> — ${netShadow>=0?'this read suggests the category may export more whale value than it imports, i.e. acting as an acquisition engine for the whole app rather than a silo.':'this read suggests the category may import more whale value than it exports, i.e. leaning somewhat on other genres.'}`;
+  document.getElementById('trustNote').innerHTML=`<b>Trust debt:</b> ${S.m_kills_pre50>0?`${S.m_kills_pre50} shipped saga(s) killed pre-ep50 → whale LTV haircut to <b>${PC(we.trust)}</b> (−${M(we.whaleVal*we.whaleLife*(1-we.trust))}/whale lifetime). `:`0 shipped sagas killed → whale LTV intact. `}Kill ideas in testing (cheap), but think twice before abandoning a saga whales have invested in. <br><b>Shadow bounty:</b> net <b>${netShadow>=0?'+':''}${M(netShadow)}/mo</b> — ${netShadow>=0?'the category exports more whale value than it imports, so it acts as an acquisition engine for the whole app, not a silo.':'the category imports more whale value than it exports, so it leans somewhat on other genres.'}`;
 }
 
 /* ============ CONTENT VINTAGE (existing catalog vs new releases) ============ */
@@ -1244,10 +1247,10 @@ function renderBrief(jn,jl){
 • June baseline: ${M(jn.totRev)}/mo ${arrLabel(jn.totRev)} — split New ${Math.round(jn.rev.N/jn.totRev*100)} / Existing ${Math.round(jn.rev.E/jn.totRev*100)} / Reactivated ${Math.round(jn.rev.R/jn.totRev*100)}; contribution ${M(jn.contribution)}/mo (margin ${PC(jn.margin)}); LTV:CAC ${jn.ltvcac.toFixed(2)}×, payback ${jn.payback.toFixed(1)}mo.
 • July plan: ${M(jl.totRev)}/mo ${arrLabel(jl.totRev)} vs the $${arcTarget.toFixed(0)}M-ARR arc pace; contribution ${M(jl.contribution)}/mo (margin ${PC(jl.margin)}); LTV:CAC ${jl.ltvcac.toFixed(2)}×.
 • Key risk: CPI inflation compresses margin as you scale — hold the marginal-ROI hurdle (fund UA only while LTV:CAC ≥ ~2 / payback ≤ target).${S.s_whale_rev/100>=0.70?`
-• Possible whale implication (if the concentration holds): with ~${PC(S.s_whale_rev/100)} of payer revenue in ~${PC(S.s_whale_pct/100)} of payers, it may be worth leaning toward "find the whales, keep the whales" — point UA at whale-lookalikes, protect the top ${PC(S.s_whale_pct/100)} in lifecycle, and protect deep coin/VIP packs in monetization.`:''}
-• The proposed ask: fund UA to the marginal hurdle rather than a volume target, and align on the cross-functional asks below.
+• Whale implication: with ~${PC(S.s_whale_rev/100)} of payer revenue in ~${PC(S.s_whale_pct/100)} of payers, lean into "find the whales, keep the whales" — point UA at whale-lookalikes, protect the top ${PC(S.s_whale_pct/100)} in lifecycle, and protect deep coin/VIP packs in monetization.`:''}
+• The ask: fund UA to the marginal hurdle, not a volume target, and align on the asks below.
 
-═══ SUGGESTED ASKS PER TEAM (for discussion) ═══
+═══ ASKS PER TEAM (draft for discussion) ═══
 ▶ Central UA / Performance — CPI ${M(jl.cpi)}, LTV:CAC ${jl.ltvcac.toFixed(2)}×, payback ${jl.payback.toFixed(1)}mo. Fund July installs to ${NUM(S.s_installs)} only while LTV:CAC ≥ ~2; optimize marginal ROI, not blended ROAS.
 ▶ Monetization — mix ${PC(mix.coins/mix.tot)} coins / ${PC(mix.ads/mix.tot)} ads / ${PC(mix.subs/mix.tot)} subs. Hold coin price ≥ $${S.s_coinprice.toFixed(3)}; keep ad-load ≤ ${S.s_adload}% to protect retention of freshly-acquired cohorts.
 ▶ Lifecycle — active churn ${S.x_churn}%/mo (ages the base); payer churn ${S.x_payer_churn}%/mo → payer lifetime ${(1/(S.x_payer_churn/100)).toFixed(1)}mo (drives LTV). Win-back reach ${NUM(S.p_reach)} at conv ≥ ${S.p_winconv}% ($${S.p_freecoin}/reach); kill subsidy-only cohorts.
@@ -1375,10 +1378,11 @@ function renderPilots(){
     const sc={'Webtoon adaptation':'s-web','Proprietary IP':'s-ip','Licensed bestseller':'s-lic','Original concept':'s-orig'}[p.src]||'s-orig';
     const bc=pilotBCost(p);
     return `<div class="pilot"><div class="ptop"><h4>${p.n}</h4><span class="ltvb" title="What ONE paying viewer is worth over their lifetime — not the show's total revenue. A hit has thousands of these viewers; see the 'Library shape' section for per-show economics.">LTV/payer $${p.ltv}</span></div>
+      <div class="au" title="Real title sourced from a romance-first platform (web-search corpus, Jun 2026). The gate metrics below are illustrative.">${p.au==='—'?'':p.au+' · '}${p.plat}</div>
       <div class="srcrow"><span class="srctag ${sc}">${p.src}</span><span style="display:flex;gap:6px;align-items:center"><span class="srcscore">Src ${p.score}</span><span class="wgrade ${gradeCls}" title="Whale depth — composite of early whale-rate, binge-depth past the paywall, and repeat-pack rate. THIS is the gate now; CTR/D1/conv are diagnostics. Deep whales can carry a broadly-mediocre title; a broadly-good title with shallow whales is a trap.">🐋 ${wg.g}</span></span></div>
       <div class="tp">${p.tp} · launch ${p.launch}</div>
       <div class="gates">${g(p.stage>=1,'G1')}${g(p.stage>=2,'G2')}${g(p.stage>=3,'G3')}${g(p.stage>=4,'G4')}</div>
-      <div class="verdict ${cl[p.stage]}">${p.verdict}${whaleLed?' <span class="slook" style="color:var(--out);background:var(--out-bg);border-color:var(--out-ln)" title="Killed on broad metrics, but whale depth looks Deep — the few who come may pay hard. If revenue is whale-led, that could be worth more than a broadly-good shallow title — possibly worth a greenlight on depth.">⭐ whale-led — greenlight on depth</span>':''}${shallowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="Passed the broad gates but whale depth looks Shallow — broad clicks, few whales. If revenue is whale-led, this may not move the needle much, so it may not be worth scaling.">⚠ shallow — broad, few whales</span>':''}${secondLook&&!whaleLed?' <span class="slook">⚠ second look</span>':''}${minnowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="High CTR but it failed before greenlight — the click was clickbait, not intent. Cut spend; a high CTR with weak downstream is a Minnow Trap, not a winner.">⚠ minnow trap</span>':''}</div>
+      <div class="verdict ${cl[p.stage]}">${p.verdict}${whaleLed?' <span class="slook" style="color:var(--out);background:var(--out-bg);border-color:var(--out-ln)" title="Killed on broad metrics, but whale depth is Deep — the few who come pay hard. In a whale-led economy that beats a broadly-good shallow title, so it earns a greenlight on depth.">⭐ whale-led — greenlight on depth</span>':''}${shallowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="Passed the broad gates but whale depth is Shallow — broad clicks, few whales. In a whale-led economy this barely moves the needle, so scaling it can wait.">⚠ shallow — broad, few whales</span>':''}${secondLook&&!whaleLed?' <span class="slook">⚠ second look</span>':''}${minnowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="High CTR but it failed before greenlight — the click was clickbait, not intent. Cut spend; a high CTR with weak downstream is a Minnow Trap, not a winner.">⚠ minnow trap</span>':''}</div>
       <div class="mm">${m.join(' · ')}</div>
       <div class="mm" style="color:var(--shared);font-weight:600">🐋 whales/1k ${p.wr} · binge ${p.bd}ep · repeat ${p.rp}%</div>
       <div class="bcost">Ledger B · content cost <b>$${NUM(bc.total)}</b> <small>(test $${NUM(bc.test)}${bc.prod?' + prod $'+NUM(bc.prod):''})</small></div></div>`;}).join('');
@@ -1386,7 +1390,7 @@ function renderPilots(){
   const sl=ev.filter(p=>p.stage<3&&p.ltv>=180).length;
   const mt=ev.filter(p=>p.ctr>=1.4&&p.stage<3).length;
   const wl=ev.filter(p=>p.stage<3&&whaleGrade(p).g==='Deep').length, st=ev.filter(p=>p.stage>=3&&whaleGrade(p).g==='Shallow').length;
-  document.getElementById('pilotSum').innerHTML=`<b>${sc}</b> scaled · <b>${gr}</b> greenlit · <b>${k}</b> killed on broad gates (of 16) — but the <b>whale gate overrides</b>: <b style="color:var(--out)">${wl} whale-led</b> (deep whales, greenlight despite mediocre broad metrics) and <b style="color:var(--neg)">${st} shallow trap(s)</b> (broadly passed, but shallow whales — I'd be cautious about scaling). <i>The proposed gate hierarchy is whale-first: early whale-rate → binge depth past the paywall → repeat-pack → concentration; CTR / D1 / conv / ROI become diagnostics. The idea being tested: if revenue is whale-led, a Deep title may be worth more than a broadly-good Shallow one. These 16 are <b>real sourced titles</b> (GoodNovel / Webnovel / Galatea / AlphaNovel) with illustrative metrics; the funnel runs <b>${NUM(S.m_pilots)}</b> pilots/mo → ~<b>${NUM(contentHits(S).s4)}</b> scaled hit${Math.round(contentHits(S).s4)===1?'':'s'}.</i> Diagnostic bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${mt?` <b style="color:var(--neg)">${mt} minnow trap(s) flagged.</b>`:''}</i>`;
+  document.getElementById('pilotSum').innerHTML=`<b>${sc}</b> scaled · <b>${gr}</b> greenlit · <b>${k}</b> killed on broad gates (of 16) — but the <b>whale gate overrides</b>: <b style="color:var(--out)">${wl} whale-led</b> (deep whales, greenlight despite mediocre broad metrics) and <b style="color:var(--neg)">${st} shallow trap(s)</b> (broadly passed, but shallow whales — hold off scaling). <i>The gate hierarchy is whale-first: early whale-rate → binge depth past the paywall → repeat-pack → concentration; CTR / D1 / conv / ROI become diagnostics. In a whale-led economy, a Deep title beats a broadly-good Shallow one. These 16 are <b>real sourced titles</b> (GoodNovel / Webnovel / Galatea / AlphaNovel) with illustrative metrics; the funnel runs <b>${NUM(S.m_pilots)}</b> pilots/mo → ~<b>${NUM(contentHits(S).s4)}</b> scaled hit${Math.round(contentHits(S).s4)===1?'':'s'}.</i> Diagnostic bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${mt?` <b style="color:var(--neg)">${mt} minnow trap(s) flagged.</b>`:''}</i>`;
 }
 
 /* ============ VARIANCE (Plan vs Actual) ============ */
