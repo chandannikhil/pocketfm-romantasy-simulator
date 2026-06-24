@@ -588,6 +588,42 @@ body.dirty .rail-card .metric .mv{opacity:.45}
   <p class="cintro" style="padding:0 0 6px">Not a separate idea — this is the §⑥·b engine in real titles: each role is a <b>job in the model</b>. <b>Acquisition bait</b> feeds the New cohort; the <b>whale saga</b> is where the top 5% live and spend; the <b>monetization engine</b> converts Existing payers; the <b>reactivation asset</b> wins back dormant users; <b>bridge / hidden-gem</b> titles become tomorrow's catalogue.</p>
   <div class="slate" id="slate"></div>
 
+  <div class="section-h">How this is built — formulas &amp; assumptions <span class="info" data-tip="The whole model in plain text, so anyone (or any LLM) can audit it without running the page. Every coefficient is an editable input above or a labelled constant; defaults are benchmarked from the public sources in the footer, not PocketFM telemetry.">i</span><span class="ln"></span></div>
+  <div class="band"><div class="band-hd" style="background:var(--paper)">The deterministic engine, in plain text<span class="sub">same inputs → same outputs · nothing hidden</span></div>
+    <pre class="brief">CONTRIBUTION  (monthly, category)
+  contribution = revenue − UA − promo − CRM − win-back − opex − content
+  margin       = contribution ÷ revenue        ← category CONTRIBUTION margin (company EBITDA ~5% sits BELOW this)
+
+REVENUE — bottoms-up coins (not a flat ARPU)
+  coin rev / payer = episodes × coins/ep × price/coin × net-margin
+  payer value      = coin rev + VIP/sub + ad yield     per tier (Light / Mid / Whale)
+
+WHALE CONCENTRATION — an input pair you assert (default 5% of payers drive 95% of payer revenue)
+  blended payer value is HELD FIXED; the model back-solves implied $/whale as a reality check
+
+WHALE ACQUISITION COST  (the unit that matters)
+  p(whale) = activation × payer-conv × whale-share-of-new-payers
+  WAC      = CPI ÷ p(whale)             ← cost to land ONE whale + the minnows it rides in with
+
+UA COST — two-way elastic CPI
+  baseCPI = CPM ÷ (1000 × CTR × install-rate) × (1 + CPI-inflation)
+  CPI     = baseCPI × (installs ÷ reference) ^ elasticity      scale up ⇒ dearer; retreat ⇒ cheaper
+
+CLICKBAIT GATE — CTR decoupled from WAC
+  quality      = min( (D3 ÷ D3ref) ÷ (CTR ÷ CTRref)² , 1 )
+  whale-share ×= quality      ⇒ CTR rising faster than Day-3 retention RAISES WAC (no free clicks)
+
+CAPITAL ALLOCATION — Kelly + sweep
+  edge b  = (whale LTV − trope-decayed WAC) ÷ WAC
+  f*      = p − (1−p)/b        p mapped from sourcing score; f* ≤ 0 ⇒ $0
+  Exploit = Σ f* × pool ;  un-bet remainder (1 − Σf*) SWEEPS into Explore   (all-locked ⇒ all to discovery)
+
+TROPE DECAY    WAC_t      = WAC × (1 + decay) ^ months-in-market      proven tropes saturate
+TRUST DEBT     whale LTV ×= e^(−0.03 × kills²)                        super-exponential — accelerates with each kill
+SHADOW BOUNTY  true cross-category contribution = contribution + (export − import)</pre>
+    <div style="padding:10px 16px 14px;font-size:11.5px;color:var(--muted);line-height:1.55">Every number here is an <b>editable input above</b> or a labelled constant — change one and press Calculate to watch it propagate. The model is <b>deterministic</b> (same inputs → same outputs) and fully self-contained: no network calls, no hidden data. It's a single <b>unminified HTML file</b> — read it via your browser's <b>View Source</b>, or in the public repo at <b>github.com/chandannikhil/pocketfm-romantasy-simulator</b>. Defaults are benchmarked from the public sources in the footer, not PocketFM telemetry.</div>
+  </div>
+
   <footer>
     <b>US market only.</b> Illustrative, internally-consistent assumptions — not telemetry. Coins modelled bottoms-up (~$0.02/coin, ~10 coins/episode; episodes/payer by tier). Cohort split, whale concentration and CPI-inflation are editable benchmarks. Public / benchmark context used for calibration (cite sources in the room): PocketFM ARR ~$200M→~$430M/12mo, EBITDA/FCF-positive ~5% (company-wide net — a single category's contribution margin sits above this, before corporate overhead & reinvestment), AI content ~$50–60/hr.
     <br><b>Benchmarks behind the defaults:</b> mix 85/10/5 ≈ PocketFM FY24 (~91% coins+IAP / ~9% ads); monthly churn 8% (sub avg ~9%, streaming ~6.7%); coins/episode 8–10 and $0.01–0.02/coin (app store); entertainment CPI ~$1–5 (Android ~$1.2, iOS ~$3.6–4.7); US Meta CPM ~$10–22; market CPI inflation ~15–25%/yr.
@@ -706,7 +742,8 @@ const IN={
   g4_spend:{sec:'mine',grp:'Gate 4 · Scale',label:'$/hit (scale)',pre:'$',suf:'',fmt:'int',val:50000,tip:'Ad spend to scale a winning hit ($50K+). For reference only — this is the shared ad-scaling line, not double-counted in the P&L.'},
   pl_minROI:{sec:'mine',grp:'Gate 4 · Scale',label:'Bar: min scale ROI',suf:'×',fmt:'x',val:1.0,tip:'Lowest return-on-ad-spend at scale for a show to count as a hit (Gate 4).'},
   m_depth:{sec:'mine',grp:'Product levers',label:'Episode depth index',suf:'%',fmt:'pct',val:100,tip:'Scales how many episodes a paying user gets through (better story arcs, continuity). 100 = today. Your main lever on coin revenue.'},
-  m_ctr:{sec:'mine',grp:'Product levers',label:'Trailer CTR (creative)',suf:'%',fmt:'pct2',val:1.3,tip:'Better trailers/IP get more clicks → cheaper installs. A creative lever you own.'},
+  m_ctr:{sec:'mine',grp:'Product levers',label:'Trailer CTR (creative)',suf:'%',fmt:'pct2',val:1.3,tip:'Better trailers/IP get more clicks → cheaper installs. BUT a CTR spike not matched by Day-3 retention is clickbait: it lowers cost but degrades whale-share, so WAC actually RISES (see the clickbait gate). Earn cheap installs with retention, not bait.'},
+  m_d3ret:{sec:'mine',grp:'Product levers',label:'Day-3 retention',suf:'%',fmt:'pct2',val:25,tip:'Share of new installs still active on day 3 — the quality check on your CTR. The clickbait gate scores CTR against this: if CTR climbs faster than Day-3 retention, the extra clicks are low-intent (minnows), whale-share falls and WAC rises. Push them up together and WAC holds.'},
   p_newconv:{sec:'mine',grp:'Product levers',label:'July New payer conv',suf:'%',fmt:'pct2',val:4.0,tip:'Share of new users who pay — driven by paywall placement, number of free episodes, and content gating.'},
   p_existconv:{sec:'mine',grp:'Product levers',label:'July Existing payer conv',suf:'%',fmt:'pct2',val:8.0,tip:'Share of regulars who pay. Modelled as a simple proportional lift on existing revenue (July ÷ June rate) — an approximation; a full finance model would split regulars into payers/non-payers and re-do each.'},
   p_reactconv:{sec:'mine',grp:'Product levers',label:'July React payer conv',suf:'%',fmt:'pct2',val:5.0,tip:'Share of won-back users who pay — driven by win-back offer quality.'},
@@ -734,6 +771,10 @@ let S={}; Object.keys(IN).forEach(k=>S[k]=IN[k].val);
 /* ===== FROZEN JUNE BASELINE — snapshotted from defaults so editing JULY levers can't rewrite the benchmark ===== */
 const JUNE_CPI=IN.x_cpm.val/(1000*(IN.m_ctr.val/100)*(IN.s_ir.val/100));   // June creative/ASO are historical, not the July plan
 const JUNE_CONTENT=(()=>{const p=IN.m_pilots.val,s1=p*IN.f_g1.val/100,s2=s1*IN.f_g2.val/100;return p*IN.g1_spend.val+s1*IN.g2_spend.val+s2*IN.g3_spend.val;})();
+// Frozen refs for the CLICKBAIT GATE (fix #3): the CTR / Day-3-retention levels at which quality = 1 (identity).
+const CTR_REF=IN.m_ctr.val, D3_REF=IN.m_d3ret.val;   // = 1.3% / 25%
+// quality = (D3/D3ref) ÷ (CTR/CTRref)²  — capped at 1. CTR rising faster than retention ⇒ quality<1 ⇒ whale-share ↓, WAC ↑.
+function clickbaitQuality(v){return Math.max(0.2,Math.min((v.m_d3ret/D3_REF)/Math.pow(v.m_ctr/CTR_REF,2),1));}
 
 /* ============ DECISION BASIS — on what basis to move each lever ============ */
 const DEC={
@@ -771,6 +812,7 @@ const DEC={
   p_reach:'How many dormant users to message. Keep reaching out until the next batch costs more than it brings back. Limited by how many lapsed users exist and team capacity.',
   p_winconv:'Share of messaged dormant users who come back. A measured result from win-back tests, not a target you set.',
   p_freecoin:'Free coins / incentive per user you message. Set it so the offer pays for itself in recovered spend. Drop offers that only attract freebie-hunters who never pay.',
+  m_d3ret:'Your honest read on creative quality. Move it WITH trailer CTR, not behind it: a CTR jump with flat Day-3 retention is clickbait — the gate marks the extra clicks as minnows and pushes WAC up. Raise it only when real engagement data (D3 cohorts) backs the CTR.',
   m_explore_pct:'How much of UA you spend hunting the NEXT trope vs scaling this month’s winner. Raise it when your proven tropes are decaying (WAC climbing) or your Genesis pipeline is thin; never take it to zero — a 100% Exploit book dies the month its trope saturates. ~20% is the standard bandit split.',
   m_kills_pre50:'How disciplined you are about NOT cancelling shipped sagas. Keep this near zero: kill ideas in testing (free), but once a saga ships and whales invest, finishing it is cheaper than the trust you destroy by abandoning it. Only let it rise if a shipped saga is so unprofitable that the completion cost truly exceeds the whale-trust hit.'
 };
@@ -944,7 +986,10 @@ function engineJuly(v,june){
   const convN=Math.min((v.p_newconv/100)*(baseCpi/cpi), 0.15);    // intent rebounds when cheaper; capped at 15%
   // D2 — content hit-rate modulates ONLY the New cohort's whale share (existing base = sunk CAC, unaffected)
   const hm=Math.max(0.25,Math.min(hitMult(contentHits(v).s4)*SLATE_MULT,2.5));  // sourced-slate quality feeds the hit-rate (identity at default)
-  const wW=SPL.W*hm, rn=1/(SPL.L+SPL.Mid+wW);
+  // D2b — CLICKBAIT GATE (fix #3): CTR that outruns Day-3 retention buys cheaper installs but worse users,
+  // so it degrades the New cohort's whale share. With cpi∝1/CTR and whale-share∝1/CTR², net WAC rises with clickbait.
+  const cq=clickbaitQuality(v);
+  const wW=SPL.W*hm*cq, rn=1/(SPL.L+SPL.Mid+wW);
   const splitN={L:SPL.L*rn,Mid:SPL.Mid*rn,W:wW*rn};
   const vpNew=valPayer(julyMonet(v),splitN);
   const pfNew=vpNew.blended/june.vp.blended;
@@ -977,8 +1022,9 @@ function engineJuly(v,june){
 // Reframes the headline from the potentially-misleading "average" toward the whale as the unit.
 // p_whale (install→whale), WAC (cost to land ONE whale + the minnows that ride along), whale LTV,
 // the edge ratio Kelly bets on, trope-decay, IP-trust-debt, and the cross-category shadow bounty.
-const TRUST_PER_KILL=0.07;        // compounding whale-LTV haircut per shipped saga abandoned pre-ep50
-function trustDebtFactor(v){return Math.pow(1-TRUST_PER_KILL,Math.max(0,v.m_kills_pre50||0));}
+const TRUST_K=0.03;               // SUPER-EXPONENTIAL whale-LTV decay: damage ACCELERATES with each abandoned saga
+// trust = e^(−k·kills²)  → kills 1/3/5 ≈ −3% / −24% / −53% (a cliff, not linear). Identity at kills=0 (=1).
+function trustDebtFactor(v){const n=Math.max(0,v.m_kills_pre50||0); return Math.exp(-TRUST_K*n*n);}
 function whaleEconomics(v,jl){
   const act=v.x_activation/100;
   const pPayerNew=jl.conv.N;                         // install→active→payer (new cohort, post-elasticity)
@@ -1023,8 +1069,8 @@ const FREE_LEVERS=['m_ctr','m_depth','p_newconv','p_existconv','p_reactconv','f_
 /* ============ RENDER HELPERS ============ */
 function step(fmt,range){return fmt==='usd2'||fmt==='pct2'?'0.1':fmt==='usd3'?'0.001':fmt==='x'?'0.05':fmt==='pct'?'1':'1';}
 // guardrails: keep denominators > 0 and shares < 100 so the engine can't be driven to NaN/Infinity
-const MINV={x_cpm:0.5,m_ctr:0.05,s_ir:1,x_nm:1,x_window:1,x_activation:1,s_coinprice:0.001,s_coinsep:1,m_depth:1,j_new_conv:0.05,j_exist_conv:0.05,j_react_conv:0.05,p_newconv:0.05,p_existconv:0.05,p_reactconv:0.05,s_whale_pct:0.1,s_installs:1000,p_reach:0,x_dormant:0,j_installs:0,x_whale_churn:0.1,x_trope_decay:0,m_explore_pct:0,m_kills_pre50:0};
-const MAXV={x_spill_out:99,s_whale_rev:98.5,x_churn:99,x_payer_churn:99,x_nm:95,s_adload:300,x_whale_churn:99,m_explore_pct:80,x_trope_decay:50,m_kills_pre50:40};
+const MINV={x_cpm:0.5,m_ctr:0.05,s_ir:1,x_nm:1,x_window:1,x_activation:1,s_coinprice:0.001,s_coinsep:1,m_depth:1,j_new_conv:0.05,j_exist_conv:0.05,j_react_conv:0.05,p_newconv:0.05,p_existconv:0.05,p_reactconv:0.05,s_whale_pct:0.1,s_installs:1000,p_reach:0,x_dormant:0,j_installs:0,x_whale_churn:0.1,x_trope_decay:0,m_explore_pct:0,m_kills_pre50:0,m_d3ret:1};
+const MAXV={x_spill_out:99,s_whale_rev:98.5,x_churn:99,x_payer_churn:99,x_nm:95,s_adload:300,x_whale_churn:99,m_explore_pct:80,x_trope_decay:50,m_kills_pre50:40,m_d3ret:90};
 function clampInput(k,x){let lo=MINV[k],hi=MAXV[k]; if(lo!=null)x=Math.max(x,lo); if(hi!=null)x=Math.min(x,hi); return x;}
 function buildFields(sec,host){
   host.innerHTML=''; let lastGrp=null;
@@ -1172,16 +1218,22 @@ function renderWhaleEngine(jl){
     const wac=tropeDecayedWAC(we.WAC,tr.mkt,S), p=pWhaleForScore(score), b=(we.whaleLTV-wac)/wac, f=kellyFraction(p,b);
     return {name:t.name,score,proven,wac,p,b,f,mkt:tr.mkt};
   });
-  const exploitPool=cands.filter(c=>c.proven), sumF=exploitPool.reduce((a,c)=>a+c.f,0);
-  exploitPool.forEach(c=>c.alloc=sumF>0?c.f/sumF*exploitBud:0);
-  document.getElementById('allocSplit').innerHTML=`<b>UA budget ${M(jl.ua)}/mo</b> → <b style="color:var(--mine)">Exploit ${M(exploitBud)}</b> (${PC(1-explorePct)}, proven tropes · Kelly-sized) + <b style="color:var(--shared)">Explore ${M(exploreBud)}</b> (${PC(explorePct)}, Genesis tropes — no whale data yet). <span style="color:var(--faint)">Rule: an IP with no Day-7 WAC can't draw Exploit budget — it earns out of Explore first.</span>`;
+  // RAW Kelly deployment (fix #1): each IP bets its own f* of the Exploit pool — NOT a forced 100% normalization.
+  const exploitPool=cands.filter(c=>c.proven);
+  const rawFrac=exploitPool.reduce((a,c)=>a+Math.max(c.f,0),0);     // Σ raw Kelly f*
+  const overSub=rawFrac>1;                                          // over-subscribed → scale down to fit the pool
+  exploitPool.forEach(c=>c.alloc=Math.max(c.f,0)*(overSub?1/rawFrac:1)*exploitBud);
+  const deployedFrac=overSub?1:rawFrac;                             // fraction of Exploit actually bet
+  const swept=exploitBud*(1-deployedFrac);                          // un-bet dry powder → SWEPT into Explore (no black hole)
+  const exploitEff=exploitBud-swept, exploreEff=exploreBud+swept;
+  document.getElementById('allocSplit').innerHTML=`<b>UA budget ${M(jl.ua)}/mo</b> → <b style="color:var(--mine)">Exploit ${M(exploitEff)}</b> (Kelly-deployed across proven tropes) + <b style="color:var(--shared)">Explore ${M(exploreEff)}</b> (Genesis tropes${swept>jl.ua*0.002?' · incl. '+M(swept)+' swept dry powder':''}). <span style="color:var(--faint)">Raw Kelly f* sum to ${PC(deployedFrac)} of the Exploit pool; the un-bet remainder sweeps into Explore, so no capital sits idle when edges are thin (and if every IP locks, all of it funds discovery).</span>`;
   const top=exploitPool.slice().sort((a,b)=>b.f-a.f).slice(0,8);
   let h=`<thead><tr><th>Proven IP (Exploit)</th><th>Mkt mo</th><th>WAC↑</th><th>p(whale)</th><th>edge b</th><th>Kelly f*</th><th>Alloc/mo</th></tr></thead><tbody>`;
   top.forEach(c=>{const locked=c.f<=0;
     h+=`<tr><td style="text-align:left">${c.name.length>28?c.name.slice(0,27)+'…':c.name}</td><td>${c.mkt}</td><td>${M(c.wac)}</td><td>${PC(c.p)}</td><td class="${c.b>0?'dpos':'dneg'}">${c.b.toFixed(2)}×</td><td>${locked?'<span class="dneg">0 · locked</span>':'<b>'+PC(c.f)+'</b>'}</td><td>${locked?'<span class="dneg">$0</span>':'<b>'+M(c.alloc)+'</b>'}</td></tr>`;});
   document.getElementById('kellyTable').innerHTML=h+`</tbody>`;
   const lockedN=exploitPool.filter(c=>c.f<=0).length, fundedN=exploitPool.filter(c=>c.f>0).length;
-  document.getElementById('kellyNote').innerHTML=`<b>Kelly position-sizing — f* = p − q/b.</b> ${fundedN} proven IP(s) clear the bar and share the Exploit pool by edge; ${lockedN?`<b>${lockedN}</b> return f* ≤ 0 and lock to $0 (the saturated tropes whose decayed WAC has eaten the edge); `:''}the Explore ${M(exploreBud)} hunts the next Genesis trope so a decaying winner never strands the book. <b>This closes the §④ loop:</b> the lanes READ flags to <i>commission</i> — hidden-identity and rebirth — get funded, while the <i>defend / already-own</i> lanes (werewolf, CEO) lock out of new acquisition spend. <i>p(whale) is mapped from the sourcing score (illustrative prior); b uses each trope's time-decayed WAC.</i>`;
+  document.getElementById('kellyNote').innerHTML=`<b>Kelly position-sizing — f* = p − q/b.</b> ${fundedN} proven IP(s) clear the bar and share the Exploit pool by edge; ${lockedN?`<b>${lockedN}</b> return f* ≤ 0 and lock to $0 (the saturated tropes whose decayed WAC has eaten the edge); `:''}the Explore ${M(exploreEff)} hunts the next Genesis trope so a decaying winner never strands the book. <b>This closes the §④ loop:</b> the lanes READ flags to <i>commission</i> — hidden-identity and rebirth — get funded, while the <i>defend / already-own</i> lanes (werewolf, CEO) lock out of new acquisition spend. <i>p(whale) is mapped from the sourcing score (illustrative prior); b uses each trope's time-decayed WAC.</i>`;
   // ③ decay + trust + shadow
   let d=`<thead><tr><th>Trope</th><th>Mkt mo</th><th>WAC now</th><th>vs base</th><th>Status</th></tr></thead><tbody>`;
   TROPES.filter(t=>t.paid==='High'||t.paid==='Medium').slice().sort((a,b)=>a.mkt-b.mkt).forEach(t=>{const w=tropeDecayedWAC(we.WAC,t.mkt,S),mult=w/we.WAC,under=w>we.whaleLTV;
@@ -1195,7 +1247,7 @@ function renderWhaleEngine(jl){
     +row('+ Shadow bounty (our whales spend elsewhere)','+'+M(exportCredit).slice(1),'dpos')
     +row('− Import (others’ whales spend here)','−'+M(importDebit).slice(1),'dneg')
     +`<tr style="border-top:2px solid var(--line2)"><td style="text-align:left"><b>= True cross-category contribution</b></td><td class="${truePnl<0?'dneg':'dpos'}"><b>${M(truePnl)}</b></td></tr></tbody>`;
-  document.getElementById('trustNote').innerHTML=`<b>Trust debt:</b> ${S.m_kills_pre50>0?`${S.m_kills_pre50} shipped saga(s) killed pre-ep50 → whale LTV haircut to <b>${PC(we.trust)}</b> (−${M(we.whaleVal*we.whaleLife*(1-we.trust))}/whale lifetime). `:`0 shipped sagas killed → whale LTV intact. `}Kill ideas in testing (cheap), but think twice before abandoning a saga whales have invested in. <br><b>Shadow bounty:</b> net <b>${netShadow>=0?'+':''}${M(netShadow)}/mo</b> — ${netShadow>=0?'the category exports more whale value than it imports, so it acts as an acquisition engine for the whole app, not a silo.':'the category imports more whale value than it exports, so it leans somewhat on other genres.'}`;
+  document.getElementById('trustNote').innerHTML=`<b>Trust debt</b> (e<sup>−0.03·kills²</sup> — accelerating, not linear): ${S.m_kills_pre50>0?`${S.m_kills_pre50} shipped saga(s) killed pre-ep50 → whale LTV haircut to <b>${PC(we.trust)}</b> (−${M(we.whaleVal*we.whaleLife*(1-we.trust))}/whale lifetime). Each kill hurts more than the last — at 5 it's roughly −50%. `:`0 shipped sagas killed → whale LTV intact (each kill would hurt more than the last). `}Kill ideas in testing (cheap), but think twice before abandoning a saga whales have invested in. <br><b>Shadow bounty:</b> net <b>${netShadow>=0?'+':''}${M(netShadow)}/mo</b> — ${netShadow>=0?'the category exports more whale value than it imports, so it acts as an acquisition engine for the whole app, not a silo.':'the category imports more whale value than it exports, so it leans somewhat on other genres.'}`;
 }
 
 /* ============ CONTENT VINTAGE (existing catalog vs new releases) ============ */
