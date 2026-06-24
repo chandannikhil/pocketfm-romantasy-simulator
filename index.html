@@ -138,6 +138,10 @@ table.tiers th:first-child,table.tiers td:first-child{text-align:left}
 .pilot .srctag.s-lic{background:#f7f4ec;color:#7a6a3f;border:1px solid #e4dabf}
 .pilot .srctag.s-orig{background:#f1f3f5;color:#5b6675;border:1px solid #d8dde3}
 .pilot .srcscore{font-size:9px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.pilot .wgrade{font-size:8.5px;font-weight:800;border-radius:5px;padding:1px 6px;text-transform:uppercase;letter-spacing:.2px;cursor:help}
+.wg-deep{background:var(--out-bg);color:var(--out);border:1px solid var(--out-ln)}
+.wg-mid{background:var(--rail);color:var(--muted);border:1px solid var(--line2)}
+.wg-shal{background:#fbeceb;color:var(--neg);border:1px solid #f0c9c4}
 .pilot .gates{display:flex;gap:4px;margin-bottom:8px}
 .pilot .g{flex:1;text-align:center;font-size:9px;font-weight:700;padding:3px 0;border-radius:4px;background:var(--rail);color:var(--faint)}
 .pilot .g.ok{background:var(--out-bg);color:var(--out)} .pilot .g.no{background:#fbeceb;color:var(--neg)}
@@ -230,9 +234,14 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
 
 /* ===== acquisition engine ===== */
 .acqw{display:flex;flex-wrap:wrap;gap:10px 16px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--rail)}
-.acqw .wq{font-size:10px;color:var(--muted);display:flex;flex-direction:column;gap:2px;min-width:118px}
-.acqw .wq b{color:var(--ink);font-variant-numeric:tabular-nums}
-.acqw input[type=range]{width:118px}
+.acqw .wq{font-size:10px;color:var(--muted);display:flex;flex-direction:column;gap:3px;min-width:124px}
+.acqw .wq .wqh{display:flex;align-items:center;gap:2px;font-weight:700;color:var(--ink)}
+.acqw .seg{display:inline-flex;border:1px solid var(--line2);border-radius:6px;overflow:hidden;width:max-content}
+.acqw .seg button{border:0;border-left:1px solid var(--line2);background:var(--paper);color:var(--muted);font-size:10px;font-weight:700;padding:4px 9px;cursor:pointer;transition:.1s}
+.acqw .seg button:first-child{border-left:0}
+.acqw .seg button:hover{background:var(--rail)}
+.acqw .seg button.on{background:var(--mine-bg);color:var(--mine)}
+.acqw .seg.risk button.on{background:#fbeceb;color:var(--neg)}
 .acqseed{font-size:10.5px;color:var(--muted);padding:9px 16px;border-bottom:1px solid var(--line);line-height:1.5}
 .acqseed b{color:var(--ink)}
 .acqcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;padding:8px 16px 12px}
@@ -267,8 +276,8 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
 
 <header><div class="wrap">
   <h1>US Romantasy — <b>June baseline → July plan</b> · Context → Inputs → Output</h1>
-  <div style="font-size:11.5px;color:var(--faint);margin:1px 0 7px">Interactive <b style="color:var(--mine)">simulator by Chandan NK</b> · for the PocketFM AVP — Category / Growth conversation</div>
-  <p class="thesis"><b>Content is near-free, so I test fast and kill fast; acquisition is expensive on a thin margin, so I scale slow on marginal contribution.</b> June is the benchmarked baseline. Set July levers — split into <b style="color:var(--mine)">my category levers</b> and <b style="color:var(--shared)">shared (needs alignment)</b> — under the <b style="color:var(--ctx)">context</b> the market hands me, then track actuals against the plan. Coins are modelled bottoms-up (episodes × coins/ep × price/coin). <i>An illustrative simulator for a US Romantasy category — not a company forecast.</i></p>
+  <div style="font-size:11.5px;color:var(--faint);margin:1px 0 7px">Interactive <b style="color:var(--mine)">simulator by Chandan NK</b></div>
+  <p class="thesis"><b>~5% of users are ~95% of revenue, so I run this like a fund, not a dashboard: I test fast and kill fast <i>in the lab</i> — but once a saga ships I protect it, because a whale who invested 40 episodes won't forgive a cancelled story. Acquisition is expensive, so I scale slow on the cost to land a <i>whale</i> (WAC), never the blended average.</b> June is the benchmarked baseline. Set July levers — split into <b style="color:var(--mine)">my category levers</b> and <b style="color:var(--shared)">shared (needs alignment)</b> — under the <b style="color:var(--ctx)">context</b> the market hands me, then track actuals against the plan. Coins are modelled bottoms-up (episodes × coins/ep × price/coin). <i>An illustrative simulator for a US Romantasy category — not a company forecast.</i></p>
   <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:8px">
     <span class="badge" style="margin-left:0">Illustrative June baseline — benchmarked assumptions, not telemetry</span>
     <span style="font-size:11px;color:var(--faint)">▶ <b>Calculate</b> recomputes outputs + the team brief (inputs are change-gated) · jump with the tabs · click any section title to fold it.</span>
@@ -343,7 +352,7 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
     <div class="cigrid">
       <div class="cicard"><div class="ct">ReelShort · scaled spend</div><h4>Contemporary hidden-identity</h4><ul><li>#1 by far: <i>Ms CEO's Baby Daddy Is the Merchant of Death</i> (326M views, ~6 pages)</li><li>Secret-billionaire husband, King of Snipers, genie-CEO</li><li><b>Zero</b> werewolf / vampire / dragon in the scaled set</li></ul><div class="take">→ Even the "supernatural" player scales contemporary reveal-melodrama.</div></div>
       <div class="cicard"><div class="ct">DramaBox · scaled spend</div><h4>Contemporary + rebirth</h4><ul><li>Mafia king, secret CEO / billionaire, immortal hidden-power husband</li><li>Rebirth proven (reborn beast-tamer)</li><li><b>Zero</b> supernatural-romantasy in the scaled set</li></ul><div class="take">→ Rebirth + secret-identity get the budget, not vampire/dragon.</div></div>
-      <div class="cicard"><div class="ct">Kuku FM · audio (India)</div><h4>Direct rival + IP defense</h4><ul><li>Fastest-growing India audio rival; leans power / revenge / occult</li><li>Pocket is litigating alleged content copying</li></ul><div class="take">→ Clear rights + fast localization are a moat, not paperwork.</div></div>
+      <div class="cicard"><div class="ct">Kuku FM · audio (India)</div><h4>Direct rival + IP defense</h4><ul><li>Fastest-growing India audio rival; leans power / revenge / occult</li><li>Competes on catalogue breadth and creator velocity</li></ul><div class="take">→ Clear rights + fast localization are a moat, not paperwork.</div></div>
       <div class="cicard"><div class="ct">Galatea / GoodNovel · mobile fiction</div><h4>Where the IP originates</h4><ul><li>Serial-native, trope-tagged, public read counts</li><li>This is the supply pool feeding the §④ board above</li></ul><div class="take">→ Source here before titles get BookTok-priced.</div></div>
     </div>
     <div class="cimech">
@@ -352,8 +361,8 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
   </div>
 
   <!-- PILOT LAB -->
-  <div class="section-h">④b Pilot Lab — named concepts through my greenlight gates <span class="info" data-tip="The real-name version of 'my levers'. Each story idea is checked against your gate bars (click-rate, next-day return, % who pay, return on ad spend). Raise a bar and fewer pass. The ones that survive are the shows you put ad money behind. The larger 1,000-idea funnel (handled by the maths, not shown by name) sets the hit count. Note: the hit rate here is only a rough what-if dial for new-user quality — it nudges how many big spenders the new cohort has, not total demand. Illustrative, not a measured result.">i</span><span class="ln"></span></div>
-  <div class="band mine"><div class="band-hd">16-concept shortlist<span class="sub">tune gate bars in 'my levers' above · each box shows its Ledger-B content cost</span></div>
+  <div class="section-h">④b Pilot Lab — whale-first greenlight gates <span class="info" data-tip="The gate hierarchy is now WHALE-FIRST: does the title create whale behaviour early (whale-rate) → do whales binge past the first paywall (binge depth) → do they buy a second coin pack (repeat-pack) → does spend concentrate without killing broad retention. CTR / D1 / unlock-conv / ROI are demoted to DIAGNOSTICS. The override that matters in a 95%-whale economy: a title with mediocre broad conversion but DEEP whales (⭐ whale-led) beats a broadly-good title with SHALLOW whales (⚠ shallow trap). Illustrative metrics on real titles; the ~100-idea/mo funnel sets the hit count.">i</span><span class="ln"></span></div>
+  <div class="band mine"><div class="band-hd">16-title shortlist — graded on whale depth, not broad conversion<span class="sub">🐋 grade = whale-rate × binge × repeat · CTR/D1/conv are diagnostics</span></div>
     <div class="pilots" id="pilotBoard"></div>
     <div class="pilotsum" id="pilotSum"></div>
   </div>
@@ -364,7 +373,7 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
     <div style="overflow-x:auto;padding:6px 12px 12px"><table class="tiers" id="gateTable"></table></div>
   </div>
 
-  <div class="act" id="act-proof"><span class="actno">4</span><span class="actt">The proof</span><span class="acts">— do the economics hold up?</span><span class="ln"></span></div>
+  <div class="act" id="act-proof"><span class="actno">4</span><span class="actt">The proof</span><span class="acts">— whale economics &amp; capital allocation: do they hold up?</span><span class="ln"></span></div>
   <!-- OUTPUT -->
   <div class="section-h">⑥ Output — July plan outcomes <span class="ln"></span></div>
   <div class="band output"><div class="band-hd">★ July plan<span class="sub" id="planVsArc"></span></div>
@@ -375,6 +384,27 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
       <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Per-tier monetization → contribution <span class="info" data-tip="Each tier's contribution adds up to total July contribution. Ad-acquisition cost is split evenly per active user; other costs by share of revenue — so free users carry the acquisition cost (and run negative) while a few big and mid spenders make the profit. Whale 'episodes' (~600/mo) include bulk coin packs and unlock-ahead, not literal listens.">i</span></div>
         <div style="overflow-x:auto"><table class="tiers" id="tierTable"></table></div>
         <div id="whaleNote" style="font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.5"></div></div>
+    </div>
+  </div>
+
+  <!-- WHALE CAPITAL-ALLOCATION ENGINE -->
+  <div class="section-h">⑥·b Whale capital-allocation engine — run it like a fund, not a dashboard <span class="info" data-tip="The operational core. With ~95% of revenue from ~5% of users, the 'average user' is a fiction that hides the business. This engine prices the only unit that matters — the whale — and allocates capital to whales the way a fund sizes bets: WAC (cost to land one whale + the minnows that ride in), whale LTV, the edge that Kelly bets on, an Explore/Exploit split, trope decay, IP-trust debt, and the cross-category shadow bounty. Illustrative; layered on the bottoms-up P&L above.">i</span><span class="ln"></span></div>
+  <div class="band mine"><div class="band-hd">① The average is a lie — price the whale<span class="sub">Pareto two-track · WAC vs whale LTV · the edge</span></div>
+    <div class="metrics" id="m_whale"></div>
+    <div class="pilotsum" id="whaleEconNote"></div>
+  </div>
+  <div class="band mine"><div class="band-hd">② Capital allocation — Explore / Exploit + Kelly position-sizing<span class="info" data-tip="Multi-armed bandit: ring-fence an Explore budget for net-new Genesis tropes (no whale data yet), and route the Exploit budget across proven IPs by the modified Kelly criterion f* = p − q/b. Kelly tells you the exact share each IP deserves; a negative f* locks its budget to zero. p = whale-hit probability (mapped from the sourcing score); b = edge = (whale LTV − trope-decayed WAC)/WAC.">i</span><span class="sub">20/80 default · f* = p − q/b · negative ⇒ locked to $0</span></div>
+    <div id="allocSplit" class="acqseed"></div>
+    <div style="overflow-x:auto;padding:2px 12px 6px"><table class="tiers" id="kellyTable"></table></div>
+    <div class="pilotsum" id="kellyNote"></div>
+  </div>
+  <div class="band mine"><div class="band-hd">③ Systemic consequences — decay · trust debt · shadow bounty<span class="info" data-tip="Three forces a static dashboard ignores. Trope decay: a proven trope's WAC compounds up every month in-market (saturation + copycats) — so you must keep exploring. IP-trust debt: abandoning a shipped saga pre-ep50 compounds a haircut onto whale LTV. Shadow bounty: whales you acquire roam to other categories — credit that value back to see if you're a profitable silo or a loss-leading top-of-funnel.">i</span><span class="sub">why a winning engine still has to keep moving</span></div>
+    <div class="mixwrap">
+      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Trope WAC decay — proven tropes saturate</div>
+        <div style="overflow-x:auto"><table class="tiers" id="decayTable"></table></div></div>
+      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Trust debt + shadow bounty — the true category P&amp;L</div>
+        <div style="overflow-x:auto"><table class="tiers" id="shadowTable"></table></div>
+        <div id="trustNote" style="font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.5"></div></div>
     </div>
   </div>
 
@@ -444,11 +474,12 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
   <div class="section-h">Where July sits on the $60M → $200M arc — illustrative US Romantasy <i>category</i> ARR, not company-wide (context only) <span class="ln"></span></div>
   <div class="arcwrap"><div id="arc"></div></div>
 
-  <div class="section-h">In-market slate — real titles by portfolio role <span class="ln"></span></div>
+  <div class="section-h">In-market slate — real titles by portfolio role <span class="info" data-tip="Why this section: it grounds the abstract cohort/tier engine in real Pocket titles. Each role maps to a job in the model — acquisition bait pulls the New cohort, the whale saga is where the top 5% (the §⑥ whale tier) live and spend, the monetization engine converts Existing payers, the reactivation asset wins back dormant users, and the bridge/hidden-gem titles are the pipeline that graduates new titles into catalogue.">i</span><span class="ln"></span></div>
+  <p class="cintro" style="padding:0 0 6px">Not a separate idea — this is the §⑥ engine in real titles: each role is a <b>job in the model</b>. <b>Acquisition bait</b> feeds the New cohort; the <b>whale saga</b> is where the top 5% (the whale tier) live and spend — the "keep the whales" asset; the <b>monetization engine</b> converts Existing payers; the <b>reactivation asset</b> wins back dormant users; <b>bridge / hidden-gem</b> titles are the pipeline that becomes tomorrow's catalogue.</p>
   <div class="slate" id="slate"></div>
 
   <footer>
-    <b>US market only.</b> Illustrative, internally-consistent assumptions — not telemetry. Coins modelled bottoms-up (~$0.02/coin, ~10 coins/episode; episodes/payer by tier). Cohort split, whale concentration and CPI-inflation are editable benchmarks. Public / benchmark context used for calibration (cite sources in the room): PocketFM ARR ~$200M→~$430M/12mo, EBITDA/FCF-positive ~5%, AI content ~$50–60/hr.
+    <b>US market only.</b> Illustrative, internally-consistent assumptions — not telemetry. Coins modelled bottoms-up (~$0.02/coin, ~10 coins/episode; episodes/payer by tier). Cohort split, whale concentration and CPI-inflation are editable benchmarks. Public / benchmark context used for calibration (cite sources in the room): PocketFM ARR ~$200M→~$430M/12mo, EBITDA/FCF-positive ~5% (company-wide net — a single category's contribution margin sits above this, before corporate overhead & reinvestment), AI content ~$50–60/hr.
     <br><b>Benchmarks behind the defaults:</b> mix 85/10/5 ≈ PocketFM FY24 (~91% coins+IAP / ~9% ads); monthly churn 8% (sub avg ~9%, streaming ~6.7%); coins/episode 8–10 and $0.01–0.02/coin (app store); entertainment CPI ~$1–5 (Android ~$1.2, iOS ~$3.6–4.7); US Meta CPM ~$10–22; market CPI inflation ~15–25%/yr.
     <div class="legend">
       <span><span class="pip pip-c">Context</span> market</span><span><span class="pip pip-m">Mine</span> category/title</span>
@@ -493,7 +524,7 @@ function calibrateWhales(mon){
   WHALE_IMPLIED={ep:EP.W,val:realized('W'),target:valW,sharePayers:w,shareRev:r,floored};
 }
 // Content-hit → New-cohort whale coupling: identity at default (s4 == S4_BASE → hitMult == 1)
-const S4_BASE=1000*0.25*0.30*0.25*0.50;            // = 9.375 = scaled hits at default gates
+const S4_BASE=100*0.25*0.30*0.25*0.50;             // = 0.9375 = scaled hits at default gates (100 Romantasy pilots/mo)
 const HIT_FLOOR=0.25, HIT_SENS=0.5;
 function hitMult(s4){return HIT_FLOOR+(1-HIT_FLOOR)*Math.pow(Math.max(s4,0)/S4_BASE,HIT_SENS);}
 
@@ -536,6 +567,8 @@ const IN={
   x_nm:{sec:'context',label:'Net margin (store/refunds)',suf:'%',fmt:'pct',val:65,tip:'What you keep after the app store cut (~30%) and refunds, on coins and subscriptions. The store cut is fixed; refunds are partly controllable.'},
   x_churn:{sec:'context',label:'Monthly active churn',suf:'%',fmt:'pct',val:8,tip:'Share of active users you lose each month. This ages your user base from June to July. Payers stick around longer — see payer churn below.'},
   x_payer_churn:{sec:'context',label:'Monthly payer churn (LTV)',suf:'%',fmt:'pct',val:5,tip:'Share of PAYING users you lose each month — used only for lifetime value (lifetime = 1 ÷ this rate). Payers stay longer than the average user, so lifetime value uses this slower rate. Active churn (above) still ages the carried-forward revenue.'},
+  x_whale_churn:{sec:'context',label:'Monthly WHALE churn (whale LTV)',suf:'%',fmt:'pct',val:3,tip:'Share of WHALES you lose each month — whales are stickier than the average payer, so their lifetime (1 ÷ this) is longer. This is what makes the 95%-from-5% concentration actually BITE: a blended payer-churn number is blind to whales; a whale-specific churn is how you protect the people who are the business.'},
+  x_trope_decay:{sec:'context',label:'Trope WAC decay / mo (saturation)',suf:'%',fmt:'pct',val:6,tip:'How fast the cost to acquire a whale on a PROVEN trope inflates each month as the ad-network saturates and rivals copy it. A winning engine does NOT scale at a flat cost — every month it is in-market, its whale-acquisition cost compounds up. This is the force that makes the Explore budget non-optional: you must find the next trope before the current one turns unprofitable.'},
   x_spill_out:{sec:'context',label:'Spillover OUT (cohort value to other genres)',suf:'%',fmt:'pct',val:35,tip:'Of the lifetime value the users you bring in go on to create, the share that lands in OTHER genres (your hook brings them in; they then binge romance/mythology). You keep the rest in your category. Used only in the two-scorecard view.'},
   x_spill_in:{sec:'context',label:'Spillover IN (your rev from other genres’ installs)',suf:'%',fmt:'pct',val:30,tip:'Of YOUR category revenue, the share that comes from users OTHER genres brought in (they installed for a thriller, then found your romantasy). Used only in the two-scorecard view.'},
   x_trigger_share:{sec:'context',label:'First-purchase-trigger share',suf:'%',fmt:'pct',val:40,tip:'Of all first-time coin purchases across the app, the share your category sets off (the moment a free user first pays). If this is bigger than what you keep, your category is a paying "on-ramp" whose value leaks to other genres. Two-scorecard view only.'},
@@ -545,10 +578,10 @@ const IN={
   x_opex:{sec:'context',label:'Variable opex % rev',suf:'%',fmt:'pct',val:21,tip:'Running costs as a share of revenue — royalties, infrastructure, payments, support (content + testing are counted separately). The company\'s ~5% profit is after this; contribution sits above it.'},
   x_dollarhr:{sec:'context',label:'Content $/finished hr',pre:'$',suf:'',fmt:'usd2',val:55,tip:'AI made content cost ~$50–60 per finished hour. Used only for the rough production-cost figure in the summary — NOT the P&L content line (that\'s your gate testing/commit spend). To one extra user, content costs nothing.'},
   // MINE (category/title) — grouped by stage
-  m_pilots:{sec:'mine',grp:'Slate',label:'Pilots / month',fmt:'int',val:1000,tip:'Story ideas entering the full testing funnel each month. Cheap to make (~$50/hr).'},
+  m_pilots:{sec:'mine',grp:'Slate',label:'Pilots / month',fmt:'int',val:100,tip:'US-Romantasy story ideas entering the full testing funnel each month. (PocketFM\'s company-wide ~1,000 pilots/mo spans all markets and genres; ~100 is this single category\'s share.) Cheap to make (~$50/hr).'},
   m_catalog:{sec:'mine',grp:'Slate',label:'Active library titles (US Romantasy)',fmt:'int',val:1200,tip:'How many US Romantasy titles are live today — hits, mid and long tail. Powers the "Library shape" view below. A mature single-category library usually runs ~1,000–1,500 titles.'},
   m_newshare:{sec:'mine',grp:'Slate',label:'New-release revenue share',suf:'%',fmt:'pct',val:22,tip:'Share of revenue from recently launched shows vs your older catalogue. New shows carry production + testing cost; older catalogue already paid for itself, so it\'s almost pure profit.'},
-  f_g1:{sec:'mine',grp:'Gate 1 · Trailer',label:'G1 pass-rate',suf:'%',fmt:'pct',val:25,tip:'Overall share of trailers that pass the first test (across the 1,000-idea funnel).'},
+  f_g1:{sec:'mine',grp:'Gate 1 · Trailer',label:'G1 pass-rate',suf:'%',fmt:'pct',val:25,tip:'Overall share of trailers that pass the first test (across the full pilot funnel).'},
   g1_spend:{sec:'mine',grp:'Gate 1 · Trailer',label:'$/concept',pre:'$',suf:'',fmt:'int',val:250,tip:'Trailer test spend per idea (~$250 in the doc). Cheap, run on every idea. Counts as content/testing in the P&L.'},
   pl_minCTR:{sec:'mine',grp:'Gate 1 · Trailer',label:'Bar: min CTR',suf:'%',fmt:'pct2',val:1.0,tip:'The pass bar for the named board — the lowest trailer click-rate to clear Gate 1.'},
   f_g2:{sec:'mine',grp:'Gate 2 · Pilot',label:'G2 pass-rate',suf:'%',fmt:'pct',val:30,tip:'Overall share of pilots (episodes 1–5) that pass the second test.'},
@@ -565,6 +598,8 @@ const IN={
   p_newconv:{sec:'mine',grp:'Product levers',label:'July New payer conv',suf:'%',fmt:'pct2',val:4.0,tip:'Share of new users who pay — driven by paywall placement, number of free episodes, and content gating.'},
   p_existconv:{sec:'mine',grp:'Product levers',label:'July Existing payer conv',suf:'%',fmt:'pct2',val:8.0,tip:'Share of regulars who pay. Modelled as a simple proportional lift on existing revenue (July ÷ June rate) — an approximation; a full finance model would split regulars into payers/non-payers and re-do each.'},
   p_reactconv:{sec:'mine',grp:'Product levers',label:'July React payer conv',suf:'%',fmt:'pct2',val:5.0,tip:'Share of won-back users who pay — driven by win-back offer quality.'},
+  m_explore_pct:{sec:'mine',grp:'Capital allocation (whale engine)',label:'Explore budget %',suf:'%',fmt:'pct',val:20,tip:'Share of UA budget ring-fenced for EXPLORE — testing unproven, net-new "Genesis" tropes that have no whale data yet. The rest (Exploit) only scales IPs that already have Day-7 whale-acquisition data. This is the multi-armed-bandit discipline: you cannot scale what you have not proven, and you cannot stop exploring or the proven tropes decay out from under you.'},
+  m_kills_pre50:{sec:'mine',grp:'Capital allocation (whale engine)',label:'Shipped sagas killed pre-ep50 / qtr',fmt:'int',val:0,tip:'How many SHIPPED whale-facing series you abandon before ~episode 50 each quarter. Killing fast is free in TESTING — but a whale who invested 40 episodes into a saga you then cancel learns not to trust your sagas. Each early kill applies a compounding haircut to whale LTV ("IP Trust Debt"). 0 = you only kill pre-greenlight, never a shipped saga.'},
   // SHARED (needs alignment) — grouped by team
   s_installs:{sec:'shared',grp:'Central UA / Performance',label:'July installs (UA)',fmt:'int',val:1000000,owner:'Central UA',tip:'How many installs UA buys in July. Central UA/Performance owns the budget; you agree on the volume and the cost-per-install you\'ll accept.'},
   s_ir:{sec:'shared',grp:'Growth / ASO',label:'Install rate (ASO)',suf:'%',fmt:'pct',val:36,owner:'Growth/ASO',tip:'Share of store-page visitors who install (store page / ASO). Higher = cheaper installs. Owned by Growth.'},
@@ -572,8 +607,8 @@ const IN={
   s_coinprice:{sec:'shared',grp:'Monetization',label:'Price per coin',pre:'$',suf:'',fmt:'usd3',val:0.02,owner:'Monetization',tip:'Price of one coin (USD). Monetization/Finance sets pack pricing.'},
   s_coinsep:{sec:'shared',grp:'Monetization',label:'Coins per episode',fmt:'int',val:10,owner:'Monetization',tip:'Coins needed to unlock one episode (~8–10 typical).'},
   s_adload:{sec:'shared',grp:'Monetization',label:'Ad-load index',suf:'%',fmt:'pct',val:100,owner:'Monetization',tip:'Scales ad revenue per user. Too many ads drives away the users you just paid to acquire.'},
-  s_whale_pct:{sec:'shared',grp:'Monetization',label:'Whales — % of payers',suf:'%',fmt:'pct2',val:6,owner:'Monetization',tip:'What share of PAYING users are whales (the heavy-spend tier). This is the unknown — you usually don\'t know it without telemetry. Pair it with the revenue share below: the model back-solves how deep each whale must spend, and the per-tier table shows whether that implied depth is believable.'},
-  s_whale_rev:{sec:'shared',grp:'Monetization',label:'Whales — % of payer revenue',suf:'%',fmt:'pct',val:40,owner:'Monetization',tip:'What share of payer revenue (coins + subs + ads from payers) the whale tier drives. Default ~40% is the model\'s benchmarked power law; set it to ~95% to model the gacha / microdrama shape an interviewer might assert. The implied per-whale spend then jumps — a reality check on the whale-% above.'},
+  s_whale_pct:{sec:'shared',grp:'Monetization',label:'Whales — % of payers',suf:'%',fmt:'pct2',val:5,owner:'Monetization',tip:'What share of PAYING users are whales — % of PAYERS, not of all actives. At 5% of payers (payers are ~5–6% of actives) whales are ~0.3% of the user base: the plausible whale-led coin economy, NOT "whales are the whole paying base." This is the unknown you rarely know without telemetry. Pair it with the revenue share below: the model back-solves how deep each whale must spend, and the per-tier table shows whether that implied depth is believable.'},
+  s_whale_rev:{sec:'shared',grp:'Monetization',label:'Whales — % of payer revenue',suf:'%',fmt:'pct',val:95,owner:'Monetization',tip:'What share of payer revenue (coins + subs + ads from payers) the whale tier drives. Default ~40% is the model\'s benchmarked power law; set it to ~95% to model the gacha / microdrama shape an interviewer might assert. The implied per-whale spend then jumps — a reality check on the whale-% above.'},
   s_crm:{sec:'shared',grp:'Lifecycle / Retention',label:'CRM % rev',suf:'%',fmt:'pct',val:4,owner:'Lifecycle',tip:'Spend on lifecycle messaging / retention, as a share of revenue.'},
   p_reach:{sec:'shared',grp:'Lifecycle / Retention',label:'Dormant reached (Jul)',fmt:'int',val:2000000,owner:'Lifecycle',tip:'How many dormant users the win-back team messages. Lifecycle runs the calendar.'},
   p_winconv:{sec:'shared',grp:'Lifecycle / Retention',label:'Dormant → active return rate',suf:'%',fmt:'pct',val:35,owner:'Lifecycle',tip:'Share of messaged dormant users who come back as active (not yet paying). Their paying rate is applied separately via "React payer conv" — so no double-count.'},
@@ -623,35 +658,48 @@ const DEC={
   s_crm:'Spend on emails / notifications to keep users active. Set it by how much extra activity it really creates (measured against a control group).',
   p_reach:'How many dormant users to message. Keep reaching out until the next batch costs more than it brings back. Limited by how many lapsed users exist and team capacity.',
   p_winconv:'Share of messaged dormant users who come back. A measured result from win-back tests, not a target you set.',
-  p_freecoin:'Free coins / incentive per user you message. Set it so the offer pays for itself in recovered spend. Drop offers that only attract freebie-hunters who never pay.'
+  p_freecoin:'Free coins / incentive per user you message. Set it so the offer pays for itself in recovered spend. Drop offers that only attract freebie-hunters who never pay.',
+  m_explore_pct:'How much of UA you spend hunting the NEXT trope vs scaling this month’s winner. Raise it when your proven tropes are decaying (WAC climbing) or your Genesis pipeline is thin; never take it to zero — a 100% Exploit book dies the month its trope saturates. ~20% is the standard bandit split.',
+  m_kills_pre50:'How disciplined you are about NOT cancelling shipped sagas. Keep this near zero: kill ideas in testing (free), but once a saga ships and whales invest, finishing it is cheaper than the trust you destroy by abandoning it. Only let it rise if a shipped saga is so unprofitable that the completion cost truly exceeds the whale-trust hit.'
 };
 
 /* ============ ACQUISITION ENGINE (comp-scored sourcing) ============ */
 // Real titles. SEEDS = proven on Pocket (the pattern we source against). CANDIDATES = acquirable IP from romance-first platforms.
 // rubric values 0–100 are JUDGMENT; signals (demandPct rank-percentile, chapters) are PUBLIC proxies, captured 2026-06, illustrative.
-const ACQ_DEFAULTS={tropeMatch:25,demandSignal:20,serialFit:15,femaleLed:15,backlist:10,rights:10,risk:-5};
+// weights are now banded Low/Med/High (10/25/40); risk is a penalty banded Low/Med/High (-5/-12/-20)
+const W_BANDS={lo:10,md:25,hi:40}, RISK_BANDS={lo:-5,md:-12,hi:-20};
+const bandOf=(k,v)=> k==='risk' ? (v<=-16?'hi':v<=-9?'md':'lo') : (v>=33?'hi':v>=18?'md':'lo');
+const ACQ_DEFAULTS={tropeMatch:40,demandSignal:40,serialFit:25,femaleLed:25,backlist:10,rights:25,risk:-12};
 let ACQ_WEIGHTS=Object.assign({},ACQ_DEFAULTS);
 // SEEDS = Pocket's actual romantasy winners (real play counts). CANDIDATES = real titles; demand = actual Galatea reads where public, else 'scout'.
+// SEEDS = Pocket's own proven romantasy (audio play counts). CANDIDATES = REAL titles on romance-first novel platforms,
+// captured via web search 2026-06 (snippet-level; per-title read counts are mostly not public on these platforms, so 'scout'
+// = traction confirmed but no clean public number). Clusters map onto the §④ whitespace tropes; the board leads with the
+// commission lanes (hidden-identity, rebirth) rather than the werewolf core we already own.
 const TITLES=[
   {name:"The Alpha's Bride",author:'RedSonia',source:'PocketFM',role:'seed',cluster:'alpha–luna',signals:{plays:'582.8M',eps:701}},
   {name:'Wolves of Blood Moon',author:'Glimmy',source:'PocketFM',role:'seed',cluster:'academy',signals:{plays:'77.2M',eps:765}},
   {name:"The Crown's Obsession",author:'ash_knight17',source:'PocketFM',role:'seed',cluster:'dark-king',signals:{plays:'63M',eps:'—'}},
   {name:'The Eclipse Princess',author:'JHeart',source:'PocketFM',role:'seed',cluster:'dragon-fae',signals:{plays:'32.2M',eps:910}},
   {name:"A Luna's Broken Bond",author:'Alicia.S.Rivers',source:'PocketFM',role:'seed',cluster:'rejected-mate',signals:{plays:'7.9M',eps:'—'}},
-  {name:'The Millennium Wolves',author:'Sapir Englard',source:'Galatea',role:'candidate',cluster:'alpha–luna',signals:{paid:'High',reads:'217M'},rubric:{tropeMatch:85,demandSignal:90,serialFit:90,femaleLed:85,backlist:70,rights:30,risk:25}},
-  {name:'Kidnapped by My Mate',author:'Annie Whipple',source:'Galatea',role:'candidate',cluster:'alpha–luna',signals:{paid:'High',reads:'76.7M'},rubric:{tropeMatch:92,demandSignal:90,serialFit:85,femaleLed:90,backlist:55,rights:75,risk:20}},
-  {name:"The Lycan's Queen",author:'L.S. Patel',source:'Galatea',role:'candidate',cluster:'alpha–luna',signals:{paid:'Medium',reads:'53.5M'},rubric:{tropeMatch:80,demandSignal:70,serialFit:82,femaleLed:85,backlist:50,rights:76,risk:20}},
-  {name:'Owned by the Alphas',author:'Jen Cooper',source:'Galatea',role:'candidate',cluster:'reverse-harem',signals:{paid:'Medium',reads:'33.7M'},rubric:{tropeMatch:78,demandSignal:70,serialFit:80,femaleLed:78,backlist:55,rights:72,risk:55}},
-  {name:"The Alpha's Call",author:'Bianca Alejandra',source:'Galatea',role:'candidate',cluster:'alpha–luna',signals:{paid:'Medium',reads:'24.1M'},rubric:{tropeMatch:84,demandSignal:70,serialFit:80,femaleLed:85,backlist:45,rights:78,risk:20}},
-  {name:'Luna Graced',author:'KristiferAnn Thorne',source:'Galatea',role:'candidate',cluster:'rejected-mate',signals:{paid:'Medium',reads:'17.8M'},rubric:{tropeMatch:88,demandSignal:70,serialFit:80,femaleLed:92,backlist:50,rights:78,risk:18}},
-  {name:'Learning to Love: Shade',author:'M.L. Knight',source:'Galatea',role:'candidate',cluster:'alpha–luna',signals:{paid:'Low',reads:'15.1M'},rubric:{tropeMatch:86,demandSignal:50,serialFit:78,femaleLed:90,backlist:45,rights:80,risk:22}},
-  {name:'The Edge of Reason',author:'Michelle Torlot',source:'Galatea',role:'candidate',cluster:'rejected-mate',signals:{paid:'Low',reads:'14.3M'},rubric:{tropeMatch:82,demandSignal:50,serialFit:75,femaleLed:88,backlist:48,rights:80,risk:18}},
-  {name:"Alpha's Unwilling Mate",author:'Elle Chipp',source:'Galatea',role:'candidate',cluster:'alpha–luna',signals:{paid:'Low',reads:'9M'},rubric:{tropeMatch:84,demandSignal:50,serialFit:76,femaleLed:80,backlist:42,rights:78,risk:55}},
-  {name:'Alpha Grayson',author:'Midika Crane',source:'Galatea',role:'candidate',cluster:'academy',signals:{paid:'None',reads:'1.6M'},rubric:{tropeMatch:72,demandSignal:30,serialFit:76,femaleLed:78,backlist:40,rights:82,risk:22}},
-  {name:"The Fae's Captive",author:'M.L. Smith',source:'Galatea',role:'candidate',cluster:'fae-court',signals:{paid:'Low',reads:'scout'},scout:true,rubric:{tropeMatch:72,demandSignal:50,serialFit:80,femaleLed:85,backlist:50,rights:82,risk:22}},
-  {name:'Slave of the Onyx Dragon',author:'Silver Taurus',source:'Galatea',role:'candidate',cluster:'dragon-court',signals:{paid:'Medium',reads:'scout'},scout:true,rubric:{tropeMatch:70,demandSignal:70,serialFit:82,femaleLed:82,backlist:55,rights:80,risk:45}},
-  {name:"Demon King's Possession",author:'A.L. Smith',source:'AlphaNovel',role:'candidate',cluster:'demon-king',signals:{paid:'Low',reads:'scout'},scout:true,rubric:{tropeMatch:74,demandSignal:50,serialFit:80,femaleLed:84,backlist:48,rights:80,risk:35}},
-  {name:'Academy of Shades',author:'Amanda Underwood',source:'Galatea',role:'candidate',cluster:'academy',signals:{paid:'Low',reads:'scout'},scout:true,rubric:{tropeMatch:68,demandSignal:50,serialFit:78,femaleLed:80,backlist:50,rights:82,risk:20}}
+  // ── HIDDEN-IDENTITY REVEAL (top commission lane) ──
+  {name:'Married a Secret Billionaire',author:'Breaking Wave',source:'GoodNovel',role:'candidate',cluster:'hidden-identity',signals:{paid:'High',reads:'scout'},scout:true,rubric:{tropeMatch:92,demandSignal:90,serialFit:88,femaleLed:88,backlist:55,rights:70,risk:25}},
+  {name:'The Substitute Wife: My Poor Husband Is A Billionaire',author:'Roana Javier',source:'GoodNovel',role:'candidate',cluster:'hidden-identity',signals:{paid:'High',reads:'scout'},scout:true,rubric:{tropeMatch:95,demandSignal:90,serialFit:90,femaleLed:90,backlist:50,rights:55,risk:38}},
+  {name:"The Billionaire's Substitute Bride",author:'Gabby',source:'GoodNovel',role:'candidate',cluster:'hidden-identity',signals:{paid:'Medium',reads:'scout'},scout:true,rubric:{tropeMatch:90,demandSignal:70,serialFit:85,femaleLed:88,backlist:48,rights:72,risk:22}},
+  {name:'The True Heiress With Countless Hidden Identities',author:'Irene Vale',source:'Galatea',role:'candidate',cluster:'hidden-identity',signals:{paid:'Medium',reads:'scout'},scout:true,rubric:{tropeMatch:88,demandSignal:70,serialFit:82,femaleLed:85,backlist:50,rights:78,risk:20}},
+  // ── REBIRTH / REGRESSION (top commission lane) ──
+  {name:'Reborn Heiress: Taking Back What Is Rightfully Hers!',author:'Bago_bago_5587',source:'Webnovel',role:'candidate',cluster:'rebirth',signals:{paid:'High',reads:'696+ ch'},rubric:{tropeMatch:90,demandSignal:85,serialFit:90,femaleLed:90,backlist:80,rights:65,risk:25}},
+  {name:"Rebirth And Revenge: The Betrayed Heiress's Return",author:'blazers990',source:'GoodNovel',role:'candidate',cluster:'rebirth',signals:{paid:'Medium',reads:'scout'},scout:true,rubric:{tropeMatch:88,demandSignal:70,serialFit:85,femaleLed:88,backlist:55,rights:72,risk:22}},
+  {name:'Reborn For Love and Revenge',author:'Annalise A.',source:'GoodNovel',role:'candidate',cluster:'rebirth',signals:{paid:'Medium',reads:'scout'},scout:true,rubric:{tropeMatch:85,demandSignal:65,serialFit:82,femaleLed:88,backlist:50,rights:74,risk:22}},
+  // ── WEREWOLF / ALPHA-LUNA (defend — we already own it) ──
+  {name:'The Millennium Wolves',author:'Sapir A. Englard',source:'Galatea',role:'candidate',cluster:'alpha–luna',signals:{paid:'High',reads:'125M+'},rubric:{tropeMatch:80,demandSignal:95,serialFit:90,femaleLed:85,backlist:85,rights:30,risk:25}},
+  {name:'Rejected, Replaced, & Forgotten',author:'Abigail Lynne',source:'Galatea',role:'candidate',cluster:'rejected-mate',signals:{paid:'Medium',reads:'scout'},scout:true,rubric:{tropeMatch:78,demandSignal:65,serialFit:82,femaleLed:88,backlist:50,rights:76,risk:20}},
+  {name:'Ella – The Rejected Mate',author:'Eleanor Moon',source:'Galatea',role:'candidate',cluster:'rejected-mate',signals:{paid:'Low',reads:'scout'},scout:true,rubric:{tropeMatch:76,demandSignal:50,serialFit:78,femaleLed:88,backlist:45,rights:78,risk:20}},
+  {name:'Luna Lola – The Moon Wolf',author:'Park Kara',source:'AlphaNovel',role:'candidate',cluster:'alpha–luna',signals:{paid:'Low',reads:'scout'},scout:true,rubric:{tropeMatch:75,demandSignal:50,serialFit:78,femaleLed:85,backlist:45,rights:80,risk:22}},
+  {name:"The Alpha's Hidden Luna",author:'Blueesandy',source:'AlphaNovel',role:'candidate',cluster:'vampire',signals:{paid:'Low',reads:'scout'},scout:true,rubric:{tropeMatch:72,demandSignal:50,serialFit:78,femaleLed:82,backlist:45,rights:78,risk:30}},
+  // ── CEO / BILLIONAIRE (contested) & FAE (test cheap) ──
+  {name:'Contract Marriage With The Billionaire Heiress',author:'Litmoonnandcoffee',source:'Webnovel',role:'candidate',cluster:'CEO/PNR',signals:{paid:'Medium',reads:'scout'},scout:true,rubric:{tropeMatch:70,demandSignal:65,serialFit:80,femaleLed:82,backlist:55,rights:70,risk:25}},
+  {name:'Fayre',author:'Nicole Riddley',source:'Galatea',role:'candidate',cluster:'fae',signals:{paid:'Low',reads:'scout'},scout:true,rubric:{tropeMatch:60,demandSignal:45,serialFit:75,femaleLed:85,backlist:50,rights:78,risk:20}}
 ];
 function scoreTitle(t){if(!t.rubric)return 0;let num=0,den=0;for(const k in ACQ_WEIGHTS){const w=ACQ_WEIGHTS[k];num+=w*(t.rubric[k]||0);den+=Math.abs(w);}return den?num/den:0;}
 function slateQuality(){const c=TITLES.filter(t=>t.role==='candidate').map(scoreTitle).sort((a,b)=>b-a).slice(0,5);return c.length?c.reduce((a,b)=>a+b,0)/c.length:0;}
@@ -661,38 +709,61 @@ let SLATE_QUALITY=SLATE_REF, SLATE_MULT=1;  // SLATE_MULT scales the new-cohort 
 /* trope-level leading indicator: external PAID demand (coin-unlock chart proxy) vs Pocket's own supply. Reconstructed, illustrative. */
 // paid = OBSERVED tag-prominence BAND on GoodNovel + DramaBox 2026-06-24 (High = top ranking-tab; Medium = real tag, not top; Low = under-Paranormal only; None = no serial tag). supply = Pocket catalogue presence band. Bands not scores — deliberately no false precision.
 // paid = novel-tag band (GoodNovel/DramaBox). supply = Pocket catalogue. rival = competitor ad-spend in Meta Ad Library (DramaBox+ReelShort scaled set, 24 Jun 2026): Scaling / Testing / None. All proxies, illustrative.
+// mkt = approx MONTHS the trope has been ad-scaled in market (drives WAC decay): high = proven-but-saturating, low = Genesis/fresh.
 const TROPES=[
-  {name:'Werewolf / alpha-luna',short:'Werewolf',paid:'High',supply:'High',rival:'None',vel:'flat'},        // we own it in audio; rivals don't ad-scale it
-  {name:'CEO / billionaire (PNR)',short:'CEO/PNR',paid:'High',supply:'High',rival:'Scaling',vel:'flat'},     // rivals scale it hard; we also hold it
-  {name:'Hidden-identity reveal (engine)',short:'Hidden-ID',paid:'High',supply:'Low',rival:'Scaling',vel:'up'}, // the universal scaled engine; Pocket under-uses as romance
-  {name:'Rebirth / regression',short:'Rebirth',paid:'High',supply:'Low',rival:'Scaling',vel:'up'},           // rival-ad-proven (reborn ghost/beast-tamer)
-  {name:'Vampire (king / bride)',short:'Vampire',paid:'Medium',supply:'Low',rival:'None',vel:'up'},          // novel demand, but ZERO rival ad-spend
-  {name:'Dragon (king / bride)',short:'Dragon',paid:'Medium',supply:'Low',rival:'None',vel:'up'},            // novel demand, but ZERO rival ad-spend
-  {name:'Academy / supernatural school',short:'Academy',paid:'Medium',supply:'Medium',rival:'None',vel:'flat'},
-  {name:'Demon king / celestial',short:'Demon',paid:'Low',supply:'Low',rival:'None',vel:'up'},
-  {name:'Fae court / cursed kingdom',short:'Fae',paid:'None',supply:'Low',rival:'None',vel:'up'}             // no serial tag + no rival ad-spend
+  {name:'Werewolf / alpha-luna',short:'Werewolf',paid:'High',supply:'High',rival:'None',vel:'flat',mkt:20},   // we own it in audio; rivals don't ad-scale it
+  {name:'CEO / billionaire (PNR)',short:'CEO/PNR',paid:'High',supply:'High',rival:'Scaling',vel:'flat',mkt:16},// rivals scale it hard; we also hold it
+  {name:'Hidden-identity reveal (engine)',short:'Hidden-ID',paid:'High',supply:'Low',rival:'Scaling',vel:'up',mkt:4}, // the universal scaled engine; Pocket under-uses as romance — still fresh for us
+  {name:'Rebirth / regression',short:'Rebirth',paid:'High',supply:'Low',rival:'Scaling',vel:'up',mkt:6},      // rival-ad-proven (reborn ghost/beast-tamer)
+  {name:'Vampire (king / bride)',short:'Vampire',paid:'Medium',supply:'Low',rival:'None',vel:'up',mkt:2},     // novel demand, but ZERO rival ad-spend
+  {name:'Dragon (king / bride)',short:'Dragon',paid:'Medium',supply:'Low',rival:'None',vel:'up',mkt:2},       // novel demand, but ZERO rival ad-spend
+  {name:'Academy / supernatural school',short:'Academy',paid:'Medium',supply:'Medium',rival:'None',vel:'flat',mkt:9},
+  {name:'Demon king / celestial',short:'Demon',paid:'Low',supply:'Low',rival:'None',vel:'up',mkt:2},
+  {name:'Fae court / cursed kingdom',short:'Fae',paid:'None',supply:'Low',rival:'None',vel:'up',mkt:1}        // no serial tag + no rival ad-spend — Genesis
 ];
+// map a candidate's cluster → its trope row (for WAC decay + proven/genesis status)
+function tropeForCluster(cluster){
+  const c=(cluster||'').toLowerCase();
+  if(c.includes('hidden'))return TROPES[2];
+  if(c.includes('rebirth'))return TROPES[3];
+  if(c.includes('alpha')||c.includes('rejected')||c.includes('werewolf'))return TROPES[0];
+  if(c.includes('ceo')||c.includes('pnr')||c.includes('billion'))return TROPES[1];
+  if(c.includes('vampire'))return TROPES[4];
+  if(c.includes('dragon'))return TROPES[5];
+  if(c.includes('academy'))return TROPES[6];
+  if(c.includes('demon'))return TROPES[7];
+  if(c.includes('fae'))return TROPES[8];
+  return TROPES[2];
+}
 
 /* ============ PILOT LAB ============ */
 // src = sourcing provenance ; score = sourcing-algorithm score 0–100 (provenance × trope novelty × creator tier)
+// Real sourced titles (see §④·b board) run through the greenlight gates. Names + tropes are REAL; the gate metrics
+// (CTR / D1 / conv / ROI / LTV) are necessarily ILLUSTRATIVE test outcomes — you can't have measured data on an unreleased pilot.
+// wr = early WHALE RATE (whales per 1,000 new payers), bd = BINGE DEPTH past the first paywall (episodes),
+// rp = REPEAT-PACK rate (% who buy a 2nd coin pack). These are the whale-behaviour gates; ctr/d1/conv/roi are demoted to DIAGNOSTICS.
+// Two deliberate teaching cases: a broad-but-SHALLOW greenlit title (Billionaire's Substitute Bride) and a narrow-but-DEEP killed title (Ella).
 const PILOTS=[
-  {n:'Moonlit Reject',tp:'Werewolf',src:'Proprietary IP',score:90,ctr:1.8,d1:42,conv:6.2,roi:1.6,ltv:240,launch:"Aug '26"},
-  {n:"Alpha's Forbidden Heir",tp:'Werewolf',src:'Webtoon adaptation',score:84,ctr:1.5,d1:38,conv:5.0,roi:1.3,ltv:200,launch:"Aug '26"},
-  {n:"Don's Captive Bride",tp:'Mafia',src:'Licensed bestseller',score:72,ctr:1.6,d1:40,conv:5.5,roi:0.8,ltv:175,launch:"Sep '26"},
-  {n:'Throne of Ash & Fae',tp:'Fae-dragon',src:'Proprietary IP',score:92,ctr:1.9,d1:45,conv:6.8,roi:1.4,ltv:260,launch:"Aug '26"},
-  {n:'Reborn as the Villainess',tp:'System-fantasy',src:'Webtoon adaptation',score:80,ctr:1.3,d1:33,conv:4.2,roi:1.1,ltv:165,launch:"Sep '26"},
-  {n:"Billionaire's Contract Heart",tp:'Billionaire',src:'Original concept',score:60,ctr:1.4,d1:30,conv:3.8,roi:0.7,ltv:130,launch:"Sep '26"},
-  {n:'Her Dragon-Bonded Mate',tp:'Fae-dragon',src:'Licensed bestseller',score:68,ctr:1.1,d1:28,conv:3.6,roi:0.9,ltv:150,launch:"Oct '26"},
-  {n:"Mafia King's Obsession",tp:'Mafia',src:'Webtoon adaptation',score:82,ctr:1.2,d1:24,conv:3.0,roi:1.0,ltv:210,launch:"Sep '26"},
-  {n:'Rejected by the Moon',tp:'Werewolf',src:'Proprietary IP',score:85,ctr:0.9,d1:35,conv:4.0,roi:1.2,ltv:225,launch:"Sep '26"},
-  {n:"Fae Queen's Gambit",tp:'Fae-dragon',src:'Original concept',score:55,ctr:1.05,d1:26,conv:3.2,roi:1.0,ltv:120,launch:"Oct '26"},
-  {n:"CEO's Secret Omega",tp:'Billionaire-WW',src:'Webtoon adaptation',score:86,ctr:1.25,d1:31,conv:4.5,roi:1.5,ltv:230,launch:"Aug '26"},
-  {n:'Blood Empire',tp:'Mafia',src:'Original concept',score:38,ctr:0.8,d1:20,conv:2.5,roi:0.6,ltv:70,launch:"Nov '26"},
-  {n:'Cursed Crown',tp:'Fae-dragon',src:'Original concept',score:45,ctr:1.0,d1:22,conv:2.8,roi:0.7,ltv:95,launch:"Oct '26"},
-  {n:'Reborn to Reject Him',tp:'System-WW',src:'Licensed bestseller',score:62,ctr:1.35,d1:29,conv:3.4,roi:0.9,ltv:140,launch:"Oct '26"},
-  {n:"The Tycoon's Fake Luna",tp:'Billionaire-WW',src:'Proprietary IP',score:70,ctr:1.15,d1:27,conv:3.7,roi:0.85,ltv:160,launch:"Oct '26"},
-  {n:'Dragonsworn',tp:'Fae-dragon',src:'Original concept',score:50,ctr:0.95,d1:30,conv:3.9,roi:1.1,ltv:110,launch:"Nov '26"}
+  {n:'Married a Secret Billionaire',tp:'Hidden-identity',src:'Licensed bestseller',score:92,ctr:1.8,d1:42,conv:6.2,roi:1.6,ltv:240,launch:"Aug '26",wr:45,bd:170,rp:52},
+  {n:'Reborn Heiress',tp:'Rebirth',src:'Licensed bestseller',score:90,ctr:1.7,d1:41,conv:5.8,roi:1.5,ltv:235,launch:"Aug '26",wr:42,bd:165,rp:50},
+  {n:'The Substitute Wife',tp:'Hidden-identity',src:'Licensed bestseller',score:86,ctr:1.5,d1:38,conv:5.0,roi:1.4,ltv:215,launch:"Aug '26",wr:40,bd:150,rp:48},
+  {n:'The Millennium Wolves',tp:'Werewolf',src:'Licensed bestseller',score:84,ctr:1.6,d1:39,conv:4.8,roi:1.5,ltv:230,launch:"Sep '26",wr:44,bd:185,rp:50},
+  {n:'The True Heiress',tp:'Hidden-identity',src:'Licensed bestseller',score:86,ctr:1.25,d1:31,conv:4.5,roi:1.5,ltv:210,launch:"Aug '26",wr:30,bd:120,rp:40},
+  {n:'Rebirth And Revenge',tp:'Rebirth',src:'Licensed bestseller',score:82,ctr:1.3,d1:33,conv:4.0,roi:0.9,ltv:185,launch:"Sep '26",wr:28,bd:110,rp:38},
+  {n:"The Billionaire's Substitute Bride",tp:'Hidden-identity',src:'Licensed bestseller',score:80,ctr:1.4,d1:30,conv:3.6,roi:0.85,ltv:175,launch:"Sep '26",wr:12,bd:55,rp:20},
+  {n:'Rejected, Replaced & Forgotten',tp:'Rejected-mate',src:'Licensed bestseller',score:85,ctr:0.9,d1:35,conv:4.0,roi:1.2,ltv:225,launch:"Sep '26",wr:38,bd:150,rp:46},
+  {n:'Reborn For Love and Revenge',tp:'Rebirth',src:'Licensed bestseller',score:68,ctr:1.1,d1:28,conv:3.6,roi:0.9,ltv:150,launch:"Oct '26",wr:26,bd:105,rp:36},
+  {n:'Contract Marriage With the Billionaire Heiress',tp:'CEO / billionaire',src:'Licensed bestseller',score:72,ctr:1.6,d1:40,conv:3.0,roi:0.8,ltv:160,launch:"Sep '26",wr:10,bd:45,rp:18},
+  {n:'Ella – The Rejected Mate',tp:'Rejected-mate',src:'Licensed bestseller',score:62,ctr:1.35,d1:29,conv:3.4,roi:0.9,ltv:140,launch:"Oct '26",wr:36,bd:145,rp:44},
+  {n:'Luna Lola – The Moon Wolf',tp:'Werewolf',src:'Licensed bestseller',score:70,ctr:1.15,d1:27,conv:3.7,roi:0.85,ltv:160,launch:"Oct '26",wr:27,bd:108,rp:37},
+  {n:"The Alpha's Hidden Luna",tp:'Vampire',src:'Licensed bestseller',score:60,ctr:1.0,d1:24,conv:2.8,roi:0.6,ltv:120,launch:"Nov '26",wr:14,bd:60,rp:22},
+  {n:'Fayre',tp:'Fae',src:'Licensed bestseller',score:55,ctr:1.05,d1:26,conv:2.8,roi:0.7,ltv:95,launch:"Nov '26",wr:11,bd:50,rp:19},
+  {n:'The Perfect Luna',tp:'Hidden-identity',src:'Licensed bestseller',score:64,ctr:0.95,d1:30,conv:3.5,roi:1.0,ltv:130,launch:"Oct '26",wr:24,bd:100,rp:34},
+  {n:'Substitute Bride: The Mysterious Billionaire',tp:'Hidden-identity',src:'Licensed bestseller',score:58,ctr:0.8,d1:20,conv:2.5,roi:0.6,ltv:70,launch:"Nov '26",wr:9,bd:40,rp:16}
 ];
+// Whale-depth gate: composite of early-whale-rate / binge-depth / repeat-pack → Deep | Mid | Shallow.
+function whaleGrade(p){const idx=Math.min(p.wr/40,1.1)*0.4+Math.min(p.bd/150,1.2)*0.3+Math.min(p.rp/45,1.15)*0.3;
+  return idx>=0.82?{g:'Deep',idx}:idx>=0.55?{g:'Mid',idx}:{g:'Shallow',idx};}
 function evalPilots(v){
   return PILOTS.map(p=>{
     let stage=0;
@@ -788,6 +859,39 @@ function engineJuly(v,june){
     dorm:v.x_dormant+june.totUsers*(v.x_churn/100)-reactUsers};
 }
 
+/* ============ WHALE CAPITAL-ALLOCATION ENGINE (layered on the bottoms-up substrate) ============ */
+// Reframes the headline from the lying "average" to the only unit that matters: the whale.
+// p_whale (install→whale), WAC (cost to land ONE whale + the minnows that ride along), whale LTV,
+// the edge ratio Kelly bets on, trope-decay, IP-trust-debt, and the cross-category shadow bounty.
+const TRUST_PER_KILL=0.07;        // compounding whale-LTV haircut per shipped saga abandoned pre-ep50
+function trustDebtFactor(v){return Math.pow(1-TRUST_PER_KILL,Math.max(0,v.m_kills_pre50||0));}
+function whaleEconomics(v,jl){
+  const act=v.x_activation/100;
+  const pPayerNew=jl.conv.N;                         // install→active→payer (new cohort, post-elasticity)
+  const whaleShareNew=jl.splitN.W;                   // whale share AMONG new payers (content-hit modulated)
+  const p_whale=Math.max(act*pPayerNew*whaleShareNew,1e-9);   // probability a fresh install becomes a whale
+  const minnowsPerWhale=p_whale>0?(1/p_whale)-1:Infinity;     // the cohort of overhead each whale rides in on
+  const WAC=jl.cpi/p_whale;                          // cost to acquire ONE whale (carries its minnows)
+  const whaleVal=WHALE_IMPLIED.val;                  // realized net $/whale/mo (after any floor)
+  const whaleLife=1/(v.x_whale_churn/100);           // whales are stickier → longer life than blended payer
+  const trust=trustDebtFactor(v);
+  const whaleLTV=whaleVal*whaleLife*trust;           // median whale lifetime value, after trust debt
+  const edge=WAC>0?(whaleLTV-WAC)/WAC:0;             // b — the Kelly payoff odds
+  // population two-track (monthly NEW installs): whales vs minnows
+  const installs=v.s_installs, actives=installs*act;
+  const whales=installs*p_whale, minnows=actives-whales;
+  // the "average lie": blended ARPU vs what a whale is actually worth
+  const arpuBlended=jl.arppu;                        // blended value/payer/mo — the misleading average
+  return {p_whale,minnowsPerWhale,WAC,whaleVal,whaleLife,whaleLTV,edge,trust,
+    installs,actives,whales,minnows,arpuBlended,whaleVsAvg:whaleVal/Math.max(arpuBlended,1e-9)};
+}
+// Kelly fraction for one IP — f* = p − q/b, locked to 0 when negative.
+function kellyFraction(p,b){ if(!(b>0))return 0; const f=p-(1-p)/b; return f>0?f:0; }
+// map a sourcing-board rubric score (0–100) to a whale-hit probability prior (illustrative)
+function pWhaleForScore(score){ return Math.max(0,Math.min(0.50*(score/100),0.50)); }
+// trope WAC decay: a proven trope's whale-acquisition cost compounds up with months-in-market
+function tropeDecayedWAC(baseWAC,months,v){ return baseWAC*Math.pow(1+v.x_trope_decay/100,Math.max(0,months||0)); }
+
 /* ============ METRICS (for optimizer + variance) ============ */
 const MET={
   newRev:{label:'New rev/mo',unit:'$M',scale:1e6,get:(jl)=>jl.newRev},
@@ -805,8 +909,8 @@ const FREE_LEVERS=['m_ctr','m_depth','p_newconv','p_existconv','p_reactconv','f_
 /* ============ RENDER HELPERS ============ */
 function step(fmt,range){return fmt==='usd2'||fmt==='pct2'?'0.1':fmt==='usd3'?'0.001':fmt==='x'?'0.05':fmt==='pct'?'1':'1';}
 // guardrails: keep denominators > 0 and shares < 100 so the engine can't be driven to NaN/Infinity
-const MINV={x_cpm:0.5,m_ctr:0.05,s_ir:1,x_nm:1,x_window:1,x_activation:1,s_coinprice:0.001,s_coinsep:1,m_depth:1,j_new_conv:0.05,j_exist_conv:0.05,j_react_conv:0.05,p_newconv:0.05,p_existconv:0.05,p_reactconv:0.05,s_whale_pct:0.1,s_installs:1000,p_reach:0,x_dormant:0,j_installs:0};
-const MAXV={x_spill_out:99,s_whale_rev:98.5,x_churn:99,x_payer_churn:99,x_nm:95,s_adload:300};
+const MINV={x_cpm:0.5,m_ctr:0.05,s_ir:1,x_nm:1,x_window:1,x_activation:1,s_coinprice:0.001,s_coinsep:1,m_depth:1,j_new_conv:0.05,j_exist_conv:0.05,j_react_conv:0.05,p_newconv:0.05,p_existconv:0.05,p_reactconv:0.05,s_whale_pct:0.1,s_installs:1000,p_reach:0,x_dormant:0,j_installs:0,x_whale_churn:0.1,x_trope_decay:0,m_explore_pct:0,m_kills_pre50:0};
+const MAXV={x_spill_out:99,s_whale_rev:98.5,x_churn:99,x_payer_churn:99,x_nm:95,s_adload:300,x_whale_churn:99,m_explore_pct:80,x_trope_decay:50,m_kills_pre50:40};
 function clampInput(k,x){let lo=MINV[k],hi=MAXV[k]; if(lo!=null)x=Math.max(x,lo); if(hi!=null)x=Math.min(x,hi); return x;}
 function buildFields(sec,host){
   host.innerHTML=''; let lastGrp=null;
@@ -836,9 +940,9 @@ function render(){
   document.getElementById('m_june').innerHTML=
     mcard('Total revenue','Adds up the three user groups (this month).',M(jn.totRev)+'/mo',arrLabel(jn.totRev),'')
    +mcard('Cohort split','Editable above — default leans on regulars.',Math.round(jn.rev.N/jn.totRev*100)+'/'+Math.round(jn.rev.E/jn.totRev*100)+'/'+Math.round(jn.rev.R/jn.totRev*100),'New/Exist/React %','')
-   +mcard('Contribution','Revenue minus ads, promo, CRM, win-back, running costs and content/testing.',M(jn.contribution)+'/mo','margin '+PC(jn.margin),jn.contribution<0?'neg':'pos')
+   +mcard('Contribution','Revenue minus this category\'s direct costs — ads, promo, CRM, win-back, an opex allocation and its own content/testing. This is category CONTRIBUTION margin, which sits ABOVE company EBITDA: PocketFM\'s public ~5% EBITDA is the after-everything net once corporate overhead, fixed content and reinvestment come out below this line.',M(jn.contribution)+'/mo','margin '+PC(jn.margin),jn.contribution<0?'neg':'pos')
    +mcard('LTV : CAC','What a paying user is worth over time ÷ what it cost to get one.',jn.ltvcac.toFixed(2)+'×','payback '+jn.payback.toFixed(1)+'mo',jn.ltvcac>=2?'pos':'warn')
-   +mcard('Active users','Active users this month = revenue ÷ revenue-per-user. Cross-check: '+NUM(jn.totUsers)+' users × '+PC(jn.payers/jn.totUsers)+' who pay = '+NUM(jn.payers)+' payers × '+M(jn.arppu)+'/mo each + ad revenue = '+M(jn.totRev)+'/mo ('+M(jn.totRev*12)+'/yr).',NUM(jn.totUsers),NUM(jn.payers)+' payers ('+PC(jn.payers/jn.totUsers)+') · '+M(jn.arppu)+'/payer/mo','');
+   +mcard('Active users','Active users this month = revenue ÷ revenue-per-user. The '+M(jn.arppu)+'/payer/mo "average" is a reconciliation crutch, NOT a decision metric — with ~95% of revenue from ~5% of payers the average hides the business. Decisions are made on WAC vs whale LTV in the §⑥·b whale engine, not here. Cross-check: '+NUM(jn.totUsers)+' users × '+PC(jn.payers/jn.totUsers)+' who pay = '+NUM(jn.payers)+' payers × '+M(jn.arppu)+'/mo each + ad revenue = '+M(jn.totRev)+'/mo.',NUM(jn.totUsers),NUM(jn.payers)+' payers ('+PC(jn.payers/jn.totUsers)+') · '+M(jn.arppu)+'/payer avg †','');
 
   // July metrics
   const arcTarget=60*Math.pow(200/60,1/12); // month-1 ARR on the arc ($M)
@@ -848,9 +952,9 @@ function render(){
   document.getElementById('m_july').innerHTML=
     mcard('Total revenue','July monthly revenue after carrying June forward and applying your levers.',M(jl.totRev)+'/mo',arrLabel(jl.totRev),'pos')
    +mcard('Cohort split','New rises/falls with how much you acquire; regulars absorb users who graduate from "new".',Math.round(jl.newRev/jl.totRev*100)+'/'+Math.round(jl.existRev/jl.totRev*100)+'/'+Math.round(jl.reactRev/jl.totRev*100),'N '+M(jl.newRev)+' E '+M(jl.existRev)+' R '+M(jl.reactRev),'')
-   +mcard('Contribution','July contribution — revenue minus all the costs above, per month.',M(jl.contribution)+'/mo','margin '+PC(jl.margin),jl.contribution<0?'neg':'pos')
+   +mcard('Contribution','July category contribution — revenue minus all the direct costs above, per month. Contribution margin sits above company EBITDA (PocketFM\'s public ~5% is the after-everything net, below this category line).',M(jl.contribution)+'/mo','margin '+PC(jl.margin),jl.contribution<0?'neg':'pos')
    +mcard('LTV : CAC','Watch it shrink as installs get more expensive.',jl.ltvcac.toFixed(2)+'×','CPI '+M(jl.cpi)+' · payback '+jl.payback.toFixed(1)+'mo',jl.ltvcac>=2?'pos':jl.ltvcac>=1?'warn':'neg')
-   +mcard('Scaled hits','Hits that come out of the 1,000-idea funnel.',NUM(jl.ch.s4),NUM(S.m_pilots)+' pilots → '+NUM(jl.ch.s4)+' hits','')
+   +mcard('Scaled hits','Hits that come out of the pilot funnel.',NUM(jl.ch.s4),NUM(S.m_pilots)+' pilots → '+NUM(jl.ch.s4)+' hit'+(Math.round(jl.ch.s4)===1?'':'s'),'')
    +mcard('UA spend','Shared — agree this with Central UA.',M(jl.ua)+'/mo',NUM(S.s_installs)+' installs @ '+M(jl.cpi),'');
 
   // mix
@@ -874,14 +978,24 @@ function render(){
   if(WHALE_IMPLIED.floored) whaleFlag=` <span style="color:var(--neg);font-weight:700">⚠ light/mid spend has hit its floor — at this revenue share the non-whale tiers can't go lower, so the concentration can't actually reach the asserted figure. Raise the whale-% or lower the revenue share.</span>`;
   else if(implausible) whaleFlag=` <span style="color:var(--neg);font-weight:700">⚠ implausibly deep — the whale-% is likely too low for this revenue share (or light/mid spend far less than modelled).</span>`;
   else whaleFlag=` <span style="color:var(--muted)">Sanity-check: is that per-whale spend believable? If not, raise the whale-%.</span>`;
+  let whaleStrat='';
+  if(S.s_whale_rev/100>=0.70){
+    whaleStrat=`<div style="margin-top:9px;padding:9px 11px;background:var(--mine-bg);border:1px solid var(--mine-ln);border-radius:8px;color:var(--mine);line-height:1.5">
+      <b>Strategy — find the whales, keep the whales.</b> With ~${PC(S.s_whale_rev/100)} of payer revenue in ~${PC(S.s_whale_pct/100)} of payers, the category lives or dies on a few thousand heavy spenders — not on blended install volume. That re-points every lever:
+      <b style="color:var(--ink)">UA</b> optimises for whale-<i>lookalikes</i> (seed audiences off existing whales), not lowest CPI;
+      <b style="color:var(--ink)">Monetization</b> protects deep coin packs / VIP and the unlock-ahead ladder the whales live on;
+      <b style="color:var(--ink)">Lifecycle</b> ring-fences the top ${PC(S.s_whale_pct/100)} with concierge retention — one churned whale ≈ ${vsLight.toFixed(0)} lost light payers;
+      <b style="color:var(--ink)">Content</b> commissions the long whale-saga arcs (700+ ep) that give them somewhere to spend. Broad acquisition is a feeder; the P&L is won on whale find-rate × whale retention.</div>`;
+  }
   document.getElementById('whaleNote').innerHTML=
-    `<b>Whale concentration:</b> ${PC(S.s_whale_pct/100)} of payers asserted to drive ${PC(S.s_whale_rev/100)} of payer revenue → model back-solves <b>${M(perWhale)}/mo net per whale</b> (~${NUM(epW)} episode-equiv/mo, ${vsLight.toFixed(0)}× a light payer).`+whaleFlag;
+    `<b>Whale concentration:</b> ${PC(S.s_whale_pct/100)} of payers asserted to drive ${PC(S.s_whale_rev/100)} of payer revenue → model back-solves <b>${M(perWhale)}/mo net per whale</b> (~${NUM(epW)} episode-equiv/mo, ${vsLight.toFixed(0)}× a light payer).`+whaleFlag+whaleStrat;
 
   renderExecSummary(jn,jl);
   renderWhitespace();
   renderAcqBoard();
   renderPilots();
   renderGateBudget(jl);
+  renderWhaleEngine(jl);
   renderContentVintage(jl);
   renderLibrary(jl);
   renderTwoLedger(jl);
@@ -896,10 +1010,10 @@ function render(){
 function renderExecSummary(jn,jl){
   const onPace=jl.totRev*12/1e6>=60*Math.pow(200/60,1/12)*0.97;
   document.getElementById('execSummary').innerHTML=
-    `<div class="exs problem"><h4>① June — as-is baseline</h4><p>Where the category stands today: <b>${M(jn.totRev)}/mo</b> ${arrLabel(jn.totRev)} at a thin <b>${PC(jn.margin)}</b> margin; acquisition runs expensive (CPI <b>${M(jn.cpi)}</b>, payback <b>${jn.payback.toFixed(1)}mo</b>). The read I take from it: growth can't come from buying users alone — it has to come from the content engine.</p></div>`
-   +`<div class="exs answer"><h4>② July plan</h4><p>Scale UA only while <b>LTV:CAC ${jl.ltvcac.toFixed(1)}×</b> holds; let the gates find cheaper winners — <b>${NUM(jl.ch.s4)} scaled hits</b> from ${NUM(S.m_pilots)} pilots feed acquisition. Plan: <b>${M(jl.totRev)}/mo</b> ${arrLabel(jl.totRev)} ${onPace?'(on arc pace)':'(below arc pace)'}, margin <b>${PC(jl.margin)}</b>. Content test budget <b>${M(jl.content)}/mo</b> (gates 1–3); AI production itself ~<b>${M(jl.ch.cost)}/mo</b> — near-free, so the spend is testing, not production.</p></div>`
-   +`<div class="exs decide"><h4>③ Decisions needed</h4><ul><li>UA budget → <b>${NUM(S.s_installs)}</b> installs (${M(jl.ua)}/mo)</li><li>Monetization → coin $${(+S.s_coinprice).toFixed(3)}, ad-load ${S.s_adload}%</li><li>Lifecycle → win-back reach ${NUM(S.p_reach)}</li><li>Content test → ${M(jl.content)}/mo (gates 1–3)</li></ul></div>`
-   +`<div class="exs risk"><h4>④ Red flags</h4><ul><li><b>Installs get pricier as you scale:</b> buy too many and the cost per install jumps while fewer of them pay — the next dollar stops paying for itself.</li><li><b>A weak slate:</b> if few shows pass the final gate, the new users you buy have fewer big spenders in the mix (a rough what-if, not a measured number) → profit margin shrinks fast.</li></ul></div>`;
+    `<div class="exs problem"><h4>① June — as-is baseline</h4><p>Where the category stands today: <b>${M(jn.totRev)}/mo</b> ${arrLabel(jn.totRev)} at a <b>${PC(jn.margin)}</b> category contribution margin; acquisition runs expensive (CPI <b>${M(jn.cpi)}</b>, payback <b>${jn.payback.toFixed(1)}mo</b>). <span style="color:var(--muted)">This is the <i>category</i> line — revenue minus its own direct UA, opex and test budget. PocketFM's public <b>~5% EBITDA</b> is the after-everything company net, once corporate overhead, fixed content and reinvestment come out below this.</span> The read I take from it: growth can't come from buying users alone — it has to come from the content engine.</p></div>`
+   +`<div class="exs answer"><h4>② July plan</h4><p>Scale UA only while <b>LTV:CAC ${jl.ltvcac.toFixed(1)}×</b> holds; let the gates find cheaper winners — <b>${NUM(jl.ch.s4)} scaled hit${Math.round(jl.ch.s4)===1?'':'s'}</b> from ${NUM(S.m_pilots)} pilots feed acquisition. Plan: <b>${M(jl.totRev)}/mo</b> ${arrLabel(jl.totRev)} ${onPace?'(on arc pace)':'(below arc pace)'}, margin <b>${PC(jl.margin)}</b>. Content test budget <b>${M(jl.content)}/mo</b> (gates 1–3); AI production itself ~<b>${M(jl.ch.cost)}/mo</b> — near-free, so the spend is testing, not production.</p></div>`
+   +`<div class="exs decide"><h4>③ Decisions needed</h4><ul><li>Capital → <b>${S.m_explore_pct}%</b> Explore / ${100-S.m_explore_pct}% Exploit, Kelly-sized per IP (§⑥·b)</li><li>UA budget → <b>${NUM(S.s_installs)}</b> installs (${M(jl.ua)}/mo) — judged on WAC, not blended CAC</li><li>Monetization → coin $${(+S.s_coinprice).toFixed(3)}, ad-load ${S.s_adload}%</li><li>Lifecycle → ring-fence the top ${PC(S.s_whale_pct/100)} (whale retention)</li><li>Content test → ${M(jl.content)}/mo (gates 1–3)</li></ul></div>`
+   +`<div class="exs risk"><h4>④ Red flags</h4><ul><li><b>Installs get pricier as you scale:</b> buy too many and the cost per install jumps while fewer of them pay — the next dollar stops paying for itself.</li><li><b>A weak slate:</b> if few shows pass the final gate, the new users you buy have fewer big spenders in the mix (a rough what-if, not a measured number) → profit margin shrinks fast.</li>${S.s_whale_rev/100>=0.70?`<li><b>Whale dependence:</b> ~${PC(S.s_whale_rev/100)} of payer revenue sits in ~${PC(S.s_whale_pct/100)} of payers — the strategy becomes <i>find the whales, keep the whales</i>; a handful of churned whales hurts more than a soft install month.</li>`:''}</ul></div>`;
 }
 
 /* ============ TWO-LEDGER ATTRIBUTION (category isn't a closed system) ============ */
@@ -922,6 +1036,52 @@ function renderTwoLedger(jl){
     `<div style="font-size:11px;color:var(--muted);margin-bottom:8px">CAC/payer <b>${M(jl.cac)}</b> · spill-out <b>${PC(so)}</b> · spill-in <b>${PC(si)}</b> · first-purchase-trigger <b>${PC(trig)}</b></div>`
    +`<div class="exs ${cls}" style="border-top-width:3px"><h4>Verdict</h4><p>${verdict}</p></div>`
    +`<div style="font-size:10.5px;color:var(--faint);margin-top:8px">CPI is per-creative and yours; LTV roams across categories. The org must pick one attribution convention (or run incrementality) and apply it uniformly — else every category's P&L sums to more than the app's revenue.</div>`;
+}
+
+/* ============ WHALE CAPITAL-ALLOCATION ENGINE — render ============ */
+function renderWhaleEngine(jl){
+  const we=whaleEconomics(S,jl);
+  // ① price the whale
+  document.getElementById('m_whale').innerHTML=
+    mcard('Whales / 100k installs','THE hero metric. How many whales a campaign actually mints per 100k installs — not installs, not DAU, not blended conversion. = p(whale) × 100k. Optimise creatives, gates and UA for THIS.',NUM(we.p_whale*1e5),'p(whale) '+PC(we.p_whale)+' · '+NUM(Math.round(we.minnowsPerWhale))+' minnows ride along','pos')
+   +mcard('Contribution per whale','What one acquired whale nets you: whale LTV ('+M(we.whaleLTV)+') − WAC ('+M(we.WAC)+'). This is the unit the whole business compounds on.',M(we.whaleLTV-we.WAC),we.whaleLTV>we.WAC?'whale LTV − WAC':'underwater — WAC > LTV',we.whaleLTV>we.WAC?'pos':'neg')
+   +mcard('WAC — whale acq cost','What it costs to land ONE whale, including the ~'+NUM(Math.round(we.minnowsPerWhale))+' minnows acquired alongside it. = CPI ÷ p(whale). Blended CAC ('+M(jl.cac)+') is the vanity number; THIS is the real unit cost.',M(we.WAC),'CPI '+M(jl.cpi)+' ÷ p(whale) '+PC(we.p_whale),'')
+   +mcard('Whale LTV (after trust)','Median whale = '+M(we.whaleVal)+'/mo × '+we.whaleLife.toFixed(0)+'mo whale life'+(we.trust<1?' × '+PC(we.trust)+' trust debt':'')+'. The asset you are actually buying.',M(we.whaleLTV),M(we.whaleVal)+'/mo · '+we.whaleLife.toFixed(0)+'mo life',we.whaleLTV>we.WAC?'pos':'neg')
+   +mcard('Edge (Kelly b)','(Whale LTV − WAC) ÷ WAC — the payoff odds Kelly sizes bets on. >0 means the whale is worth chasing at this WAC.',we.edge.toFixed(2)+'×',we.whaleLTV>we.WAC?'whale LTV > WAC ✓':'underwater ✗',we.edge>0?'pos':'neg')
+   +mcard('Whale vs "average"','How many times a whale outspends the blended-average payer ('+M(we.arpuBlended)+'/mo). The bigger it is, the more the average lies — and why ARPU is demoted here.',we.whaleVsAvg.toFixed(0)+'×','1 whale ≈ '+we.whaleVsAvg.toFixed(0)+' avg payers','')
+   +mcard('Pareto two-track','Of '+NUM(Math.round(we.actives))+' new actives/mo only '+NUM(Math.round(we.whales))+' are whales; the rest are overhead (server cost + acquisition friction) that exist to surface whales.',NUM(Math.round(we.whales))+' : '+NUM(Math.round(we.minnows)),'whales : minnows (new/mo)','');
+  document.getElementById('whaleEconNote').innerHTML=`<b>The average is a lie.</b> Blended CAC reads <b>${M(jl.cac)}</b> and blended value <b>${M(we.arpuBlended)}/mo</b> — comfortable, and meaningless. Price the only unit that matters and the real cost to land a whale is <b>${M(we.WAC)}</b> (it drags ~<b>${NUM(Math.round(we.minnowsPerWhale))}</b> minnows in with it), against a whale worth <b>${M(we.whaleLTV)}</b> over life — an edge of <b>${we.edge.toFixed(1)}×</b>. Every lever is judged on WAC vs whale LTV, never on the average.`;
+  // ② Explore / Exploit + Kelly
+  const explorePct=S.m_explore_pct/100, exploreBud=jl.ua*explorePct, exploitBud=jl.ua-exploreBud;
+  const cands=TITLES.filter(t=>t.role==='candidate').map(t=>{
+    const tr=tropeForCluster(t.cluster), score=scoreTitle(t), proven=t.signals.paid==='High'||t.signals.paid==='Medium';
+    const wac=tropeDecayedWAC(we.WAC,tr.mkt,S), p=pWhaleForScore(score), b=(we.whaleLTV-wac)/wac, f=kellyFraction(p,b);
+    return {name:t.name,score,proven,wac,p,b,f,mkt:tr.mkt};
+  });
+  const exploitPool=cands.filter(c=>c.proven), sumF=exploitPool.reduce((a,c)=>a+c.f,0);
+  exploitPool.forEach(c=>c.alloc=sumF>0?c.f/sumF*exploitBud:0);
+  document.getElementById('allocSplit').innerHTML=`<b>UA budget ${M(jl.ua)}/mo</b> → <b style="color:var(--mine)">Exploit ${M(exploitBud)}</b> (${PC(1-explorePct)}, proven tropes · Kelly-sized) + <b style="color:var(--shared)">Explore ${M(exploreBud)}</b> (${PC(explorePct)}, Genesis tropes — no whale data yet). <span style="color:var(--faint)">Rule: an IP with no Day-7 WAC can't draw Exploit budget — it earns out of Explore first.</span>`;
+  const top=exploitPool.slice().sort((a,b)=>b.f-a.f).slice(0,8);
+  let h=`<thead><tr><th>Proven IP (Exploit)</th><th>Mkt mo</th><th>WAC↑</th><th>p(whale)</th><th>edge b</th><th>Kelly f*</th><th>Alloc/mo</th></tr></thead><tbody>`;
+  top.forEach(c=>{const locked=c.f<=0;
+    h+=`<tr><td style="text-align:left">${c.name.length>28?c.name.slice(0,27)+'…':c.name}</td><td>${c.mkt}</td><td>${M(c.wac)}</td><td>${PC(c.p)}</td><td class="${c.b>0?'dpos':'dneg'}">${c.b.toFixed(2)}×</td><td>${locked?'<span class="dneg">0 · locked</span>':'<b>'+PC(c.f)+'</b>'}</td><td>${locked?'<span class="dneg">$0</span>':'<b>'+M(c.alloc)+'</b>'}</td></tr>`;});
+  document.getElementById('kellyTable').innerHTML=h+`</tbody>`;
+  const lockedN=exploitPool.filter(c=>c.f<=0).length, fundedN=exploitPool.filter(c=>c.f>0).length;
+  document.getElementById('kellyNote').innerHTML=`<b>Kelly position-sizing — f* = p − q/b.</b> ${fundedN} proven IP(s) clear the bar and share the Exploit pool by edge; ${lockedN?`<b>${lockedN}</b> returned f* ≤ 0 → locked to $0 (mostly the saturated tropes whose decayed WAC has eaten the edge); `:''}the Explore ${M(exploreBud)} hunts the next Genesis trope so you're never caught when a proven one decays out. <i>p(whale) is mapped from the sourcing score (illustrative prior); b uses each trope's time-decayed WAC.</i>`;
+  // ③ decay + trust + shadow
+  let d=`<thead><tr><th>Trope</th><th>Mkt mo</th><th>WAC now</th><th>vs base</th><th>Status</th></tr></thead><tbody>`;
+  TROPES.filter(t=>t.paid==='High'||t.paid==='Medium').slice().sort((a,b)=>a.mkt-b.mkt).forEach(t=>{const w=tropeDecayedWAC(we.WAC,t.mkt,S),mult=w/we.WAC,under=w>we.whaleLTV;
+    d+=`<tr><td style="text-align:left">${t.short}</td><td>${t.mkt}</td><td>${M(w)}</td><td>${mult.toFixed(2)}×</td><td class="${under?'dneg':t.mkt>=14?'dneg':'dpos'}" style="text-align:left">${under?'⚠ underwater':t.mkt>=14?'saturating':'fresh'}</td></tr>`;});
+  document.getElementById('decayTable').innerHTML=d+`</tbody>`;
+  const so=S.x_spill_out/100, si=S.x_spill_in/100;
+  const exportCredit=jl.newRev*(so/Math.max(1-so,0.01)), importDebit=jl.totRev*si, netShadow=exportCredit-importDebit, truePnl=jl.contribution+netShadow;
+  const row=(l,v,cls)=>`<tr><td style="text-align:left">${l}</td><td class="${cls||''}"><b>${v}</b></td></tr>`;
+  document.getElementById('shadowTable').innerHTML=`<thead><tr><th>True category P&amp;L (monthly)</th><th></th></tr></thead><tbody>`
+    +row('Reported contribution',M(jl.contribution),jl.contribution<0?'dneg':'dpos')
+    +row('+ Shadow bounty (our whales spend elsewhere)','+'+M(exportCredit).slice(1),'dpos')
+    +row('− Import (others’ whales spend here)','−'+M(importDebit).slice(1),'dneg')
+    +`<tr style="border-top:2px solid var(--line2)"><td style="text-align:left"><b>= True cross-category contribution</b></td><td class="${truePnl<0?'dneg':'dpos'}"><b>${M(truePnl)}</b></td></tr></tbody>`;
+  document.getElementById('trustNote').innerHTML=`<b>Trust debt:</b> ${S.m_kills_pre50>0?`${S.m_kills_pre50} shipped saga(s) killed pre-ep50 → whale LTV haircut to <b>${PC(we.trust)}</b> (−${M(we.whaleVal*we.whaleLife*(1-we.trust))}/whale lifetime). `:`0 shipped sagas killed → whale LTV intact. `}Kill ideas in testing (free); don't abandon sagas whales have invested in. <br><b>Shadow bounty:</b> net <b>${netShadow>=0?'+':''}${M(netShadow)}/mo</b> — ${netShadow>=0?'the category exports more whale value than it imports → a profitable acquisition engine for the whole app, not a silo.':'the category imports more whale value than it exports → it leans on other genres.'}`;
 }
 
 /* ============ CONTENT VINTAGE (existing catalog vs new releases) ============ */
@@ -972,14 +1132,15 @@ function renderBrief(jn,jl){
 ═══ STAKEHOLDER SUMMARY ═══
 • June baseline: ${M(jn.totRev)}/mo ${arrLabel(jn.totRev)} — split New ${Math.round(jn.rev.N/jn.totRev*100)} / Existing ${Math.round(jn.rev.E/jn.totRev*100)} / Reactivated ${Math.round(jn.rev.R/jn.totRev*100)}; contribution ${M(jn.contribution)}/mo (margin ${PC(jn.margin)}); LTV:CAC ${jn.ltvcac.toFixed(2)}×, payback ${jn.payback.toFixed(1)}mo.
 • July plan: ${M(jl.totRev)}/mo ${arrLabel(jl.totRev)} vs the $${arcTarget.toFixed(0)}M-ARR arc pace; contribution ${M(jl.contribution)}/mo (margin ${PC(jl.margin)}); LTV:CAC ${jl.ltvcac.toFixed(2)}×.
-• Key risk: CPI inflation compresses margin as you scale — hold the marginal-ROI hurdle (fund UA only while LTV:CAC ≥ ~2 / payback ≤ target).
+• Key risk: CPI inflation compresses margin as you scale — hold the marginal-ROI hurdle (fund UA only while LTV:CAC ≥ ~2 / payback ≤ target).${S.s_whale_rev/100>=0.70?`
+• Whale strategy: ~${PC(S.s_whale_rev/100)} of payer revenue sits in ~${PC(S.s_whale_pct/100)} of payers — "find the whales, keep the whales." Point UA at whale-lookalikes, ring-fence the top ${PC(S.s_whale_pct/100)} in lifecycle, and protect deep coin/VIP packs in monetization.`:''}
 • The ask: fund UA to the hurdle, not a volume target, and lock the cross-functional asks below.
 
 ═══ TEAM DIRECTIVES ═══
 ▶ Central UA / Performance — CPI ${M(jl.cpi)}, LTV:CAC ${jl.ltvcac.toFixed(2)}×, payback ${jl.payback.toFixed(1)}mo. Fund July installs to ${NUM(S.s_installs)} only while LTV:CAC ≥ ~2; optimize marginal ROI, not blended ROAS.
 ▶ Monetization — mix ${PC(mix.coins/mix.tot)} coins / ${PC(mix.ads/mix.tot)} ads / ${PC(mix.subs/mix.tot)} subs. Hold coin price ≥ $${S.s_coinprice.toFixed(3)}; keep ad-load ≤ ${S.s_adload}% to protect retention of freshly-acquired cohorts.
 ▶ Lifecycle — active churn ${S.x_churn}%/mo (ages the base); payer churn ${S.x_payer_churn}%/mo → payer lifetime ${(1/(S.x_payer_churn/100)).toFixed(1)}mo (drives LTV). Win-back reach ${NUM(S.p_reach)} at conv ≥ ${S.p_winconv}% ($${S.p_freecoin}/reach); kill subsidy-only cohorts.
-▶ Content [mine] — ${NUM(S.m_pilots)} pilots → ${NUM(jl.ch.s4)} scaled hits; hit-detection ${M(jl.content)}/mo. New releases = ${PC(S.m_newshare/100)} of revenue; the existing catalog earns the rest at near-pure margin (content sunk). Source toward proven provenance (${srcMix}) & fresh tropes (${tropes}); second-look the high-score kills${sl2.length?': '+sl2.join(', '):''}. Hold greenlight bars (CTR≥${S.pl_minCTR}%, D1≥${S.pl_minRet}%, unlock≥${S.pl_minConv}%).`;
+▶ Content [mine] — ${NUM(S.m_pilots)} pilots → ${NUM(jl.ch.s4)} scaled hit${Math.round(jl.ch.s4)===1?'':'s'}; hit-detection ${M(jl.content)}/mo. New releases = ${PC(S.m_newshare/100)} of revenue; the existing catalog earns the rest at near-pure margin (content sunk). Source toward proven provenance (${srcMix}) & fresh tropes (${tropes}); second-look the high-score kills${sl2.length?': '+sl2.join(', '):''}. Hold greenlight bars (CTR≥${S.pl_minCTR}%, D1≥${S.pl_minRet}%, unlock≥${S.pl_minConv}%).`;
   document.getElementById('briefText').textContent=txt;
 }
 /* ============ LIBRARY SHAPE (hits vs long tail — protect the hits) ============ */
@@ -1041,15 +1202,27 @@ function renderWhitespace(){
   document.getElementById('wsTable').innerHTML=h+`</tbody>`;
   document.getElementById('wsNote').innerHTML=`<b>How to read it:</b> the matrix shows the <i>structural</i> opening (high demand × low supply = green); the <b>Rival ad-spend</b> column then decides <b>commit vs test</b>. <b>Rebirth + the hidden-identity reveal engine</b> — rivals (DramaBox/ReelShort) are <i>scaling</i> them and we're absent → <b>top commission</b>. <b>Vampire / dragon / fae</b> sit in green structurally, but <b>no rival spends a dollar on them</b> → <b>test cheaply, don't commit</b>. <b>Werewolf</b> — we own it (rivals don't ad-scale it in audio) → defend. <b>CEO</b> — contested (rivals scaling, we hold). “$” on the map = a rival is scaling it. <i>Signals: novel-tag bands (GoodNovel/DramaBox) + Pocket catalogue + Meta Ad Library scaled-spend (DramaBox + ReelShort), 24 Jun 2026 — proxies, not revenue.</i>`;
 }
+const ACQ_FACTORS={
+  tropeMatch:{lab:'Trope match',tip:'How closely the title sits on a lane we want to commission — weighted toward the §④ whitespace winners (hidden-identity reveal, rebirth) and our owned werewolf core. High = squarely on a target trope.'},
+  demandSignal:{lab:'Paid demand',tip:'Observed prominence on PAID coin-unlock charts (GoodNovel / DramaBox), banded High / Medium / Low / None — a proxy for willingness-to-pay, NOT free reads. This is the signal that mirrors Pocket\'s coin model.'},
+  serialFit:{lab:'Serial fit',tip:'How well the story breaks into many short cliffhanger episodes — the serialized / microdrama shape that drives coin unlocks. Tight episode hooks = High.'},
+  femaleLed:{lab:'Female-led arc',tip:'Heroine-centred POV and emotional arc — the core of the Romantasy audience. High = the story lives in her head.'},
+  backlist:{lab:'Backlist depth',tip:'How many more books / episodes the author or IP can supply — franchise and sequel potential. A 12-book series scores High; a one-shot scores Low.'},
+  rights:{lab:'Rights value',tip:'How clean, available and affordable the adaptation rights are to lock before BookTok / a rival prices the title up. High = easy to option now.'},
+  risk:{lab:'Content risk',tip:'Legal / originality / brand-safety risk — a PENALTY, not a positive. A higher setting discounts risky or heavily-syndicated titles more harshly.'}
+};
 function renderAcqWeights(){
-  const lab={tropeMatch:'Trope match',demandSignal:'Paid demand',serialFit:'Serial fit',femaleLed:'Female-led arc',backlist:'Backlist depth',rights:'Rights value',risk:'Content risk'};
-  document.getElementById('acqWeights').innerHTML=Object.keys(lab).map(k=>{const isRisk=k==='risk';
-    return `<label class="wq">${lab[k]} <b data-wv="${k}">${ACQ_WEIGHTS[k]}</b><input type="range" min="${isRisk?-20:0}" max="${isRisk?0:40}" step="1" value="${ACQ_WEIGHTS[k]}" data-w="${k}"></label>`;}).join('');
-  document.getElementById('acqWeights').querySelectorAll('input[data-w]').forEach(r=>r.addEventListener('input',()=>{
-    const k=r.dataset.w; ACQ_WEIGHTS[k]=parseFloat(r.value)||0;
-    document.querySelector(`[data-wv="${k}"]`).textContent=ACQ_WEIGHTS[k];
+  const BANDS=['lo','md','hi'], LBL={lo:'Low',md:'Med',hi:'High'};
+  document.getElementById('acqWeights').innerHTML=Object.keys(ACQ_FACTORS).map(k=>{const f=ACQ_FACTORS[k],isRisk=k==='risk',cur=bandOf(k,ACQ_WEIGHTS[k]);
+    return `<label class="wq"><span class="wqh">${f.lab}<span class="info" data-tip="${f.tip.replace(/"/g,'&quot;')}">i</span></span>
+      <span class="seg${isRisk?' risk':''}" data-w="${k}">${BANDS.map(b=>`<button type="button" data-w="${k}" data-band="${b}" class="${b===cur?'on':''}">${LBL[b]}</button>`).join('')}</span></label>`;}).join('');
+  document.getElementById('acqWeights').querySelectorAll('.seg button').forEach(btn=>btn.addEventListener('click',()=>{
+    const k=btn.dataset.w, band=btn.dataset.band;
+    ACQ_WEIGHTS[k]=(k==='risk'?RISK_BANDS:W_BANDS)[band];
+    btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===btn));
     renderAcqBoard(); render();   // re-rank + flow the new hit-rate through the P&L
   }));
+  a11yTips();
 }
 function renderAcqBoard(){
   const seeds=TITLES.filter(t=>t.role==='seed');
@@ -1060,7 +1233,7 @@ function renderAcqBoard(){
   const tierOf=s=>s>=70?['t-pri','Prioritize']:s>=50?['t-test','Test & learn']:['t-pass','Pass'];
   document.getElementById('acqBoard').innerHTML=cands.map(t=>{const[tc,tl]=tierOf(t.score);
     const col=t.score>=70?'var(--out)':t.score>=50?'var(--warn)':'var(--muted)';
-    const free=t.signals.reads==='scout'?'scout':t.signals.reads+' reads (free)';
+    const free=t.signals.reads==='scout'?'scout':t.signals.reads+' (free/awareness)';
     return `<div class="acard"><span class="sc" style="color:${col}">${Math.round(t.score)}</span>
       <h4>${t.name}</h4><div class="au">${t.author} · ${t.source}</div>
       <span class="tier ${tc}">${tl}</span>
@@ -1068,7 +1241,7 @@ function renderAcqBoard(){
   SLATE_QUALITY=slateQuality();
   SLATE_MULT=Math.max(0.6,Math.min(Math.pow(SLATE_QUALITY/SLATE_REF,0.6),1.6));
   const pri=cands.filter(t=>t.score>=70).length,test=cands.filter(t=>t.score>=50&&t.score<70).length,pass=cands.filter(t=>t.score<50).length;
-  document.getElementById('acqSum').innerHTML=`<b>${pri}</b> prioritize · <b>${test}</b> test & learn · <b>${pass}</b> pass (of ${cands.length} candidates). Slate quality <b>${Math.round(SLATE_QUALITY)}</b>/100 → expected hit-rate ×<b>${SLATE_MULT.toFixed(2)}</b>. <i>Scoring runs off <b>paid demand</b> (banded High/Medium/Low/None — a coin-unlock chart proxy, not a false-precise score) — the signal that mirrors Pocket's coin model. Galatea reads are shown as <b>free/awareness</b> only (it's a subscription app, so reads ≠ willingness-to-pay). Seeds = Pocket's real play counts. Paid proxies are reconstructed pending a live chart pull (Step 3); the score→hit-rate link is an illustrative prior. Not internal telemetry.</i>`;
+  document.getElementById('acqSum').innerHTML=`<b>${pri}</b> prioritize · <b>${test}</b> test & learn · <b>${pass}</b> pass (of ${cands.length} candidates). Slate quality <b>${Math.round(SLATE_QUALITY)}</b>/100 → expected hit-rate ×<b>${SLATE_MULT.toFixed(2)}</b>. <i>Scoring runs off <b>paid demand</b> (banded High/Medium/Low/None — a coin-unlock chart proxy, not a false-precise score) — the signal that mirrors Pocket's coin model. Candidates are <b>real titles</b> on GoodNovel / Webnovel / Galatea / AlphaNovel (captured via web search, Jun 2026); read / chapter counts are shown as <b>free/awareness</b> only (novel-platform reads ≠ willingness-to-pay), and most per-title counts aren't public (shown as "scout"). The board deliberately leads with the §④ commission lanes — <b>hidden-identity</b> and <b>rebirth</b> — over the werewolf core we already own. Seeds = Pocket's real play counts. The score→hit-rate link is an illustrative prior, not internal telemetry.</i>`;
 }
 function renderPilots(){
   const ev=evalPilots(S);
@@ -1081,18 +1254,28 @@ function renderPilots(){
     if(p.stage>=2) m.push('conv '+p.conv+'%');
     if(p.stage>=4) m.push('ROI '+p.roi+'×');
     const secondLook = p.stage<3 && p.ltv>=180;
+    // Minnow Trap (#3): clickbait CTR that didn't convert — high click-rate but failed before greenlight → CUT, don't scale.
+    const minnowTrap = p.ctr>=1.4 && p.stage<3;
+    const wg=whaleGrade(p);
+    // whale-first gate: a broadly-mediocre title with DEEP whales beats a broadly-good but SHALLOW one.
+    const whaleLed = p.stage<3 && wg.g==='Deep';        // killed on broad metrics but the few who come pay deep → greenlight on depth
+    const shallowTrap = p.stage>=3 && wg.g==='Shallow';  // broadly passed but no whale depth → don't scale
+    const gradeCls=wg.g==='Deep'?'wg-deep':wg.g==='Mid'?'wg-mid':'wg-shal';
     const sc={'Webtoon adaptation':'s-web','Proprietary IP':'s-ip','Licensed bestseller':'s-lic','Original concept':'s-orig'}[p.src]||'s-orig';
     const bc=pilotBCost(p);
     return `<div class="pilot"><div class="ptop"><h4>${p.n}</h4><span class="ltvb" title="What ONE paying viewer is worth over their lifetime — not the show's total revenue. A hit has thousands of these viewers; see the 'Library shape' section for per-show economics.">LTV/payer $${p.ltv}</span></div>
-      <div class="srcrow"><span class="srctag ${sc}">${p.src}</span><span class="srcscore">Src ${p.score}</span></div>
+      <div class="srcrow"><span class="srctag ${sc}">${p.src}</span><span style="display:flex;gap:6px;align-items:center"><span class="srcscore">Src ${p.score}</span><span class="wgrade ${gradeCls}" title="Whale depth — composite of early whale-rate, binge-depth past the paywall, and repeat-pack rate. THIS is the gate now; CTR/D1/conv are diagnostics. Deep whales can carry a broadly-mediocre title; a broadly-good title with shallow whales is a trap.">🐋 ${wg.g}</span></span></div>
       <div class="tp">${p.tp} · launch ${p.launch}</div>
       <div class="gates">${g(p.stage>=1,'G1')}${g(p.stage>=2,'G2')}${g(p.stage>=3,'G3')}${g(p.stage>=4,'G4')}</div>
-      <div class="verdict ${cl[p.stage]}">${p.verdict}${secondLook?' <span class="slook">⚠ second look</span>':''}</div>
+      <div class="verdict ${cl[p.stage]}">${p.verdict}${whaleLed?' <span class="slook" style="color:var(--out);background:var(--out-bg);border-color:var(--out-ln)" title="Killed on broad metrics, but whale depth is Deep — the few who come pay hard. In a 95%-whale economy this beats a broadly-good shallow title. Greenlight on depth.">⭐ whale-led — greenlight on depth</span>':''}${shallowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="Passed the broad gates but whale depth is Shallow — broad clicks, no whales. In a whale economy this does not fund the business. Do not scale.">⚠ shallow — broad, no whales</span>':''}${secondLook&&!whaleLed?' <span class="slook">⚠ second look</span>':''}${minnowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="High CTR but it failed before greenlight — the click was clickbait, not intent. Cut spend; a high CTR with weak downstream is a Minnow Trap, not a winner.">⚠ minnow trap</span>':''}</div>
       <div class="mm">${m.join(' · ')}</div>
+      <div class="mm" style="color:var(--shared);font-weight:600">🐋 whales/1k ${p.wr} · binge ${p.bd}ep · repeat ${p.rp}%</div>
       <div class="bcost">Ledger B · content cost <b>$${NUM(bc.total)}</b> <small>(test $${NUM(bc.test)}${bc.prod?' + prod $'+NUM(bc.prod):''})</small></div></div>`;}).join('');
   const sc=ev.filter(p=>p.stage===4).length, gr=ev.filter(p=>p.stage===3).length, k=ev.filter(p=>p.stage<3).length;
   const sl=ev.filter(p=>p.stage<3&&p.ltv>=180).length;
-  document.getElementById('pilotSum').innerHTML=`<b>${sc}</b> scaled · <b>${gr}</b> greenlit · <b>${k}</b> killed (of 16). <i>These 16 are an illustrative shortlist; the statistical funnel above runs <b>${NUM(S.m_pilots)}</b> concepts/mo → ~<b>${NUM(contentHits(S).s4)}</b> scaled hits.</i> Bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${sl?` <b style="color:var(--warn)">${sl} high-sourcing-score title(s) killed on execution → ⚠ second look.</b>`:''} <br><i>Src score = provenance (Webtoon adaptation / Proprietary IP / Licensed bestseller / Original) × trope novelty × creator tier — the sourcing signal you commission on. Metrics show only what's observed up to each title's gate.</i>`;
+  const mt=ev.filter(p=>p.ctr>=1.4&&p.stage<3).length;
+  const wl=ev.filter(p=>p.stage<3&&whaleGrade(p).g==='Deep').length, st=ev.filter(p=>p.stage>=3&&whaleGrade(p).g==='Shallow').length;
+  document.getElementById('pilotSum').innerHTML=`<b>${sc}</b> scaled · <b>${gr}</b> greenlit · <b>${k}</b> killed on broad gates (of 16) — but the <b>whale gate overrides</b>: <b style="color:var(--out)">${wl} whale-led</b> (deep whales, greenlight despite mediocre broad metrics) and <b style="color:var(--neg)">${st} shallow trap(s)</b> (broadly passed, no whale depth — don't scale). <i>The gate hierarchy is now whale-first: early whale-rate → binge depth past the paywall → repeat-pack → concentration; CTR / D1 / conv / ROI are demoted to diagnostics. In a 95%-whale economy a Deep title beats a broadly-good Shallow one. These 16 are <b>real sourced titles</b> (GoodNovel / Webnovel / Galatea / AlphaNovel) with illustrative metrics; the funnel runs <b>${NUM(S.m_pilots)}</b> pilots/mo → ~<b>${NUM(contentHits(S).s4)}</b> scaled hit${Math.round(contentHits(S).s4)===1?'':'s'}.</i> Diagnostic bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${mt?` <b style="color:var(--neg)">${mt} minnow trap(s) flagged.</b>`:''}</i>`;
 }
 
 /* ============ VARIANCE (Plan vs Actual) ============ */
