@@ -391,7 +391,7 @@ body.dirty .rail-card .metric .mv{opacity:.45}
   <div class="hero">
     <div class="hero-k">The working thesis</div>
     <h2 class="hero-h">The whale is the right unit.</h2>
-    <p class="hero-p"><b>~5% of payers drive ~95% of revenue</b>, so I'd allocate capital here like a fund, not read a dashboard: test cheaply and cut early <i>in the lab</i>, protect a saga once it ships (a whale who's spent dozens of episodes is hard to win back), and scale on the cost to land a <i>whale</i> (WAC) rather than the blended average. I'm working from public benchmarks, not internal data — so the rest of this tool exists to pressure-test that thesis.</p>
+    <p class="hero-p"><b>~5% of payers drive ~95% of revenue</b>, so I'd allocate capital here like a fund, not read a dashboard: test cheaply and cut early <i>in the lab</i>, but <i>finish</i> what I ship (a whale 40 episodes into a saga won't forgive a permanent cliffhanger — I cut a title's marketing, never its story), and scale on the cost to land a <i>whale</i> (WAC) rather than the blended average. I'm working from public benchmarks, not internal data — so the rest of this tool exists to pressure-test that thesis.</p>
     
   <div class="hero-stats">
     <div class="hero-stat"><div class="v">~5% → ~95%</div><div class="l">users → revenue<br>concentration</div></div>
@@ -574,7 +574,7 @@ body.dirty .rail-card .metric .mv{opacity:.45}
 
 <!-- ============ THE ASK ============ -->
 <section class="tab-panel" data-tab="ask" data-screen-label="THE ASK — the brief">
-  <div class="chapter-intro"><span class="ci-step">4 · THE ASK</span><p>The economics hold up, so here's what I'd take to the room: a draft cross-functional brief with an ask per team, where July sits on the arc, and the engine grounded in real titles. <b>Once a saga ships, protect it.</b></p></div>
+  <div class="chapter-intro"><span class="ci-step">4 · THE ASK</span><p>The economics hold up, so here's what I'd take to the room: a draft cross-functional brief with an ask per team, where July sits on the arc, and the engine grounded in real titles. <b>Once a saga ships, finish it — cut the marketing, never the story.</b></p></div>
 
   <div class="section-h">⑪ The cross-functional ask — June read → team &amp; stakeholder brief <span class="info" data-tip="The loop in action: a June signal forces a July action. A copy-paste brief with instructions per team plus a leadership summary. Refreshes on Calculate.">i</span><span class="ln"></span></div>
   <div class="band"><div class="band-hd" style="background:var(--paper)">Shareable brief — partner teams + stakeholders<button class="btn" id="copyBrief" style="margin-left:auto;padding:5px 11px">⧉ Copy</button></div>
@@ -619,7 +619,7 @@ CAPITAL ALLOCATION — Kelly + sweep
   Exploit = Σ f* × pool ;  un-bet remainder (1 − Σf*) SWEEPS into Explore   (all-locked ⇒ all to discovery)
 
 TROPE DECAY    WAC_t      = WAC × (1 + decay) ^ months-in-market      proven tropes saturate
-TRUST DEBT     whale LTV ×= e^(−0.03 × kills²)                        super-exponential — accelerates with each kill
+TRUST DEBT     whale LTV ×= e^(−0.03 × abandons²)                     abandon an ongoing saga MID-ARC (not de-fund, not remove); accelerates with each one
 SHADOW BOUNTY  true cross-category contribution = contribution + (export − import)</pre>
     <div style="padding:10px 16px 14px;font-size:11.5px;color:var(--muted);line-height:1.55">Every number here is an <b>editable input above</b> or a labelled constant — change one and press Calculate to watch it propagate. The model is <b>deterministic</b> (same inputs → same outputs) and fully self-contained: no network calls, no hidden data. It's a single <b>unminified HTML file</b> — read it via your browser's <b>View Source</b>, or in the public repo at <b>github.com/chandannikhil/pocketfm-romantasy-simulator</b>. Defaults are benchmarked from the public sources in the footer, not PocketFM telemetry.</div>
   </div>
@@ -748,7 +748,7 @@ const IN={
   p_existconv:{sec:'mine',grp:'Product levers',label:'July Existing payer conv',suf:'%',fmt:'pct2',val:8.0,tip:'Share of regulars who pay. Modelled as a simple proportional lift on existing revenue (July ÷ June rate) — an approximation; a full finance model would split regulars into payers/non-payers and re-do each.'},
   p_reactconv:{sec:'mine',grp:'Product levers',label:'July React payer conv',suf:'%',fmt:'pct2',val:5.0,tip:'Share of won-back users who pay — driven by win-back offer quality.'},
   m_explore_pct:{sec:'mine',grp:'Capital allocation (whale engine)',label:'Explore budget %',suf:'%',fmt:'pct',val:20,tip:'Share of UA budget ring-fenced for EXPLORE — testing unproven, net-new "Genesis" tropes that have no whale data yet. The rest (Exploit) only scales IPs that already have Day-7 whale-acquisition data. This is the multi-armed-bandit discipline: you cannot scale what you have not proven, and you cannot stop exploring or the proven tropes decay out from under you.'},
-  m_kills_pre50:{sec:'mine',grp:'Capital allocation (whale engine)',label:'Shipped sagas killed pre-ep50 / qtr',fmt:'int',val:0,tip:'How many SHIPPED whale-facing series you abandon before ~episode 50 each quarter. Killing fast is free in TESTING — but a whale who invested 40 episodes into a saga you then cancel learns not to trust your sagas. Each early kill applies a compounding haircut to whale LTV ("IP Trust Debt"). 0 = you only kill pre-greenlight, never a shipped saga.'},
+  m_kills_pre50:{sec:'mine',grp:'Capital allocation (whale engine)',label:'Whale sagas abandoned mid-arc / qtr',fmt:'int',val:0,tip:'How many ONGOING whale sagas you stop producing before the arc finishes — i.e. leave whales on a permanent cliffhanger. Three different things, don\'t confuse them: (1) removing content from the shelf — you NEVER do this (it\'s sunk and still earns); (2) cutting a title\'s marketing — the normal, costless move; (3) abandoning the STORY mid-arc — the only one that hurts. Because AI makes finishing a saga nearly free (~$50/hr), you can almost always just finish it, so this should sit near 0. Each abandonment applies an accelerating haircut to whale LTV ("IP trust debt").'},
   // SHARED (needs alignment) — grouped by team
   s_installs:{sec:'shared',grp:'Central UA / Performance',label:'July installs (UA)',fmt:'int',val:1000000,owner:'Central UA',tip:'How many installs UA buys in July. Central UA/Performance owns the budget; you agree on the volume and the cost-per-install you\'ll accept.'},
   s_ir:{sec:'shared',grp:'Growth / ASO',label:'Install rate (ASO)',suf:'%',fmt:'pct',val:36,owner:'Growth/ASO',tip:'Share of store-page visitors who install (store page / ASO). Higher = cheaper installs. Owned by Growth.'},
@@ -814,7 +814,7 @@ const DEC={
   p_freecoin:'Free coins / incentive per user you message. Set it so the offer pays for itself in recovered spend. Drop offers that only attract freebie-hunters who never pay.',
   m_d3ret:'Your honest read on creative quality. Move it WITH trailer CTR, not behind it: a CTR jump with flat Day-3 retention is clickbait — the gate marks the extra clicks as minnows and pushes WAC up. Raise it only when real engagement data (D3 cohorts) backs the CTR.',
   m_explore_pct:'How much of UA you spend hunting the NEXT trope vs scaling this month’s winner. Raise it when your proven tropes are decaying (WAC climbing) or your Genesis pipeline is thin; never take it to zero — a 100% Exploit book dies the month its trope saturates. ~20% is the standard bandit split.',
-  m_kills_pre50:'How disciplined you are about NOT cancelling shipped sagas. Keep this near zero: kill ideas in testing (free), but once a saga ships and whales invest, finishing it is cheaper than the trust you destroy by abandoning it. Only let it rise if a shipped saga is so unprofitable that the completion cost truly exceeds the whale-trust hit.'
+  m_kills_pre50:'How disciplined you are about FINISHING shipped sagas. Keep near zero. You can always de-fund a title (cut its marketing) at no cost, and you never pull content off the shelf — but stopping production on a saga whales are mid-binge strands them on a cliffhanger and erodes trust in every future saga. Since AI makes completion nearly free, abandoning mid-arc almost never pays.'
 };
 
 /* ============ ACQUISITION ENGINE (comp-scored sourcing) ============ */
@@ -1022,8 +1022,8 @@ function engineJuly(v,june){
 // Reframes the headline from the potentially-misleading "average" toward the whale as the unit.
 // p_whale (install→whale), WAC (cost to land ONE whale + the minnows that ride along), whale LTV,
 // the edge ratio Kelly bets on, trope-decay, IP-trust-debt, and the cross-category shadow bounty.
-const TRUST_K=0.03;               // SUPER-EXPONENTIAL whale-LTV decay: damage ACCELERATES with each abandoned saga
-// trust = e^(−k·kills²)  → kills 1/3/5 ≈ −3% / −24% / −53% (a cliff, not linear). Identity at kills=0 (=1).
+const TRUST_K=0.03;               // SUPER-EXPONENTIAL whale-LTV decay: damage ACCELERATES per ongoing saga abandoned MID-ARC
+// trust = e^(−k·abandons²)  → 1/3/5 ≈ −3% / −24% / −53% (a cliff, not linear). Identity at 0 (=1). (m_kills_pre50 = abandons)
 function trustDebtFactor(v){const n=Math.max(0,v.m_kills_pre50||0); return Math.exp(-TRUST_K*n*n);}
 function whaleEconomics(v,jl){
   const act=v.x_activation/100;
@@ -1247,7 +1247,7 @@ function renderWhaleEngine(jl){
     +row('+ Shadow bounty (our whales spend elsewhere)','+'+M(exportCredit).slice(1),'dpos')
     +row('− Import (others’ whales spend here)','−'+M(importDebit).slice(1),'dneg')
     +`<tr style="border-top:2px solid var(--line2)"><td style="text-align:left"><b>= True cross-category contribution</b></td><td class="${truePnl<0?'dneg':'dpos'}"><b>${M(truePnl)}</b></td></tr></tbody>`;
-  document.getElementById('trustNote').innerHTML=`<b>Trust debt</b> (e<sup>−0.03·kills²</sup> — accelerating, not linear): ${S.m_kills_pre50>0?`${S.m_kills_pre50} shipped saga(s) killed pre-ep50 → whale LTV haircut to <b>${PC(we.trust)}</b> (−${M(we.whaleVal*we.whaleLife*(1-we.trust))}/whale lifetime). Each kill hurts more than the last — at 5 it's roughly −50%. `:`0 shipped sagas killed → whale LTV intact (each kill would hurt more than the last). `}Kill ideas in testing (cheap), but think twice before abandoning a saga whales have invested in. <br><b>Shadow bounty:</b> net <b>${netShadow>=0?'+':''}${M(netShadow)}/mo</b> — ${netShadow>=0?'the category exports more whale value than it imports, so it acts as an acquisition engine for the whole app, not a silo.':'the category imports more whale value than it exports, so it leans somewhat on other genres.'}`;
+  document.getElementById('trustNote').innerHTML=`<b>Trust debt</b> (e<sup>−0.03·abandons²</sup> — accelerating, not linear): ${S.m_kills_pre50>0?`${S.m_kills_pre50} ongoing saga(s) abandoned mid-arc → whale LTV haircut to <b>${PC(we.trust)}</b> (−${M(we.whaleVal*we.whaleLife*(1-we.trust))}/whale lifetime). Each one hurts more than the last — at 5 it's roughly −50%. `:`0 sagas abandoned mid-arc → whale LTV intact (each would hurt more than the last). `}You never pull content off the shelf, and de-funding a finished title is free — but leaving whales on a cliffhanger is the one move that breaks trust. Since AI makes finishing nearly free, almost always finish the arc. <br><b>Shadow bounty:</b> net <b>${netShadow>=0?'+':''}${M(netShadow)}/mo</b> — ${netShadow>=0?'the category exports more whale value than it imports, so it acts as an acquisition engine for the whole app, not a silo.':'the category imports more whale value than it exports, so it leans somewhat on other genres.'}`;
 }
 
 /* ============ CONTENT VINTAGE (existing catalog vs new releases) ============ */
