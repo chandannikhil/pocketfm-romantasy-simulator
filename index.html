@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PocketFM · US Romantasy Engine — Simulator by Chandan NK</title>
+<title>PocketFM · US Romantasy Category Engine — Simulator by Chandan NK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+
 :root{
   --bg:#f4f5f7; --paper:#fff; --ink:#1c2430; --muted:#5b6675; --faint:#97a1af;
   --line:#e2e6eb; --line2:#ccd2da; --rail:#eef0f3;
@@ -270,83 +274,162 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
   .info,.decic{width:18px;height:18px}                     /* larger tap target */
   table.tiers th,table.tiers td,.vartable th,.vartable td{padding:6px 6px}
 }
+
+
+/* ===================== RESTRUCTURE — TABBED WORKBENCH SHELL ===================== */
+body{font-family:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1320px}
+.section-h{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.band-hd .sub{font-family:'IBM Plex Sans'}
+
+/* pinned header = thesis bar + tab bar */
+.topbar{position:sticky;top:0;z-index:60;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.tbinner{display:flex;align-items:center;gap:18px;padding:11px 22px}
+.tb-id{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tb-eyebrow{font:600 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--faint)}
+.tb-title{font-size:16px;font-weight:800;color:var(--ink);letter-spacing:-.2px;line-height:1.15}
+.tb-sub{display:block;font-weight:400;font-size:11.5px;color:var(--muted);line-height:1.2}
+.tb-actions{margin-left:auto;display:flex;align-items:center;gap:9px;flex-shrink:0}
+.tb-dirty{display:none;font:600 11px 'IBM Plex Sans';color:var(--neg);white-space:nowrap}
+body.dirty .tb-dirty{display:inline}
+body.dirty .rail-card .metric .mv{opacity:.45}
+
+.tabbar{border-top:1px solid var(--line);background:var(--rail)}
+.tabinner{display:flex;align-items:stretch;gap:2px;padding:0 22px}
+.tabs{display:flex;gap:2px}
+.tabbtn{appearance:none;border:0;background:transparent;cursor:pointer;padding:10px 18px;display:flex;flex-direction:column;gap:3px;border-bottom:2px solid transparent;text-align:left;transition:.12s}
+.tabbtn b{font:700 12.5px/1 'IBM Plex Mono',monospace;letter-spacing:.03em;color:var(--muted)}
+.tabbtn i{font:400 10px/1 'IBM Plex Sans';font-style:normal;color:var(--faint)}
+.tabbtn:hover{background:var(--paper)} .tabbtn:hover b{color:var(--ink)}
+.tabbtn.active{border-bottom-color:var(--accent);background:var(--paper)}
+.tabbtn.active b,.tabbtn.active i{color:var(--accent)}
+.tablegend{margin-left:auto;display:flex;align-items:center;gap:9px;font-size:10px;color:var(--muted)}
+.tablegend .tb-by{color:var(--faint)} .tablegend .tb-by b{color:var(--mine)}
+
+.tab-panel{display:none} .tab-panel.active{display:block}
+.panels{padding-top:18px;padding-bottom:10px}
+
+/* thesis hero */
+.hero{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:36px 40px;margin:2px 0 10px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;top:0;right:0;width:5px;height:100%;background:linear-gradient(var(--accent),var(--shared))}
+.hero-k{font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:18px}
+.hero-h{font:800 42px/1.03 'IBM Plex Sans';letter-spacing:-.025em;color:var(--ink);margin:0 0 18px}
+.hero-p{font-size:14.5px;line-height:1.62;color:var(--muted);max-width:820px;margin:0 0 20px}
+.hero-p b{color:var(--ink)} .hero-p i{color:var(--accent);font-style:normal;font-weight:600}
+.hero-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.hero-stat{border:1px solid var(--line2);border-radius:10px;padding:10px 15px;background:#fcfdfe}
+.hero-stat .v{font:800 19px/1 'IBM Plex Sans';color:var(--accent)}
+.hero-stat .l{font:400 10.5px/1.3 'IBM Plex Sans';color:var(--muted);margin-top:5px}
+.hero-note{font-size:11px;line-height:1.5;color:var(--faint);margin:0;max-width:820px}
+.hero-note b{color:var(--muted)}
+
+/* workbench: levers (main) + sticky live-output rail */
+.workbench{display:grid;grid-template-columns:minmax(0,1fr) 358px;gap:20px;align-items:start}
+.wb-main{min-width:0}
+.wb-rail{position:sticky;top:148px}
+.rail-card{border:1px solid var(--out-ln);border-radius:14px;background:var(--out-bg);overflow:hidden}
+.rail-h{padding:11px 15px;border-bottom:1px solid var(--out-ln);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.rail-h .rt{font:800 12px 'IBM Plex Sans';color:var(--out)}
+.rail-sub{font-weight:500;font-size:10px;color:var(--muted);line-height:1.4}
+.rail-card .metrics{background:var(--out-ln)}
+.rail-card .metric .mv{font-size:17px}
+.rail-mix{padding:13px 15px;background:var(--paper)}
+.chart-t{font-size:11.5px;font-weight:700;margin-bottom:5px;color:var(--ink)}
+/* narrative connective tissue */
+.overview{border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:14px;padding:16px 18px 6px;margin:2px 0 12px}
+.overview .ov-h{font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+.overview .ov-s{font-size:11.5px;line-height:1.5;color:var(--muted);margin-bottom:13px}
+.overview .ov-s b{color:var(--ink)}
+.chapter-intro{display:flex;gap:13px;align-items:flex-start;margin:2px 0 16px;padding:13px 16px;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:0 11px 11px 0}
+.chapter-intro .ci-step{font:700 10px/1.5 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--accent);white-space:nowrap}
+.chapter-intro p{margin:0;font-size:12.5px;line-height:1.55;color:var(--muted)}
+.chapter-intro b{color:var(--ink)}
+.movement{display:flex;align-items:center;gap:11px;margin:30px 0 10px}
+.movement .mvno{font:800 11px/1 'IBM Plex Mono',monospace;color:#fff;background:var(--ink);border-radius:6px;padding:6px 9px}
+.movement .mvt{font:800 14.5px 'IBM Plex Sans';color:var(--ink);letter-spacing:-.2px}
+.movement .mvs{font-size:11.5px;color:var(--muted)}
+.movement .ln{flex:1;height:1px;background:var(--line2)}
+@media(max-width:1000px){.workbench{grid-template-columns:1fr}.wb-rail{position:static}}
+@media(max-width:600px){.tbinner{flex-wrap:wrap}.tb-actions{margin-left:0}.hero-h{font-size:30px}.tabbtn{padding:9px 12px}.tabbtn i{display:none}}
+
 </style>
 </head>
 <body>
 
-<header><div class="wrap">
-  <h1>US Romantasy — <b>June baseline → July plan</b> · Context → Inputs → Output</h1>
-  <div style="font-size:11.5px;color:var(--faint);margin:1px 0 7px">Interactive <b style="color:var(--mine)">simulator by Chandan NK</b></div>
-  <p class="thesis"><b>~5% of users are ~95% of revenue, so I run this like a fund, not a dashboard: I test fast and kill fast <i>in the lab</i> — but once a saga ships I protect it, because a whale who invested 40 episodes won't forgive a cancelled story. Acquisition is expensive, so I scale slow on the cost to land a <i>whale</i> (WAC), never the blended average.</b> June is the benchmarked baseline. Set July levers — split into <b style="color:var(--mine)">my category levers</b> and <b style="color:var(--shared)">shared (needs alignment)</b> — under the <b style="color:var(--ctx)">context</b> the market hands me, then track actuals against the plan. Coins are modelled bottoms-up (episodes × coins/ep × price/coin). <i>An illustrative simulator for a US Romantasy category — not a company forecast.</i></p>
-  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:8px">
-    <span class="badge" style="margin-left:0">Illustrative June baseline — benchmarked assumptions, not telemetry</span>
-    <span style="font-size:11px;color:var(--faint)">▶ <b>Calculate</b> recomputes outputs + the team brief (inputs are change-gated) · jump with the tabs · click any section title to fold it.</span>
+<div class="topbar">
+  <div class="tbinner">
+    <div class="tb-id">
+      <span class="tb-eyebrow">PocketFM · US ROMANTASY · JUNE BASELINE → JULY PLAN</span>
+      <span class="tb-title">The average user is a lie</span>
+      <span class="tb-sub">~5% of users → ~95% of revenue · run the category like a fund</span>
+    </div>
+    <div class="tb-actions">
+      <span class="tb-dirty">● inputs changed</span>
+      <button class="btn primary calc" id="calcBtn">▶ Calculate<span class="dot"></span></button>
+      <button class="btn" id="resetBtn">↺ Reset</button>
+    </div>
   </div>
-</div></header>
+  <div class="tabbar"><div class="wrap tabinner">
+    <nav class="tabs" aria-label="Workbench tabs">
+      <button class="tabbtn" data-tab="read"><b>1 · READ</b><i>what the market hands me</i></button>
+      <button class="tabbtn" data-tab="set"><b>2 · SET</b><i>my levers · live output</i></button>
+      <button class="tabbtn" data-tab="prove"><b>3 · PROVE</b><i>does it hold up?</i></button>
+      <button class="tabbtn" data-tab="ask"><b>4 · THE ASK</b><i>the brief</i></button>
+    </nav>
+    <span class="tablegend">
+      <span><span class="pip pip-c">Ctx</span></span><span><span class="pip pip-m">Mine</span></span><span><span class="pip pip-s">Shared</span></span><span><span class="pip pip-o">Out</span></span>
+      <span class="tb-by">by <b>Chandan NK</b></span>
+    </span>
+  </div></div>
+</div>
 
-<div class="controls"><div class="wrap">
-  <button class="btn primary calc" id="calcBtn">▶ Calculate<span class="dot"></span></button>
-  <button class="btn" id="resetBtn">↺ Reset</button>
-  <nav class="actnav" id="actNav" aria-label="Section navigation">
-    <a href="#act-situation">1 · Situation</a><a href="#act-levers">2 · Levers</a><a href="#act-engine">3 · Content engine</a><a href="#act-proof">4 · Proof</a><a href="#act-stress">5 · Stress-test</a><a href="#act-ask">6 · The ask</a>
-    <button class="btn navtoggle" id="collapseAll" type="button">▾ Collapse all</button>
-  </nav>
-</div></div>
-<div class="stalebar"><div class="wrap">● Inputs changed — press <b>Calculate</b> to refresh outputs.</div></div>
+<div class="wrap panels">
 
-<div class="wrap">
+<!-- ============ READ ============ -->
+<section class="tab-panel" data-tab="read" data-screen-label="READ — the market">
+  <div class="hero">
+    <div class="hero-k">The thesis</div>
+    <h2 class="hero-h">The average user is a lie.</h2>
+    <p class="hero-p"><b>~5% of users drive ~95% of revenue</b>, so I run this category like a fund, not a dashboard: I test fast and kill fast <i>in the lab</i> — but once a saga ships I protect it, because a whale who invested 40 episodes won't forgive a cancelled story. Acquisition is expensive, so I scale slow on the cost to land a <i>whale</i> (WAC), never the blended average.</p>
+    
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="v">~5% → ~95%</div><div class="l">users → revenue<br>concentration</div></div>
+    <div class="hero-stat"><div class="v">85 · 10 · 5</div><div class="l">coins · ads · subs<br>revenue mix</div></div>
+    <div class="hero-stat"><div class="v">$60M → $200M</div><div class="l">category ARR<br>arc (illustrative)</div></div>
+    <div class="hero-stat"><div class="v">WAC, not CAC</div><div class="l">price the whale,<br>not the average</div></div>
+  </div>
+    <p class="hero-note">An illustrative US Romantasy <b>category</b> simulator — benchmarked assumptions, not telemetry. June is the baseline; coins are modelled bottoms-up (episodes × coins/ep × price/coin). Set July levers in <b>SET</b>, prove the economics in <b>PROVE</b>, hand off the brief in <b>THE ASK</b>. Press <b>Calculate</b> to refresh outputs.</p>
+  </div>
 
-  <!-- EXEC SUMMARY -->
-  <div class="section-h">Executive summary — the one-screen read <span class="info" data-tip="Your one-screen read: where June stands, the July plan, the decisions you need to make, and the risks to watch. Built automatically from the live numbers; refreshes when you press Calculate.">i</span><span class="ln"></span></div>
-  <div id="execSummary" class="execsum"></div>
+  <div class="overview">
+    <div class="ov-h">My read — the one-screen verdict</div>
+    <div class="ov-s">Answer first: where June stands, the July plan, the decisions I need, and the risks I'm watching — built live, refreshes on Calculate. <b>Everything below is how I got here.</b></div>
+    <div id="execSummary" class="execsum"></div>
+  </div>
 
-  <div class="act" id="act-situation"><span class="actno">1</span><span class="actt">Situation</span><span class="acts">— where the category stands (June + the environment)</span><span class="ln"></span></div>
-  <!-- JUNE BASELINE -->
-  <div class="section-h">① June 2026 baseline — editable, illustrative (cohort split is yours to set) <span class="ln"></span></div>
-  <div class="band june"><div class="band-hd">June baseline (illustrative) <span class="sub">benchmarked default split New 35% / Existing 55% / Reactivated 10% — override freely</span></div>
+  <div class="chapter-intro"><span class="ci-step">1 · READ</span><p>Before I touch a lever, I read the board the market hands me — where June actually sits, the environment I can't control, where paid demand is open, and what rivals' money already proves. <b>You read the market; you don't fight it.</b></p></div>
+
+  <div class="section-h">① June 2026 baseline — where the category stands <span class="ln"></span></div>
+  <div class="band june"><div class="band-hd">June baseline (illustrative)<span class="sub">benchmarked default split New 35 / Existing 55 / Reactivated 10 — override freely</span></div>
     <div class="fields" id="f_june"></div>
     <div class="metrics" id="m_june"></div>
   </div>
 
-  <!-- CONTEXT -->
-  <div class="section-h">② Context — the environment (uncontrollable) <span class="ln"></span></div>
-  <div class="band context"><div class="band-hd">The environment — CPM, CPI inflation, churn, store fees<span class="sub">you read it, you don't fight it</span></div>
+  <div class="section-h">② Context — the environment you read, don't fight <span class="ln"></span></div>
+  <div class="band context"><div class="band-hd">CPM · CPI inflation · churn · store fees<span class="sub">uncontrollable</span></div>
     <div class="fields" id="f_context"></div>
   </div>
 
-  <div class="act" id="act-levers"><span class="actno">2</span><span class="actt">My levers</span><span class="acts">— what I set, and what needs alignment</span><span class="ln"></span></div>
-  <!-- INPUTS -->
-  <div class="section-h">③ July inputs — my levers vs shared (needs alignment) <span class="ln"></span></div>
-  <div class="cap" style="margin:-6px 0 11px">Each lever carries two icons — <b style="display:inline-flex;width:13px;height:13px;border:1px solid var(--line2);border-radius:50%;color:var(--faint);align-items:center;justify-content:center;font-size:8.5px">i</b> tells you what the number <i>means</i> · <b style="display:inline-flex;width:13px;height:13px;border:1px solid var(--mine-ln);background:var(--mine-bg);border-radius:3px;color:var(--mine);align-items:center;justify-content:center;font-size:8.5px">D</b> tells you <i>how to decide</i> where to set it.</div>
-  <div class="twocol">
-    <div class="band mine"><div class="band-hd">◆ My category levers<span class="sub">slate · greenlight · depth · paywall</span></div>
-      <div class="fields" id="f_mine"></div></div>
-    <div class="band shared"><div class="band-hd">⤿ Shared — needs alignment<span class="sub">UA · monetization · lifecycle</span></div>
-      <div class="fields" id="f_shared"></div></div>
-  </div>
-
-  <div class="act" id="act-engine"><span class="actno">3</span><span class="actt">The content engine</span><span class="acts">— how I source, test, and greenlight (my edge)</span><span class="ln"></span></div>
-  <!-- WHITESPACE MAP -->
-  <div class="section-h">④ Where to bet — trope whitespace (3 leading indicators) <span class="info" data-tip="Before any single title, triangulate three leading indicators: (1) PAID demand — tag/ranking prominence on coin-unlock platforms (GoodNovel/DramaBox); (2) OUR supply — Pocket's catalogue coverage; (3) RIVAL ad-spend — what DramaBox & ReelShort are actually scaling in the Meta Ad Library. Whitespace = high demand × low supply; commit only when a rival's money also proves it (else test cheaply). This is the systematic version of 'what market signal forced The Alpha's Bride.' All three are public proxies (24 Jun 2026) — not revenue, not telemetry.">i</span><span class="ln"></span></div>
+  <div class="section-h">④ Where to bet — trope whitespace (3 leading indicators) <span class="info" data-tip="Triangulate three public proxies (24 Jun 2026): PAID demand (coin-unlock chart prominence), OUR supply (catalogue coverage), and RIVAL ad-spend (Meta Ad Library scaled spend). Whitespace = high demand × low supply; commit only when a rival's money also proves it.">i</span><span class="ln"></span></div>
   <div class="band mine"><div class="band-hd">Pick the lane first — paid demand vs our supply<span class="sub">coin-unlock chart proxies · illustrative</span></div>
     <div class="mixwrap">
-      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Demand–supply map</div><div id="wsChart"></div></div>
+      <div><div class="chart-t">Demand–supply map</div><div id="wsChart"></div></div>
       <div style="overflow-x:auto"><table class="tiers" id="wsTable"></table></div>
     </div>
     <div class="pilotsum" id="wsNote"></div>
   </div>
 
-  <!-- ACQUISITION ENGINE -->
-  <div class="section-h">④·b Content sourcing — comp-scored acquisition <span class="info" data-tip="The category-AVP move: don't source on taste. Seed from Pocket's proven winners, abstract the emotional engine ('wounded heroine chosen by dangerous power'), then score candidate IP from romance-first platforms on an explicit rubric. The weights are your judgment (drag them). Public signals (plays rank / chapter counts) are a demand PRIOR, not a forecast — and they feed the expected hit-rate that drives the P&L below.">i</span><span class="ln"></span></div>
-  <div class="band mine"><div class="band-hd">Seed → score candidate IP → rank<span class="sub">weights are your judgment — drag to re-rank live</span></div>
-    <div id="acqWeights" class="acqw"></div>
-    <div id="acqSeeds" class="acqseed"></div>
-    <div class="acqcards" id="acqBoard"></div>
-    <div class="pilotsum" id="acqSum"></div>
-  </div>
-
-  <!-- COMPETITIVE INTEL -->
-  <div class="section-h">④·c What rivals prove works — competitive ad-spend intelligence <span class="info" data-tip="Read across the Meta Ad Library by sort: recency = a rival's Gate-1 creative tests; impressions = their scaled winners (where budget actually flows). Doing that for DramaBox + ReelShort (24 Jun 2026) shows their scaled money runs on ONE engine — hidden identity + a dangerous powerful partner + humiliation→reveal — in interchangeable wrappers. Public ad-spend proxies, not revenue.">i</span><span class="ln"></span></div>
+  <div class="section-h">④·c What rivals prove works — competitive ad-spend intelligence <span class="info" data-tip="Read the Meta Ad Library by sort: recency = rivals' Gate-1 creative tests; impressions = their scaled winners. DramaBox + ReelShort scale ONE engine — hidden identity + a dangerous powerful partner + humiliation→reveal — in interchangeable wrappers.">i</span><span class="ln"></span></div>
   <div class="band"><div class="band-hd" style="background:var(--paper)">The universal engine — what rivals actually scale<span class="sub">Meta Ad Library scaled-spend · 24 Jun 2026 · proxy</span></div>
     <p class="cintro"><b>One engine wins everywhere: hidden identity + a dangerous powerful partner + humiliation → reveal → vindication.</b> The wrapper is interchangeable — Pocket runs it as <i>werewolf</i>, DramaBox as <i>mafia king / secret CEO</i>, ReelShort as <i>"Merchant of Death" baby-daddy / genie-CEO</i>. So commission the <b>engine</b>; pick the <b>wrapper</b> by whitespace. Winners get <b>localized</b> (ES/PT/AR/TR) and run through <b>dozens of cloaked pages</b> — that's the UA machine.</p>
     <div class="cigrid">
@@ -359,79 +442,108 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
       <span><b>Hidden identity / reveal</b> · secret CEO / secret Luna (the core)</span><span><b>Dangerous powerful partner</b> · alpha / mafia / CEO king</span><span><b>Humiliation → vindication</b> · rejected, then rises</span><span><b>Rebirth + revenge</b> · second-chance fate</span><span><b>Forced bond</b> · contract / captive mate</span>
     </div>
   </div>
+</section>
 
-  <!-- PILOT LAB -->
-  <div class="section-h">④b Pilot Lab — whale-first greenlight gates <span class="info" data-tip="The gate hierarchy is now WHALE-FIRST: does the title create whale behaviour early (whale-rate) → do whales binge past the first paywall (binge depth) → do they buy a second coin pack (repeat-pack) → does spend concentrate without killing broad retention. CTR / D1 / unlock-conv / ROI are demoted to DIAGNOSTICS. The override that matters in a 95%-whale economy: a title with mediocre broad conversion but DEEP whales (⭐ whale-led) beats a broadly-good title with SHALLOW whales (⚠ shallow trap). Illustrative metrics on real titles; the ~100-idea/mo funnel sets the hit count.">i</span><span class="ln"></span></div>
-  <div class="band mine"><div class="band-hd">16-title shortlist — graded on whale depth, not broad conversion<span class="sub">🐋 grade = whale-rate × binge × repeat · CTR/D1/conv are diagnostics</span></div>
-    <div class="pilots" id="pilotBoard"></div>
-    <div class="pilotsum" id="pilotSum"></div>
-  </div>
+<!-- ============ SET ============ -->
+<section class="tab-panel" data-tab="set" data-screen-label="SET — my levers">
+  <div class="chapter-intro"><span class="ci-step">2 · SET</span><p>The read is fixed — now I set the plan against it: the dials I control, the shared levers that need alignment, and the engine that fills the slate. <b>Test fast and kill fast in the lab; scale slow on the cost to land a whale.</b> The live output on the right stays stale until you press Calculate.</p></div>
+  <div class="workbench">
+    <div class="wb-main">
+      <div class="movement"><span class="mvno">A</span><span class="mvt">The dials I set</span><span class="mvs">— my levers vs shared, and how they monetize</span><span class="ln"></span></div>
+      <div class="section-h">③ July inputs — my levers vs shared (needs alignment) <span class="ln"></span></div>
+      <div class="cap" style="margin:-6px 0 11px">Each lever carries two icons — <b style="display:inline-flex;width:13px;height:13px;border:1px solid var(--line2);border-radius:50%;color:var(--faint);align-items:center;justify-content:center;font-size:8.5px">i</b> what the number <i>means</i> · <b style="display:inline-flex;width:13px;height:13px;border:1px solid var(--mine-ln);background:var(--mine-bg);border-radius:3px;color:var(--mine);align-items:center;justify-content:center;font-size:8.5px">D</b> <i>how to decide</i> where to set it. The live output to the right is stale until you press <b>Calculate</b>.</div>
+      <div class="twocol">
+        <div class="band mine"><div class="band-hd">◆ My category levers<span class="sub">slate · greenlight · depth · paywall</span></div>
+          <div class="fields" id="f_mine"></div></div>
+        <div class="band shared"><div class="band-hd">⤿ Shared — needs alignment<span class="sub">UA · monetization · lifecycle</span></div>
+          <div class="fields" id="f_shared"></div></div>
+      </div>
 
-  <!-- STAGE-GATE BUDGET -->
-  <div class="section-h">⑤ Stage-gate content/test budget <span class="info" data-tip="What you spend at each gate to find hits. Gates 1–3 (trailer / pilot / greenlight) are your content + testing spend, and show up in the P&L as the content line. Gate 4 is the big ad spend to scale winners (shared) — already shown under UA, so it isn't counted twice.">i</span><span class="ln"></span></div>
-  <div class="band mine"><div class="band-hd">Funnel budget by gate<span class="sub">edit $/concept in 'my levers' above</span></div>
-    <div style="overflow-x:auto;padding:6px 12px 12px"><table class="tiers" id="gateTable"></table></div>
-  </div>
+      <div class="section-h">Per-tier monetization → contribution <span class="info" data-tip="Each tier's contribution sums to total July contribution. Ad-acquisition cost splits per active user; other costs by share of revenue — so free users carry acquisition (negative) while big/mid spenders make the profit.">i</span><span class="ln"></span></div>
+      <div class="band output"><div class="band-hd">★ How the tiers add up<span class="sub">whale ≈ 600 episode-equiv/mo (bulk packs + unlock-ahead)</span></div>
+        <div style="overflow-x:auto;padding:6px 16px 4px"><table class="tiers" id="tierTable"></table></div>
+        <div id="whaleNote" style="padding:6px 16px 14px;font-size:10.5px;color:var(--muted);line-height:1.5"></div>
+      </div>
 
-  <div class="act" id="act-proof"><span class="actno">4</span><span class="actt">The proof</span><span class="acts">— whale economics &amp; capital allocation: do they hold up?</span><span class="ln"></span></div>
-  <!-- OUTPUT -->
-  <div class="section-h">⑥ Output — July plan outcomes <span class="ln"></span></div>
-  <div class="band output"><div class="band-hd">★ July plan<span class="sub" id="planVsArc"></span></div>
-    <div class="metrics" id="m_july"></div>
-    <div class="mixwrap">
-      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Revenue mix — coins / ads / subs <span class="info" data-tip="Built from the ground up: coin revenue = payers × episodes unlocked × coins/episode × price/coin × net margin. It leans ~85/10/5 toward coins because a few big spenders unlock far more episodes.">i</span></div>
-        <div class="mixbar" id="mixBar"></div><div id="mixNums" style="font-size:11.5px;color:var(--muted)"></div></div>
-      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Per-tier monetization → contribution <span class="info" data-tip="Each tier's contribution adds up to total July contribution. Ad-acquisition cost is split evenly per active user; other costs by share of revenue — so free users carry the acquisition cost (and run negative) while a few big and mid spenders make the profit. Whale 'episodes' (~600/mo) include bulk coin packs and unlock-ahead, not literal listens.">i</span></div>
-        <div style="overflow-x:auto"><table class="tiers" id="tierTable"></table></div>
-        <div id="whaleNote" style="font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.5"></div></div>
+      <div class="movement"><span class="mvno">B</span><span class="mvt">The engine that fills the slate</span><span class="mvs">— source → test whale-first → greenlight → budget</span><span class="ln"></span></div>
+      <div class="section-h">④·b Content sourcing — comp-scored acquisition <span class="info" data-tip="Don't source on taste. Seed from Pocket's proven winners, abstract the emotional engine, then score candidate IP on an explicit rubric. The weights are your judgment (drag them) and feed the expected hit-rate that drives the P&amp;L.">i</span><span class="ln"></span></div>
+      <div class="band mine"><div class="band-hd">Seed → score candidate IP → rank<span class="sub">weights are your judgment — drag to re-rank live</span></div>
+        <div id="acqWeights" class="acqw"></div>
+        <div id="acqSeeds" class="acqseed"></div>
+        <div class="acqcards" id="acqBoard"></div>
+        <div class="pilotsum" id="acqSum"></div>
+      </div>
+
+      <div class="section-h">④b Pilot Lab — whale-first greenlight gates <span class="info" data-tip="Gate hierarchy is whale-first: whale-rate → binge depth past the paywall → repeat-pack → concentration. CTR/D1/conv/ROI are demoted to diagnostics. A title with mediocre broad conversion but DEEP whales (⭐) beats a broadly-good title with SHALLOW whales (⚠).">i</span><span class="ln"></span></div>
+      <div class="band mine"><div class="band-hd">16-title shortlist — graded on whale depth, not broad conversion<span class="sub">🐋 grade = whale-rate × binge × repeat</span></div>
+        <div class="pilots" id="pilotBoard"></div>
+        <div class="pilotsum" id="pilotSum"></div>
+      </div>
+
+      <div class="section-h">⑤ Stage-gate content / test budget <span class="info" data-tip="What you spend at each gate to find hits. Gates 1–3 are content + testing spend (the P&amp;L content line). Gate 4 is the big ad spend to scale winners — already counted under UA, not double-counted.">i</span><span class="ln"></span></div>
+      <div class="band mine"><div class="band-hd">Funnel budget by gate<span class="sub">edit $/concept in my levers above</span></div>
+        <div style="overflow-x:auto;padding:6px 12px 12px"><table class="tiers" id="gateTable"></table></div>
+      </div>
     </div>
-  </div>
 
-  <!-- WHALE CAPITAL-ALLOCATION ENGINE -->
-  <div class="section-h">⑥·b Whale capital-allocation engine — run it like a fund, not a dashboard <span class="info" data-tip="The operational core. With ~95% of revenue from ~5% of users, the 'average user' is a fiction that hides the business. This engine prices the only unit that matters — the whale — and allocates capital to whales the way a fund sizes bets: WAC (cost to land one whale + the minnows that ride in), whale LTV, the edge that Kelly bets on, an Explore/Exploit split, trope decay, IP-trust debt, and the cross-category shadow bounty. Illustrative; layered on the bottoms-up P&L above.">i</span><span class="ln"></span></div>
+    <aside class="wb-rail">
+      <div class="rail-card">
+        <div class="rail-h"><span class="rt">★ Live output</span><span class="rail-sub" id="planVsArc"></span></div>
+        <div class="metrics" id="m_july"></div>
+        <div class="rail-mix">
+          <div class="chart-t">Revenue mix — coins / ads / subs</div>
+          <div class="mixbar" id="mixBar"></div>
+          <div id="mixNums" style="font-size:11px;color:var(--muted);margin-top:6px"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ PROVE ============ -->
+<section class="tab-panel" data-tab="prove" data-screen-label="PROVE — does it hold up">
+  <div class="chapter-intro"><span class="ci-step">3 · PROVE</span><p>A plan is only a hypothesis. Here's the stress test — do the unit economics hold when I price the only unit that matters, the whale; does the portfolio shape hold; and what would have to be true to hit the targets? <b>The average user is a lie.</b></p></div>
+  <div class="movement"><span class="mvno">1</span><span class="mvt">The unit economics hold</span><span class="mvs">— price the whale, size the bet</span><span class="ln"></span></div>
+  <div class="section-h">⑥·b Whale capital-allocation engine — run it like a fund, not a dashboard <span class="info" data-tip="The operational core. With ~95% of revenue from ~5% of users, the 'average user' hides the business. This prices the only unit that matters — the whale — and allocates capital the way a fund sizes bets: WAC, whale LTV, the edge Kelly bets on, Explore/Exploit, trope decay, trust debt, shadow bounty.">i</span><span class="ln"></span></div>
   <div class="band mine"><div class="band-hd">① The average is a lie — price the whale<span class="sub">Pareto two-track · WAC vs whale LTV · the edge</span></div>
     <div class="metrics" id="m_whale"></div>
     <div class="pilotsum" id="whaleEconNote"></div>
   </div>
-  <div class="band mine"><div class="band-hd">② Capital allocation — Explore / Exploit + Kelly position-sizing<span class="info" data-tip="Multi-armed bandit: ring-fence an Explore budget for net-new Genesis tropes (no whale data yet), and route the Exploit budget across proven IPs by the modified Kelly criterion f* = p − q/b. Kelly tells you the exact share each IP deserves; a negative f* locks its budget to zero. p = whale-hit probability (mapped from the sourcing score); b = edge = (whale LTV − trope-decayed WAC)/WAC.">i</span><span class="sub">20/80 default · f* = p − q/b · negative ⇒ locked to $0</span></div>
+  <div class="band mine"><div class="band-hd">② Capital allocation — Explore / Exploit + Kelly position-sizing<span class="sub">20/80 default · f* = p − q/b · negative ⇒ locked to $0</span></div>
     <div id="allocSplit" class="acqseed"></div>
     <div style="overflow-x:auto;padding:2px 12px 6px"><table class="tiers" id="kellyTable"></table></div>
     <div class="pilotsum" id="kellyNote"></div>
   </div>
-  <div class="band mine"><div class="band-hd">③ Systemic consequences — decay · trust debt · shadow bounty<span class="info" data-tip="Three forces a static dashboard ignores. Trope decay: a proven trope's WAC compounds up every month in-market (saturation + copycats) — so you must keep exploring. IP-trust debt: abandoning a shipped saga pre-ep50 compounds a haircut onto whale LTV. Shadow bounty: whales you acquire roam to other categories — credit that value back to see if you're a profitable silo or a loss-leading top-of-funnel.">i</span><span class="sub">why a winning engine still has to keep moving</span></div>
+  <div class="band mine"><div class="band-hd">③ Systemic consequences — decay · trust debt · shadow bounty<span class="sub">why a winning engine still has to keep moving</span></div>
     <div class="mixwrap">
-      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Trope WAC decay — proven tropes saturate</div>
+      <div><div class="chart-t">Trope WAC decay — proven tropes saturate</div>
         <div style="overflow-x:auto"><table class="tiers" id="decayTable"></table></div></div>
-      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Trust debt + shadow bounty — the true category P&amp;L</div>
+      <div><div class="chart-t">Trust debt + shadow bounty — the true category P&amp;L</div>
         <div style="overflow-x:auto"><table class="tiers" id="shadowTable"></table></div>
         <div id="trustNote" style="font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.5"></div></div>
     </div>
   </div>
 
-  <!-- CONTENT VINTAGE -->
-  <div class="section-h">⑦ Revenue by content vintage — existing catalog vs new releases <span class="info" data-tip="A different angle from the user view: users are WHO pays; vintage is WHAT they watch. Your existing catalogue already paid for itself, so it's almost pure profit. New releases bring in revenue but still carry production + testing cost and the ad spend they drive. Catalogue is money in the bank; new content is the pipeline that becomes tomorrow's catalogue.">i</span><span class="ln"></span></div>
+  <div class="movement"><span class="mvno">2</span><span class="mvt">The portfolio shape holds</span><span class="mvs">— catalog vs new releases · protect the hits</span><span class="ln"></span></div>
+  <div class="section-h">⑦ Revenue by content vintage — existing catalog vs new releases <span class="info" data-tip="Users are WHO pays; vintage is WHAT they watch. Existing catalogue already paid for itself — almost pure profit. New releases bring revenue but carry production + testing cost and the ad spend they drive.">i</span><span class="ln"></span></div>
   <div class="band"><div class="band-hd" style="background:var(--paper)">Catalog (sunk content) + new releases − acquisition = contribution</div>
     <div class="mixwrap">
-      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Revenue by vintage</div>
-        <div class="mixbar" id="cvBar"></div><div id="cvNums" style="font-size:11.5px;color:var(--muted)"></div></div>
+      <div><div class="chart-t">Revenue by vintage</div><div class="mixbar" id="cvBar"></div><div id="cvNums" style="font-size:11.5px;color:var(--muted);margin-top:5px"></div></div>
       <div style="overflow-x:auto"><table class="tiers" id="cvTable"></table></div>
     </div>
   </div>
 
-  <!-- LIBRARY SHAPE -->
-  <div class="section-h">⑦·b Library shape — a few hits, a long tail (protect the hits) <span class="info" data-tip="What a real Romantasy library looks like. A mature catalogue has ~1,000–1,500 live titles, but a small number of hits earn most of the money. An illustrative power-law benchmark (not measured per-title data) scaled to your catalogue size and total revenue — to show why the hits are the last thing you'd ever take down.">i</span><span class="ln"></span></div>
-  <div class="band"><div class="band-hd" style="background:var(--paper)">US Romantasy active library — title count × revenue concentration <span class="sub">edit 'Active library titles' in my levers above</span></div>
+  <div class="section-h">⑦·b Library shape — a few hits, a long tail (protect the hits) <span class="info" data-tip="A mature catalogue runs ~1,000–1,500 live titles, but a few hits earn most of the money. An illustrative power-law benchmark scaled to your catalogue size and total revenue.">i</span><span class="ln"></span></div>
+  <div class="band"><div class="band-hd" style="background:var(--paper)">Active library — title count × revenue concentration <span class="sub">edit 'Active library titles' in my levers</span></div>
     <div class="mixwrap">
-      <div><div style="font-size:11.5px;font-weight:700;margin-bottom:4px">Revenue concentration by title tier</div>
-        <div class="mixbar" id="libBar"></div><div id="libNums" style="font-size:11.5px;color:var(--muted)"></div></div>
+      <div><div class="chart-t">Revenue concentration by title tier</div><div class="mixbar" id="libBar"></div><div id="libNums" style="font-size:11.5px;color:var(--muted);margin-top:5px"></div></div>
       <div style="overflow-x:auto"><table class="tiers" id="libTable"></table></div>
     </div>
     <div class="pilotsum" id="libNote"></div>
   </div>
 
-  <div class="act" id="act-stress"><span class="actno">5</span><span class="actt">Stress-test</span><span class="acts">— attribution, what-must-be-true, track vs actual</span><span class="ln"></span></div>
-  <!-- TWO-LEDGER ATTRIBUTION -->
-  <div class="section-h">⑧ Attribution — two ledgers (your category isn't a closed system) <span class="info" data-tip="The category-lead point: the cost to bring in a user is genuinely yours per ad, but the value they create wanders — a user your hook acquired may spend months watching other genres. So judge yourself on TWO scorecards: one as a channel that brings users to the whole app, one as a creator of value inside your own category. Don't collapse them into a single blended number.">i</span><span class="ln"></span></div>
+  <div class="movement"><span class="mvno">3</span><span class="mvt">Stress-test &amp; govern</span><span class="mvs">— two ledgers · plan vs actual · back-solve the targets</span><span class="ln"></span></div>
+  <div class="section-h">⑧ Attribution — two ledgers (your category isn't a closed system) <span class="info" data-tip="The cost to bring in a user is yours per ad, but the value they create wanders. Judge yourself on TWO scorecards: one as a channel that brings users to the whole app, one as a creator of value inside your own category.">i</span><span class="ln"></span></div>
   <div class="band"><div class="band-hd" style="background:var(--paper)">CPI is yours · LTV roams — acquisition vs consumption ledger</div>
     <div class="twocol">
       <div style="overflow-x:auto;padding:4px 6px 8px"><table class="tiers" id="ledgerTable"></table></div>
@@ -439,43 +551,40 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
     </div>
   </div>
 
-  <!-- VARIANCE -->
   <div class="section-h">⑨ Plan vs Actual — track July as it lands <span class="ln"></span></div>
   <div class="band"><div class="band-hd" style="background:var(--paper)">June baseline · July plan · July actual (you fill) · variance</div>
     <div style="overflow-x:auto;padding:4px 6px 10px"><table class="vartable" id="varTable"></table></div>
   </div>
 
-  <!-- OPTIMIZER -->
-  <div class="section-h">⑩ What must be true — back-solve the levers for a set of targets <span class="info" data-tip="Set the outcomes you must hit (=, ≥, ≤). The solver finds the smallest set of lever moves that would make them all true, while also improving a secondary goal — i.e. 'for this plan to work, here's what would have to be true.' If the targets can't be reached it names the binding one. It only changes your inputs when a feasible solution is found; an unreachable solve leaves them untouched. Shared levers it moves are flagged 'needs alignment.'">i</span><span class="ln"></span></div>
+  <div class="section-h">⑩ What must be true — back-solve the levers for a set of targets <span class="info" data-tip="Set the outcomes you must hit (=, ≥, ≤). The solver finds the smallest set of lever moves that make them all true while improving a secondary goal. If unreachable it names the binding constraint and leaves your inputs unchanged.">i</span><span class="ln"></span></div>
   <div class="optcard">
     <p class="opthelp">Pick the outcomes you must hit and let it back-solve <i>what would have to be true</i> — the smallest lever moves across <b style="color:var(--mine)">my levers</b> (free by default) and any <b style="color:var(--shared)">shared</b> lever you unlock. It optimizes a secondary objective and, if the targets can't be reached, names the binding one and leaves your inputs unchanged.</p>
     <div id="constraintRows"></div>
     <button class="btn" id="addConstraint" style="margin:4px 0 10px">+ add target</button>
-    <div class="optrow2">
-      <span class="lbl">Free levers</span><span id="freeLeverChips" style="display:flex;gap:6px;flex-wrap:wrap"></span>
-    </div>
-    <div class="optrow2">
-      <span class="lbl">Objective</span>
+    <div class="optrow2"><span class="lbl">Free levers</span><span id="freeLeverChips" style="display:flex;gap:6px;flex-wrap:wrap"></span></div>
+    <div class="optrow2"><span class="lbl">Objective</span>
       <select id="optObjective"><option value="minua">minimize UA spend</option><option value="maxcontrib">maximize contribution</option></select>
       <button class="btn primary" id="solveBtn">Solve →</button>
     </div>
     <div class="cap">Solve = inverse-solve your free levers to hit the target vector; names the binding constraint if they conflict.</div>
     <div class="optresult" id="optResult"><span style="color:var(--faint)">Add targets, choose free levers, press Solve. Try: New rev ≥ 1.45 AND margin ≥ 5 AND payback ≤ 6.</span></div>
   </div>
+</section>
 
-  <div class="act" id="act-ask"><span class="actno">6</span><span class="actt">The ask</span><span class="acts">— the cross-functional brief + where July sits on the arc</span><span class="ln"></span></div>
-  <!-- BRIEF -->
-  <div class="section-h">⑪ June → team &amp; stakeholder brief <span class="info" data-tip="The loop in action: a June signal forces a July action. A copy-paste brief with instructions per team (UA / Monetization / Lifecycle / Content) plus a summary for leadership. Refreshes when you press Calculate.">i</span><span class="ln"></span></div>
+<!-- ============ THE ASK ============ -->
+<section class="tab-panel" data-tab="ask" data-screen-label="THE ASK — the brief">
+  <div class="chapter-intro"><span class="ci-step">4 · THE ASK</span><p>The economics hold — so here's what I need from the room: a cross-functional brief with a directive per team, where July sits on the arc, and the whole engine grounded in real titles. <b>Once a saga ships, we protect it.</b></p></div>
+
+  <div class="section-h">⑪ The cross-functional ask — June read → team &amp; stakeholder brief <span class="info" data-tip="The loop in action: a June signal forces a July action. A copy-paste brief with instructions per team plus a leadership summary. Refreshes on Calculate.">i</span><span class="ln"></span></div>
   <div class="band"><div class="band-hd" style="background:var(--paper)">Shareable brief — partner teams + stakeholders<button class="btn" id="copyBrief" style="margin-left:auto;padding:5px 11px">⧉ Copy</button></div>
     <pre id="briefText" class="brief"></pre>
   </div>
 
-  <!-- ARC + SLATE -->
-  <div class="section-h">Where July sits on the $60M → $200M arc — illustrative US Romantasy <i>category</i> ARR, not company-wide (context only) <span class="ln"></span></div>
+  <div class="section-h">Where July sits on the $60M → $200M arc — illustrative US Romantasy <i>category</i> ARR (context only) <span class="ln"></span></div>
   <div class="arcwrap"><div id="arc"></div></div>
 
-  <div class="section-h">In-market slate — real titles by portfolio role <span class="info" data-tip="Why this section: it grounds the abstract cohort/tier engine in real Pocket titles. Each role maps to a job in the model — acquisition bait pulls the New cohort, the whale saga is where the top 5% (the §⑥ whale tier) live and spend, the monetization engine converts Existing payers, the reactivation asset wins back dormant users, and the bridge/hidden-gem titles are the pipeline that graduates new titles into catalogue.">i</span><span class="ln"></span></div>
-  <p class="cintro" style="padding:0 0 6px">Not a separate idea — this is the §⑥ engine in real titles: each role is a <b>job in the model</b>. <b>Acquisition bait</b> feeds the New cohort; the <b>whale saga</b> is where the top 5% (the whale tier) live and spend — the "keep the whales" asset; the <b>monetization engine</b> converts Existing payers; the <b>reactivation asset</b> wins back dormant users; <b>bridge / hidden-gem</b> titles are the pipeline that becomes tomorrow's catalogue.</p>
+  <div class="section-h">In-market slate — real titles by portfolio role <span class="info" data-tip="Grounds the cohort/tier engine in real Pocket titles. Each role maps to a job in the model: acquisition bait feeds New, the whale saga is where the top 5% live, the monetization engine converts Existing, the reactivation asset wins back dormant users, bridge/gem titles are tomorrow's catalogue.">i</span><span class="ln"></span></div>
+  <p class="cintro" style="padding:0 0 6px">Not a separate idea — this is the §⑥ engine in real titles: each role is a <b>job in the model</b>. <b>Acquisition bait</b> feeds the New cohort; the <b>whale saga</b> is where the top 5% live and spend; the <b>monetization engine</b> converts Existing payers; the <b>reactivation asset</b> wins back dormant users; <b>bridge / hidden-gem</b> titles become tomorrow's catalogue.</p>
   <div class="slate" id="slate"></div>
 
   <footer>
@@ -486,6 +595,8 @@ footer{color:var(--faint);font-size:11px;padding:22px 0 60px}footer b{color:var(
       <span><span class="pip pip-s">Shared</span> needs alignment</span><span><span class="pip pip-o">Output</span> computed</span>
     </div>
   </footer>
+</section>
+
 </div>
 
 <script>
@@ -1451,28 +1562,25 @@ const SLATE=[
 ];
 document.getElementById('slate').innerHTML=SLATE.map(s=>`<div class="tcard"><span class="role ${s.cls}">${s.role}</span><h4>${s.t}</h4><div class="tr">${s.tr}</div></div>`).join('');
 
-/* ============ NAV + COLLAPSIBLE ============ */
-function initCollapsibles(){
-  document.querySelectorAll('.band').forEach(b=>{
-    const hd=b.querySelector('.band-hd'); if(!hd||hd.dataset.clk)return; hd.dataset.clk='1'; hd.classList.add('clk');
-    const car=document.createElement('span'); car.className='car'; car.textContent='▾'; hd.appendChild(car);
-    hd.addEventListener('click',e=>{ if(e.target.closest('button,input,a,select,.info,.decic'))return; b.classList.toggle('collapsed'); });
-  });
-}
-let allCollapsed=false;
-function initNav(){
-  const btn=document.getElementById('collapseAll');
-  btn.addEventListener('click',()=>{allCollapsed=!allCollapsed;document.querySelectorAll('.band').forEach(b=>b.classList.toggle('collapsed',allCollapsed));btn.textContent=allCollapsed?'▸ Expand all':'▾ Collapse all';});
-  const links=[...document.querySelectorAll('.actnav a')];
-  const acts=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
-  if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){const id='#'+en.target.id;links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')===id));}});},{rootMargin:'-110px 0px -72% 0px'});
-    acts.forEach(a=>io.observe(a));
+/* ============ TABS (replaces act-nav + collapsibles) ============ */
+function initTabs(){
+  var TABS=['read','set','prove','ask'];
+  var btns=[].slice.call(document.querySelectorAll('.tabbtn'));
+  var panels=[].slice.call(document.querySelectorAll('.tab-panel'));
+  function show(id){
+    btns.forEach(function(b){b.classList.toggle('active',b.dataset.tab===id);});
+    panels.forEach(function(p){p.classList.toggle('active',p.dataset.tab===id);});
+    try{history.replaceState(null,'','#'+id);}catch(e){}
+    window.scrollTo(0,0);
   }
+  btns.forEach(function(b){b.addEventListener('click',function(){show(b.dataset.tab);});});
+  var init=(location.hash||'').replace('#','');
+  show(TABS.indexOf(init)>=0?init:'read');
 }
 
 /* ============ INIT ============ */
-buildAll(); renderConstraints(); render(); initCollapsibles(); initNav();
+buildAll(); renderConstraints(); render(); initTabs();
+
 </script>
 </body>
 </html>
