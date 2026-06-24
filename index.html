@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PocketFM · US Romantasy Category Engine — Simulator by Chandan NK</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nositelink, nosnippet">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Category P&L Simulator — illustrative</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -296,6 +299,9 @@ body.dirty .tb-dirty{display:inline}
 body.dirty .rail-card .metric .mv{opacity:.45}
 
 .tabbar{border-top:1px solid var(--line);background:var(--rail)}
+.disclaimer{background:#fbf6e9;border-bottom:1px solid #ecdca8}
+.disclaimer .wrap{padding:7px 22px;font-size:11px;line-height:1.5;color:#6b5a1f}
+.disclaimer b{color:#4a3f15}
 .tabinner{display:flex;align-items:stretch;gap:2px;padding:0 22px}
 .tabs{display:flex;gap:2px}
 .tabbtn{appearance:none;border:0;background:transparent;cursor:pointer;padding:10px 18px;display:flex;flex-direction:column;gap:3px;border-bottom:2px solid transparent;text-align:left;transition:.12s}
@@ -384,6 +390,8 @@ body.dirty .rail-card .metric .mv{opacity:.45}
   </div></div>
 </div>
 
+<div class="disclaimer"><div class="wrap">⚠ <b>Independent, illustrative thought-exercise</b> — not affiliated with, endorsed by, or built on internal data from PocketFM or any company named here. Every figure is an <b>editable, public-benchmark estimate</b> (not telemetry); competitor notes are public ad-library observations and may be imprecise. "Whale" is standard monetization shorthand for a high-value payer.</div></div>
+
 <div class="wrap panels">
 
 <!-- ============ READ ============ -->
@@ -437,7 +445,7 @@ body.dirty .rail-card .metric .mv{opacity:.45}
       <div class="cicard"><div class="ct">ReelShort · scaled spend</div><h4>Contemporary hidden-identity</h4><ul><li>#1 by far: <i>Ms CEO's Baby Daddy Is the Merchant of Death</i> (326M views, ~6 pages)</li><li>Secret-billionaire husband, King of Snipers, genie-CEO</li><li><b>Zero</b> werewolf / vampire / dragon in the scaled set</li></ul><div class="take">→ Even the "supernatural" player scales contemporary reveal-melodrama.</div></div>
       <div class="cicard"><div class="ct">DramaBox · scaled spend</div><h4>Contemporary + rebirth</h4><ul><li>Mafia king, secret CEO / billionaire, immortal hidden-power husband</li><li>Rebirth proven (reborn beast-tamer)</li><li><b>Zero</b> supernatural-romantasy in the scaled set</li></ul><div class="take">→ Rebirth + secret-identity get the budget, not vampire/dragon.</div></div>
       <div class="cicard"><div class="ct">Kuku FM · audio (India)</div><h4>Direct rival + IP defense</h4><ul><li>Fastest-growing India audio rival; leans power / revenge / occult</li><li>Competes on catalogue breadth and creator velocity</li></ul><div class="take">→ Clear rights + fast localization are a moat, not paperwork.</div></div>
-      <div class="cicard"><div class="ct">Galatea / GoodNovel · mobile fiction</div><h4>Where the IP originates</h4><ul><li>Serial-native, trope-tagged, public read counts</li><li>This is the supply pool feeding the §④ board above</li></ul><div class="take">→ Source here before titles get BookTok-priced.</div></div>
+      <div class="cicard"><div class="ct">Galatea / GoodNovel · mobile fiction</div><h4>Where the IP originates</h4><ul><li>Serial-native, trope-tagged, public read counts</li><li>This is the supply pool feeding the §④ board above</li></ul><div class="take">→ A public, trope-tagged supply pool — the comps feeding the §④ board.</div></div>
     </div>
     <div class="cimech">
       <span><b>Hidden identity / reveal</b> · secret CEO / secret Luna (the core)</span><span><b>Dangerous powerful partner</b> · alpha / mafia / CEO king</span><span><b>Humiliation → vindication</b> · rejected, then rises</span><span><b>Rebirth + revenge</b> · second-chance fate</span><span><b>Forced bond</b> · contract / captive mate</span>
@@ -603,7 +611,7 @@ WHALE CONCENTRATION — an input pair you assert (default 5% of payers drive 95%
 
 WHALE ACQUISITION COST  (the unit that matters)
   p(whale) = activation × payer-conv × whale-share-of-new-payers
-  WAC      = CPI ÷ p(whale)             ← cost to land ONE whale + the minnows it rides in with
+  WAC      = CPI ÷ p(whale)             ← cost to land ONE whale + the casual installs acquired alongside it
 
 UA COST — two-way elastic CPI
   baseCPI = CPM ÷ (1000 × CTR × install-rate) × (1 + CPI-inflation)
@@ -743,7 +751,7 @@ const IN={
   pl_minROI:{sec:'mine',grp:'Gate 4 · Scale',label:'Bar: min scale ROI',suf:'×',fmt:'x',val:1.0,tip:'Lowest return-on-ad-spend at scale for a show to count as a hit (Gate 4).'},
   m_depth:{sec:'mine',grp:'Product levers',label:'Episode depth index',suf:'%',fmt:'pct',val:100,tip:'Scales how many episodes a paying user gets through (better story arcs, continuity). 100 = today. Your main lever on coin revenue.'},
   m_ctr:{sec:'mine',grp:'Product levers',label:'Trailer CTR (creative)',suf:'%',fmt:'pct2',val:1.3,tip:'Better trailers/IP get more clicks → cheaper installs. BUT a CTR spike not matched by Day-3 retention is clickbait: it lowers cost but degrades whale-share, so WAC actually RISES (see the clickbait gate). Earn cheap installs with retention, not bait.'},
-  m_d3ret:{sec:'mine',grp:'Product levers',label:'Day-3 retention',suf:'%',fmt:'pct2',val:25,tip:'Share of new installs still active on day 3 — the quality check on your CTR. The clickbait gate scores CTR against this: if CTR climbs faster than Day-3 retention, the extra clicks are low-intent (minnows), whale-share falls and WAC rises. Push them up together and WAC holds.'},
+  m_d3ret:{sec:'mine',grp:'Product levers',label:'Day-3 retention',suf:'%',fmt:'pct2',val:25,tip:'Share of new installs still active on day 3 — the quality check on your CTR. The clickbait gate scores CTR against this: if CTR climbs faster than Day-3 retention, the extra clicks are low-intent casual users, whale-share falls and WAC rises. Push them up together and WAC holds.'},
   p_newconv:{sec:'mine',grp:'Product levers',label:'July New payer conv',suf:'%',fmt:'pct2',val:4.0,tip:'Share of new users who pay — driven by paywall placement, number of free episodes, and content gating.'},
   p_existconv:{sec:'mine',grp:'Product levers',label:'July Existing payer conv',suf:'%',fmt:'pct2',val:8.0,tip:'Share of regulars who pay. Modelled as a simple proportional lift on existing revenue (July ÷ June rate) — an approximation; a full finance model would split regulars into payers/non-payers and re-do each.'},
   p_reactconv:{sec:'mine',grp:'Product levers',label:'July React payer conv',suf:'%',fmt:'pct2',val:5.0,tip:'Share of won-back users who pay — driven by win-back offer quality.'},
@@ -812,7 +820,7 @@ const DEC={
   p_reach:'How many dormant users to message. Keep reaching out until the next batch costs more than it brings back. Limited by how many lapsed users exist and team capacity.',
   p_winconv:'Share of messaged dormant users who come back. A measured result from win-back tests, not a target you set.',
   p_freecoin:'Free coins / incentive per user you message. Set it so the offer pays for itself in recovered spend. Drop offers that only attract freebie-hunters who never pay.',
-  m_d3ret:'Your honest read on creative quality. Move it WITH trailer CTR, not behind it: a CTR jump with flat Day-3 retention is clickbait — the gate marks the extra clicks as minnows and pushes WAC up. Raise it only when real engagement data (D3 cohorts) backs the CTR.',
+  m_d3ret:'Your honest read on creative quality. Move it WITH trailer CTR, not behind it: a CTR jump with flat Day-3 retention is clickbait — the gate marks the extra clicks as low-intent and pushes WAC up. Raise it only when real engagement data (D3 cohorts) backs the CTR.',
   m_explore_pct:'How much of UA you spend hunting the NEXT trope vs scaling this month’s winner. Raise it when your proven tropes are decaying (WAC climbing) or your Genesis pipeline is thin; never take it to zero — a 100% Exploit book dies the month its trope saturates. ~20% is the standard bandit split.',
   m_kills_pre50:'How disciplined you are about FINISHING shipped sagas. Keep near zero. You can always de-fund a title (cut its marketing) at no cost, and you never pull content off the shelf — but stopping production on a saga whales are mid-binge strands them on a cliffhanger and erodes trust in every future saga. Since AI makes completion nearly free, abandoning mid-arc almost never pays.'
 };
@@ -1020,7 +1028,7 @@ function engineJuly(v,june){
 
 /* ============ WHALE CAPITAL-ALLOCATION ENGINE (layered on the bottoms-up substrate) ============ */
 // Reframes the headline from the potentially-misleading "average" toward the whale as the unit.
-// p_whale (install→whale), WAC (cost to land ONE whale + the minnows that ride along), whale LTV,
+// p_whale (install→whale), WAC (cost to land ONE whale + the casualBase that ride along), whale LTV,
 // the edge ratio Kelly bets on, trope-decay, IP-trust-debt, and the cross-category shadow bounty.
 const TRUST_K=0.03;               // SUPER-EXPONENTIAL whale-LTV decay: damage ACCELERATES per ongoing saga abandoned MID-ARC
 // trust = e^(−k·abandons²)  → 1/3/5 ≈ −3% / −24% / −53% (a cliff, not linear). Identity at 0 (=1). (m_kills_pre50 = abandons)
@@ -1030,20 +1038,20 @@ function whaleEconomics(v,jl){
   const pPayerNew=jl.conv.N;                         // install→active→payer (new cohort, post-elasticity)
   const whaleShareNew=jl.splitN.W;                   // whale share AMONG new payers (content-hit modulated)
   const p_whale=Math.max(act*pPayerNew*whaleShareNew,1e-9);   // probability a fresh install becomes a whale
-  const minnowsPerWhale=p_whale>0?(1/p_whale)-1:Infinity;     // the cohort of overhead each whale rides in on
-  const WAC=jl.cpi/p_whale;                          // cost to acquire ONE whale (carries its minnows)
+  const casualPerWhale=p_whale>0?(1/p_whale)-1:Infinity;     // the cohort of overhead each whale rides in on
+  const WAC=jl.cpi/p_whale;                          // cost to acquire ONE whale (carries its casualBase)
   const whaleVal=WHALE_IMPLIED.val;                  // realized net $/whale/mo (after any floor)
   const whaleLife=1/(v.x_whale_churn/100);           // whales are stickier → longer life than blended payer
   const trust=trustDebtFactor(v);
   const whaleLTV=whaleVal*whaleLife*trust;           // median whale lifetime value, after trust debt
   const edge=WAC>0?(whaleLTV-WAC)/WAC:0;             // b — the Kelly payoff odds
-  // population two-track (monthly NEW installs): whales vs minnows
+  // population two-track (monthly NEW installs): whales vs casualBase
   const installs=v.s_installs, actives=installs*act;
-  const whales=installs*p_whale, minnows=actives-whales;
+  const whales=installs*p_whale, casualBase=actives-whales;
   // the "average lie": blended ARPU vs what a whale is actually worth
   const arpuBlended=jl.arppu;                        // blended value/payer/mo — the misleading average
-  return {p_whale,minnowsPerWhale,WAC,whaleVal,whaleLife,whaleLTV,edge,trust,
-    installs,actives,whales,minnows,arpuBlended,whaleVsAvg:whaleVal/Math.max(arpuBlended,1e-9)};
+  return {p_whale,casualPerWhale,WAC,whaleVal,whaleLife,whaleLTV,edge,trust,
+    installs,actives,whales,casualBase,arpuBlended,whaleVsAvg:whaleVal/Math.max(arpuBlended,1e-9)};
 }
 // Kelly fraction for one IP — f* = p − q/b, locked to 0 when negative.
 function kellyFraction(p,b){ if(!(b>0))return 0; const f=p-(1-p)/b; return f>0?f:0; }
@@ -1203,14 +1211,14 @@ function renderWhaleEngine(jl){
   const we=whaleEconomics(S,jl);
   // ① price the whale
   document.getElementById('m_whale').innerHTML=
-    mcard('Whales / 100k installs','The metric I watch first: how many whales a campaign mints per 100k installs — not installs, DAU or blended conversion. = p(whale) × 100k. I optimise creatives, gates and UA toward this.',NUM(we.p_whale*1e5),'p(whale) '+PC(we.p_whale)+' · '+NUM(Math.round(we.minnowsPerWhale))+' minnows ride along','pos')
+    mcard('Whales / 100k installs','The metric I watch first: how many whales a campaign mints per 100k installs — not installs, DAU or blended conversion. = p(whale) × 100k. I optimise creatives, gates and UA toward this. ("Whale" is the standard monetization term for a high-value payer — used as shorthand, not a value judgment.)',NUM(we.p_whale*1e5),'p(whale) '+PC(we.p_whale)+' · '+NUM(Math.round(we.casualPerWhale))+' casual installs alongside','pos')
    +mcard('Contribution per whale','What one acquired whale nets: whale LTV ('+M(we.whaleLTV)+') − WAC ('+M(we.WAC)+'). Since whales are the bulk of revenue, this is the unit that compounds.',M(we.whaleLTV-we.WAC),we.whaleLTV>we.WAC?'whale LTV − WAC':'underwater — WAC > LTV',we.whaleLTV>we.WAC?'pos':'neg')
-   +mcard('WAC — whale acq cost','What it costs to land ONE whale, including the ~'+NUM(Math.round(we.minnowsPerWhale))+' minnows acquired alongside it. = CPI ÷ p(whale). Blended CAC ('+M(jl.cac)+') flatters; this per-whale cost is the number to clear.',M(we.WAC),'CPI '+M(jl.cpi)+' ÷ p(whale) '+PC(we.p_whale),'')
+   +mcard('WAC — whale acq cost','What it costs to land ONE whale, including the ~'+NUM(Math.round(we.casualPerWhale))+' casual installs acquired alongside it. = CPI ÷ p(whale). Blended CAC ('+M(jl.cac)+') flatters; this per-whale cost is the number to clear.',M(we.WAC),'CPI '+M(jl.cpi)+' ÷ p(whale) '+PC(we.p_whale),'')
    +mcard('Whale LTV (after trust)','Median whale ≈ '+M(we.whaleVal)+'/mo × '+we.whaleLife.toFixed(0)+'mo whale life'+(we.trust<1?' × '+PC(we.trust)+' trust debt':'')+'. This is the asset I\'m really buying.',M(we.whaleLTV),M(we.whaleVal)+'/mo · '+we.whaleLife.toFixed(0)+'mo life',we.whaleLTV>we.WAC?'pos':'neg')
    +mcard('Edge (Kelly b)','(Whale LTV − WAC) ÷ WAC — the payoff odds Kelly sizes against. >0 means the whale is worth chasing at this WAC.',we.edge.toFixed(2)+'×',we.whaleLTV>we.WAC?'whale LTV > WAC ✓':'underwater ✗',we.edge>0?'pos':'neg')
    +mcard('Whale vs "average"','How many times a whale outspends the blended-average payer ('+M(we.arpuBlended)+'/mo). The bigger this gets, the more the average misleads — which is why I lead with the whale, not ARPU.',we.whaleVsAvg.toFixed(0)+'×','1 whale ≈ '+we.whaleVsAvg.toFixed(0)+' avg payers','')
-   +mcard('Pareto two-track','Of ~'+NUM(Math.round(we.actives))+' new actives/mo, ~'+NUM(Math.round(we.whales))+' are whales; the rest are overhead (server cost + acquisition friction) that helps surface whales.',NUM(Math.round(we.whales))+' : '+NUM(Math.round(we.minnows)),'whales : minnows (new/mo)','');
-  document.getElementById('whaleEconNote').innerHTML=`<b>Price the whale, not the average.</b> Blended CAC reads <b>${M(jl.cac)}</b> and blended value <b>${M(we.arpuBlended)}/mo</b> — fine on the surface, but it hides the spread. Priced per whale, landing one costs ~<b>${M(we.WAC)}</b> (dragging ~<b>${NUM(Math.round(we.minnowsPerWhale))}</b> minnows in with it), against a whale worth ~<b>${M(we.whaleLTV)}</b> over life — an edge of ~<b>${we.edge.toFixed(1)}×</b>. So I judge levers on WAC vs whale LTV, and lead with the whale.`;
+   +mcard('Pareto two-track','Of ~'+NUM(Math.round(we.actives))+' new actives/mo, ~'+NUM(Math.round(we.whales))+' become whales; the rest are the broad base of casual and free users.',NUM(Math.round(we.whales))+' : '+NUM(Math.round(we.casualBase)),'whales : broad base (new/mo)','');
+  document.getElementById('whaleEconNote').innerHTML=`<b>Price the whale, not the average.</b> Blended CAC reads <b>${M(jl.cac)}</b> and blended value <b>${M(we.arpuBlended)}/mo</b> — fine on the surface, but it hides the spread. Priced per whale, landing one costs ~<b>${M(we.WAC)}</b> (plus the ~<b>${NUM(Math.round(we.casualPerWhale))}</b> casual installs acquired alongside it), against a whale worth ~<b>${M(we.whaleLTV)}</b> over life — an edge of ~<b>${we.edge.toFixed(1)}×</b>. So I judge levers on WAC vs whale LTV, and lead with the whale.`;
   // ② Explore / Exploit + Kelly
   const explorePct=S.m_explore_pct/100, exploreBud=jl.ua*explorePct, exploitBud=jl.ua-exploreBud;
   const cands=TITLES.filter(t=>t.role==='candidate').map(t=>{
@@ -1420,8 +1428,8 @@ function renderPilots(){
     if(p.stage>=2) m.push('conv '+p.conv+'%');
     if(p.stage>=4) m.push('ROI '+p.roi+'×');
     const secondLook = p.stage<3 && p.ltv>=180;
-    // Minnow Trap (#3): clickbait CTR that didn't convert — high click-rate but failed before greenlight → CUT, don't scale.
-    const minnowTrap = p.ctr>=1.4 && p.stage<3;
+    // Clickbait trap (#3): high CTR that didn't convert — high click-rate but failed before greenlight → CUT, don't scale.
+    const clickbaitTrap = p.ctr>=1.4 && p.stage<3;
     const wg=whaleGrade(p);
     // whale-first gate: a broadly-mediocre title with DEEP whales beats a broadly-good but SHALLOW one.
     const whaleLed = p.stage<3 && wg.g==='Deep';        // killed on broad metrics but the few who come pay deep → greenlight on depth
@@ -1434,7 +1442,7 @@ function renderPilots(){
       <div class="srcrow"><span class="srctag ${sc}">${p.src}</span><span style="display:flex;gap:6px;align-items:center"><span class="srcscore">Src ${p.score}</span><span class="wgrade ${gradeCls}" title="PROJECTED whale depth, modelled from comparable proven titles — you can't observe it pre-launch (whales form over months). Composite of expected whale-rate / binge-depth / repeat-pack. The board ranks on this projection; CTR/D1/conv are diagnostics; real depth is confirmed post-launch.">🐋 ${wg.g} (proj.)</span></span></div>
       <div class="tp">${p.tp} · launch ${p.launch}</div>
       <div class="gates">${g(p.stage>=1,'G1')}${g(p.stage>=2,'G2')}${g(p.stage>=3,'G3')}${g(p.stage>=4,'G4')}</div>
-      <div class="verdict ${cl[p.stage]}">${p.verdict}${whaleLed?' <span class="slook" style="color:var(--out);background:var(--out-bg);border-color:var(--out-ln)" title="Killed on broad metrics, but PROJECTED whale depth is Deep — comps say the few who come pay hard. In a whale-led economy that beats a broadly-good shallow title, so it earns a greenlight on depth (confirmed post-launch).">⭐ whale-led — greenlight on depth</span>':''}${shallowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="Passed the broad gates but PROJECTED whale depth is Shallow — broad clicks, few expected whales. In a whale-led economy this barely moves the needle, so scaling it can wait until real data argues otherwise.">⚠ shallow — broad, few whales</span>':''}${secondLook&&!whaleLed?' <span class="slook">⚠ second look</span>':''}${minnowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="High CTR but it failed before greenlight — the click was clickbait, not intent. Cut spend; a high CTR with weak downstream is a Minnow Trap, not a winner.">⚠ minnow trap</span>':''}</div>
+      <div class="verdict ${cl[p.stage]}">${p.verdict}${whaleLed?' <span class="slook" style="color:var(--out);background:var(--out-bg);border-color:var(--out-ln)" title="Killed on broad metrics, but PROJECTED whale depth is Deep — comps say the few who come pay hard. In a whale-led economy that beats a broadly-good shallow title, so it earns a greenlight on depth (confirmed post-launch).">⭐ whale-led — greenlight on depth</span>':''}${shallowTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="Passed the broad gates but PROJECTED whale depth is Shallow — broad clicks, few expected whales. In a whale-led economy this barely moves the needle, so scaling it can wait until real data argues otherwise.">⚠ shallow — broad, few whales</span>':''}${secondLook&&!whaleLed?' <span class="slook">⚠ second look</span>':''}${clickbaitTrap?' <span class="slook" style="color:var(--neg);background:#fbeceb;border-color:#f0c9c4" title="High CTR but it failed before greenlight — the click was clickbait, not intent. Cut spend; a high CTR with weak downstream is a clickbait trap, not a winner.">⚠ clickbait trap</span>':''}</div>
       <div class="mm">${m.join(' · ')}</div>
       <div class="mm" style="color:var(--shared);font-weight:600">🐋 exp. (from comps): whales/1k ${p.wr} · binge ${p.bd}ep · repeat ${p.rp}%</div>
       <div class="bcost">Ledger B · content cost <b>$${NUM(bc.total)}</b> <small>(test $${NUM(bc.test)}${bc.prod?' + prod $'+NUM(bc.prod):''})</small></div></div>`;}).join('');
@@ -1442,7 +1450,7 @@ function renderPilots(){
   const sl=ev.filter(p=>p.stage<3&&p.ltv>=180).length;
   const mt=ev.filter(p=>p.ctr>=1.4&&p.stage<3).length;
   const wl=ev.filter(p=>p.stage<3&&whaleGrade(p).g==='Deep').length, st=ev.filter(p=>p.stage>=3&&whaleGrade(p).g==='Shallow').length;
-  document.getElementById('pilotSum').innerHTML=`<b>Projected</b> for the June slate (real CTR / retention / whale data confirms each as it moves through the gates over the coming months): <b>${sc}</b> projected to scale · <b>${gr}</b> to greenlight · <b>${k}</b> killed early in the lab (of 16) — and the <b>whale gate overrides</b>: <b style="color:var(--out)">${wl} whale-led</b> (deep projected whales, greenlight despite mediocre broad metrics) and <b style="color:var(--neg)">${st} shallow trap(s)</b> (broadly passed, but shallow projected whales — hold off scaling). <i>The gate hierarchy is whale-first: projected whale-rate → binge depth past the paywall → repeat-pack → concentration; CTR / D1 / conv / ROI become diagnostics. In a whale-led economy, a Deep title beats a broadly-good Shallow one. These 16 are <b>real sourced titles</b> (GoodNovel / Webnovel / Galatea / AlphaNovel) with <b>projected</b> metrics (from comps, not observed); the funnel runs <b>${NUM(S.m_pilots)}</b> pilots/mo → ~<b>${NUM(contentHits(S).s4)}</b> scaled hit${Math.round(contentHits(S).s4)===1?'':'s'}.</i> Diagnostic bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${mt?` <b style="color:var(--neg)">${mt} minnow trap(s) flagged.</b>`:''}</i>`;
+  document.getElementById('pilotSum').innerHTML=`<b>Projected</b> for the June slate (real CTR / retention / whale data confirms each as it moves through the gates over the coming months): <b>${sc}</b> projected to scale · <b>${gr}</b> to greenlight · <b>${k}</b> killed early in the lab (of 16) — and the <b>whale gate overrides</b>: <b style="color:var(--out)">${wl} whale-led</b> (deep projected whales, greenlight despite mediocre broad metrics) and <b style="color:var(--neg)">${st} shallow trap(s)</b> (broadly passed, but shallow projected whales — hold off scaling). <i>The gate hierarchy is whale-first: projected whale-rate → binge depth past the paywall → repeat-pack → concentration; CTR / D1 / conv / ROI become diagnostics. In a whale-led economy, a Deep title beats a broadly-good Shallow one. These 16 are <b>real sourced titles</b> (GoodNovel / Webnovel / Galatea / AlphaNovel) with <b>projected</b> metrics (from comps, not observed); the funnel runs <b>${NUM(S.m_pilots)}</b> pilots/mo → ~<b>${NUM(contentHits(S).s4)}</b> scaled hit${Math.round(contentHits(S).s4)===1?'':'s'}.</i> Diagnostic bars: CTR≥${S.pl_minCTR}% · D1≥${S.pl_minRet}% · conv≥${S.pl_minConv}% · ROI≥${S.pl_minROI}×.${mt?` <b style="color:var(--neg)">${mt} clickbait trap(s) flagged.</b>`:''}</i>`;
 }
 
 /* ============ VARIANCE (Plan vs Actual) ============ */
